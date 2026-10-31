@@ -88,6 +88,9 @@
         @media (min-width: 768px) {
             .sidebar-closed { transform: translateX(0%); }
         }
+
+        /* Transiciones del acordeón */
+        .chevron { transition: transform 0.3s ease; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden selection:bg-accent selection:text-black">
@@ -98,8 +101,8 @@
     <header class="h-16 w-full glass fixed top-0 z-50 border-b border-gray-800 flex items-center justify-between px-4">
         <div class="flex items-center">
             <!-- Botón Menú Móvil -->
-            <button id="btn-menu-toggle" class="md:hidden p-2 text-white hover:text-accent mr-2 transition-colors">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+            <button id="btn-menu-toggle" class="md:hidden p-2 text-white hover:text-accent mr-1 transition-colors">
+                <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -107,23 +110,24 @@
             </button>
             
             <!-- Logo -->
-            <i class="ph ph-guitar text-accent text-3xl"></i>
-            <span class="ml-2 font-bold text-xl text-white">RiffMaster</span>
+            <i class="ph ph-guitar text-accent text-2xl md:text-3xl"></i>
+            <span class="ml-2 font-bold text-lg md:text-xl text-white tracking-tight">RiffMaster</span>
         </div>
         
+        <!-- Iconos de acción (Con más aire para móviles) -->
         <div class="flex items-center space-x-2 md:space-x-3">
             
             <!-- Botón Referencia (Libro) -->
-            <button id="btn-reference-toggle" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <button id="btn-reference-toggle" class="p-1.5 md:p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                 </svg>
             </button>
 
             <!-- Botón Afinador -->
-            <button id="btn-tuner-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <button id="btn-tuner-modal" class="p-1.5 md:p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 22v-6"></path>
                     <path d="M9.5 16A4.5 4.5 0 0 1 5 11.5V3"></path>
                     <path d="M14.5 16A4.5 4.5 0 0 0 19 11.5V3"></path>
@@ -131,8 +135,8 @@
             </button>
             
             <!-- Botón Metrónomo -->
-            <button id="btn-metro-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <button id="btn-metro-modal" class="p-1.5 md:p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5.5 21l3-15h7l3 15h-13z"></path>
                     <path d="M8.5 17l1.5-8h4l1.5 8"></path>
                     <line x1="12" y1="19" x2="15" y2="9"></line>
@@ -141,8 +145,8 @@
             </button>
             
             <!-- Botón Ajustes -->
-            <button id="btn-settings-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <button id="btn-settings-modal" class="p-1.5 md:p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
@@ -182,49 +186,54 @@
     <!-- ============================================== -->
     <div id="reference-view" class="fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-dark z-30 hidden flex-col md:flex-row overflow-hidden">
         
-        <!-- Índice de Referencia (Sidebar interna) -->
-        <aside class="w-full md:w-72 bg-[#111] border-r border-gray-800 h-1/3 md:h-full overflow-y-auto p-5 shadow-lg z-10">
-            <h3 class="text-accent font-black mb-6 uppercase tracking-wider text-sm flex items-center">
+        <!-- Índice de Referencia en Acordeón -->
+        <aside class="w-full md:w-72 bg-[#111] border-r border-gray-800 h-1/3 md:h-full overflow-y-auto p-4 md:p-5 shadow-lg z-10">
+            <h3 class="text-accent font-black mb-4 md:mb-6 uppercase tracking-wider text-sm flex items-center">
                 <i class="ph-fill ph-book-open text-xl mr-2"></i> Índice de Referencia
             </h3>
             
-            <ul class="space-y-4 text-sm font-medium text-gray-300">
+            <ul class="space-y-3 text-sm font-medium text-gray-300">
+                
                 <!-- Tema 1 -->
-                <li>
-                    <a href="#ref-guitarras" class="hover:text-white flex items-center">
-                        <i class="ph ph-guitar mr-2 text-gray-500"></i> 1. Modelos de Guitarras
-                    </a>
-                    <ul class="pl-6 mt-2 space-y-2 border-l border-gray-800 ml-2 text-gray-400">
-                        <li><a href="#ref-strat" class="hover:text-accent transition-colors">Stratocaster</a></li>
-                        <li><a href="#ref-tele" class="hover:text-accent transition-colors">Telecaster</a></li>
-                        <li><a href="#ref-lespaul" class="hover:text-accent transition-colors">Les Paul</a></li>
-                        <li><a href="#ref-sg" class="hover:text-accent transition-colors">SG</a></li>
-                        <li><a href="#ref-superstrat" class="hover:text-accent transition-colors">Superstrat</a></li>
+                <li class="bg-[#151515] rounded-xl border border-gray-800 overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-3 hover:bg-gray-800 transition-colors">
+                        <span class="flex items-center"><i class="ph ph-guitar mr-2 text-accent text-lg"></i> 1. Modelos</span>
+                        <i class="ph ph-caret-down text-gray-500 chevron text-lg"></i>
+                    </button>
+                    <!-- Contenido (Se gestiona su ocultación vía JS) -->
+                    <ul class="accordion-content px-4 pb-3 pt-1 space-y-2 border-t border-gray-800/50 hidden text-gray-400">
+                        <li><a href="#ref-strat" class="block hover:text-accent transition-colors py-1">Stratocaster</a></li>
+                        <li><a href="#ref-tele" class="block hover:text-accent transition-colors py-1">Telecaster</a></li>
+                        <li><a href="#ref-lespaul" class="block hover:text-accent transition-colors py-1">Les Paul</a></li>
+                        <li><a href="#ref-sg" class="block hover:text-accent transition-colors py-1">SG</a></li>
+                        <li><a href="#ref-superstrat" class="block hover:text-accent transition-colors py-1">Superstrat</a></li>
                     </ul>
                 </li>
                 
                 <!-- Tema 2 -->
-                <li>
-                    <a href="#ref-pedales" class="hover:text-white flex items-center">
-                        <i class="ph ph-sliders mr-2 text-gray-500"></i> 2. Pedales y Efectos
-                    </a>
-                    <ul class="pl-6 mt-2 space-y-2 border-l border-gray-800 ml-2 text-gray-400">
-                        <li><a href="#ref-overdrive" class="hover:text-accent transition-colors">Overdrive y Distorsión</a></li>
-                        <li><a href="#ref-fuzz" class="hover:text-accent transition-colors">Fuzz</a></li>
-                        <li><a href="#ref-modulacion" class="hover:text-accent transition-colors">Modulación (Chorus/Phaser)</a></li>
-                        <li><a href="#ref-tiempo" class="hover:text-accent transition-colors">Tiempo (Delay/Reverb)</a></li>
+                <li class="bg-[#151515] rounded-xl border border-gray-800 overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-3 hover:bg-gray-800 transition-colors">
+                        <span class="flex items-center"><i class="ph ph-sliders mr-2 text-accent text-lg"></i> 2. Efectos</span>
+                        <i class="ph ph-caret-down text-gray-500 chevron text-lg"></i>
+                    </button>
+                    <ul class="accordion-content px-4 pb-3 pt-1 space-y-2 border-t border-gray-800/50 hidden text-gray-400">
+                        <li><a href="#ref-overdrive" class="block hover:text-accent transition-colors py-1">Overdrive y Distorsión</a></li>
+                        <li><a href="#ref-fuzz" class="block hover:text-accent transition-colors py-1">Fuzz</a></li>
+                        <li><a href="#ref-modulacion" class="block hover:text-accent transition-colors py-1">Modulación (Chorus)</a></li>
+                        <li><a href="#ref-tiempo" class="block hover:text-accent transition-colors py-1">Tiempo (Delay/Reverb)</a></li>
                     </ul>
                 </li>
 
                 <!-- Tema 3 -->
-                <li>
-                    <a href="#ref-amps" class="hover:text-white flex items-center">
-                        <i class="ph ph-speaker-high mr-2 text-gray-500"></i> 3. Amplificadores
-                    </a>
-                    <ul class="pl-6 mt-2 space-y-2 border-l border-gray-800 ml-2 text-gray-400">
-                        <li><a href="#ref-valvulas" class="hover:text-accent transition-colors">Válvulas (Tubes)</a></li>
-                        <li><a href="#ref-transistores" class="hover:text-accent transition-colors">Transistores (Solid State)</a></li>
-                        <li><a href="#ref-modelado" class="hover:text-accent transition-colors">Modelado Digital</a></li>
+                <li class="bg-[#151515] rounded-xl border border-gray-800 overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-3 hover:bg-gray-800 transition-colors">
+                        <span class="flex items-center"><i class="ph ph-speaker-high mr-2 text-accent text-lg"></i> 3. Amplis</span>
+                        <i class="ph ph-caret-down text-gray-500 chevron text-lg"></i>
+                    </button>
+                    <ul class="accordion-content px-4 pb-3 pt-1 space-y-2 border-t border-gray-800/50 hidden text-gray-400">
+                        <li><a href="#ref-valvulas" class="block hover:text-accent transition-colors py-1">Válvulas (Tubes)</a></li>
+                        <li><a href="#ref-transistores" class="block hover:text-accent transition-colors py-1">Transistores (Solid State)</a></li>
+                        <li><a href="#ref-modelado" class="block hover:text-accent transition-colors py-1">Modelado Digital</a></li>
                     </ul>
                 </li>
             </ul>
@@ -422,7 +431,7 @@
                     <p class="text-[11px] text-accent uppercase font-bold tracking-wider mb-4 flex items-center">VERSIÓN DEL CURSO</p>
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-300 font-medium">Versión Instalada:</span>
-                        <span class="bg-[#2a2a2a] text-accent font-mono text-sm px-3 py-1 rounded-md">v2.3.0</span>
+                        <span class="bg-[#2a2a2a] text-accent font-mono text-sm px-3 py-1 rounded-md">v2.4.0</span>
                     </div>
                     <button id="btn-force-update" class="w-full bg-[#2a2a2a] hover:bg-[#333] text-gray-200 font-medium py-3 rounded-lg flex items-center justify-center transition-colors">
                         <svg class="mr-2" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21.5 2v6h-6M2.13 15.57a9 9 0 1 0 3.87-11.14L2.5 8"></path></svg> Forzar Actualización
@@ -443,7 +452,7 @@
                 </div>
                 <div class="bg-accent/10 border border-accent/30 p-3 rounded-lg flex items-center">
                     <div class="bg-accent rounded-full p-1 mr-3 flex-shrink-0"><svg viewBox="0 0 24 24" width="16" height="16" stroke="black" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                    <p class="text-xs text-gray-200 font-medium leading-tight">Estás usando la versión más reciente del curso (v2.3.0).</p>
+                    <p class="text-xs text-gray-200 font-medium leading-tight">Estás usando la versión más reciente del curso (v2.4.0).</p>
                 </div>
                 <div class="pt-4 border-t border-[#2a2a2a]">
                     <button id="btn-reset-data" class="w-full text-red-500 hover:text-red-400 font-medium text-sm py-2 flex items-center justify-center transition-colors">Borrar Progreso Local</button>
@@ -499,46 +508,12 @@
                 document.addEventListener(evt, unlockAudio, { capture: true });
             });
 
-            // Frecuencias científicas detalladas y expandidas
             const noteFreqs = {
-                'E2': 82.41, 
-                'F2': 87.31, 
-                'F#2': 92.50, 
-                'G2': 98.00, 
-                'G#2': 103.83, 
-                'A2': 110.00, 
-                'Bb2': 116.54, 
-                'B2': 123.47,
-                'C3': 130.81, 
-                'C#3': 138.59, 
-                'D3': 146.83, 
-                'Eb3': 155.56, 
-                'E3': 164.81, 
-                'F3': 174.61, 
-                'F#3': 185.00, 
-                'G3': 196.00, 
-                'G#3': 207.65, 
-                'A3': 220.00, 
-                'Bb3': 233.08, 
-                'B3': 246.94, 
-                'C4': 261.63, 
-                'C#4': 277.18, 
-                'D4': 293.66, 
-                'D#4': 311.13, 
-                'Eb4': 311.13, 
-                'E4': 329.63, 
-                'F4': 349.23, 
-                'F#4': 369.99, 
-                'G4': 392.00, 
-                'G#4': 415.30, 
-                'A4': 440.00, 
-                'B4': 493.88, 
-                'C5': 523.25, 
-                'C#5': 554.37, 
-                'D5': 587.33, 
-                'D#5': 622.25, 
-                'E5': 659.25, 
-                'F5': 698.46
+                'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'Bb2': 116.54, 'B2': 123.47,
+                'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'Eb3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00, 
+                'G#3': 207.65, 'A3': 220.00, 'Bb3': 233.08, 'B3': 246.94, 'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 
+                'Eb4': 311.13, 'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'B4': 493.88, 
+                'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'D#5': 622.25, 'E5': 659.25, 'F5': 698.46
             };
 
             function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
@@ -616,7 +591,6 @@
             function playRiff(notes, isDistorted = true, tempo = 100) {
                 const beatDuration = 60 / tempo;
                 let currentTimeOffset = 0;
-                
                 notes.forEach(noteData => {
                     const { note, dur, pause } = noteData;
                     if (note && note !== 'rest') {
@@ -633,19 +607,14 @@
             function startBackingTrack(bpm, onBeatCallback) {
                 if (isBackingPlaying) return;
                 isBackingPlaying = true;
-                
                 const eighthNoteTime = ((60 / bpm) / 2) * 1000; 
                 let step = 0;
-                
                 backingInterval = setInterval(() => {
                     const isDownbeat = (step % 2 === 0);
-                    
                     if (step % 4 === 0) playNote('A1', 0.4, false, 0); 
                     if (step % 2 === 1) playClick(false); 
                     if (step % 4 === 2) playNote('A1', 0.2, false, 0); 
-                    
                     if (isDownbeat && onBeatCallback) onBeatCallback();
-                    
                     step++;
                 }, eighthNoteTime);
             }
@@ -655,10 +624,7 @@
                 if(backingInterval) clearInterval(backingInterval);
             }
 
-            return { 
-                playNote, playRiff, playClick, startBackingTrack, stopBackingTrack, 
-                get isBackingActive() { return isBackingPlaying; } 
-            };
+            return { playNote, playRiff, playClick, startBackingTrack, stopBackingTrack, get isBackingActive() { return isBackingPlaying; } };
         })();
 
         /* ============================================================
@@ -761,800 +727,160 @@
         }
 
         /* ============================================================
-         * 3. RIFF DATA (Formato expandido)
+         * 3. RIFF DATA
          * ============================================================ */
         const riffData = {
-            'smoke': [
-                {note:'E2', dur:1}, 
-                {note:'G2', dur:1}, 
-                {note:'A2', dur:1.5, pause:0.5}, 
-                {note:'E2', dur:1}, 
-                {note:'G2', dur:1}, 
-                {note:'Bb2', dur:0.5}, 
-                {note:'A2', dur:1.5, pause:0.5}, 
-                {note:'E2', dur:1}, 
-                {note:'G2', dur:1}, 
-                {note:'A2', dur:1.5}, 
-                {note:'G2', dur:1}, 
-                {note:'E2', dur:2}
-            ],
-            'punk': [
-                {note:['G2','D3'], dur:0.5}, 
-                {note:['G2','D3'], dur:0.5}, 
-                {note:['G2','D3'], dur:0.5}, 
-                {note:['G2','D3'], dur:0.5, pause:0.5}, 
-                {note:['F2','C3'], dur:0.5}, 
-                {note:['F2','C3'], dur:0.5}, 
-                {note:['F2','C3'], dur:0.5}, 
-                {note:['F2','C3'], dur:0.5, pause:0.5}, 
-                {note:['G2','D3'], dur:1.5}
-            ],
-            'blues': [
-                {note:'D4', dur:0.5}, 
-                {note:'E4', dur:0.5}, 
-                {note:'G4', dur:0.5}, 
-                {note:'E4', dur:0.5}, 
-                {note:'D4', dur:0.5}, 
-                {note:'C4', dur:0.5}, 
-                {note:'A3', dur:1.5}
-            ],
-            'strum': [
-                {note:['G2','B2','D3','G3','B3','G4'], dur:1}, 
-                {note:['G2','B2','D3','G3','B3','G4'], dur:1}, 
-                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, 
-                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, 
-                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, 
-                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}
-            ],
-            'expression': [
-                {note:'C4', dur:0.5}, 
-                {note:'D4', dur:0.5}, 
-                {note:'C4', dur:1, pause: 0.5}, 
-                {note:'G3', dur:0.5}, 
-                {note:'A3', dur:0.5}, 
-                {note:'C4', dur:1}
-            ],
-            'arpeggio': [
-                {note:'E2', dur:0.5}, 
-                {note:'E3', dur:0.5}, 
-                {note:'G3', dur:0.5}, 
-                {note:'B3', dur:0.5}, 
-                {note:'E4', dur:0.5}, 
-                {note:'B3', dur:0.5}, 
-                {note:'C3', dur:0.5}, 
-                {note:'E3', dur:0.5}, 
-                {note:'G3', dur:0.5}, 
-                {note:'C4', dur:0.5}, 
-                {note:'E4', dur:0.5}, 
-                {note:'C4', dur:0.5}
-            ],
-            'country': [
-                {note:'C#3', dur:0.25}, 
-                {note:'D3', dur:0.25}, 
-                {note:'C#3', dur:0.25}, 
-                {note:'B2', dur:0.5}, 
-                {note:'G2', dur:0.5}, 
-                {note:'E2', dur:0.5}, 
-                {note:'G#2', dur:1}
-            ],
-            'funk': [
-                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, 
-                {note:null, dur:0.25}, 
-                {note:null, dur:0.25}, 
-                {note:null, dur:0.25}, 
-                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, 
-                {note:null, dur:0.25}, 
-                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, 
-                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}
-            ],
-            'speed': [
-                {note:'E4', dur:0.25}, 
-                {note:'D4', dur:0.25}, 
-                {note:'C4', dur:0.25}, 
-                {note:'B3', dur:0.25}, 
-                {note:'A3', dur:0.25}, 
-                {note:'G3', dur:0.25}, 
-                {note:'F#3', dur:0.25}, 
-                {note:'E3', dur:0.25}, 
-                {note:'E2', dur:1.0}
-            ],
-            'travis': [
-                {note:'C3', dur:0.5}, 
-                {note:'G3', dur:0.25}, 
-                {note:'E4', dur:0.25}, 
-                {note:'G3', dur:0.5}, 
-                {note:'C4', dur:0.5}, 
-                {note:'C3', dur:0.5}, 
-                {note:'G3', dur:0.25}, 
-                {note:'E4', dur:0.25}, 
-                {note:'G3', dur:0.5}, 
-                {note:'C4', dur:0.5}
-            ],
-            'dorian': [
-                {note:'A3', dur:0.5}, 
-                {note:'C4', dur:0.5}, 
-                {note:'D4', dur:0.5}, 
-                {note:'E4', dur:0.5}, 
-                {note:'F#4', dur:1.0}, 
-                {note:'G4', dur:0.5}, 
-                {note:'E4', dur:1.5}
-            ],
-            'tapping': [
-                {note:'E5', dur:0.25}, 
-                {note:'B4', dur:0.25}, 
-                {note:'G4', dur:0.25}, 
-                {note:'E5', dur:0.25}, 
-                {note:'B4', dur:0.25}, 
-                {note:'G4', dur:0.25}, 
-                {note:'D#5', dur:0.25}, 
-                {note:'B4', dur:0.25}, 
-                {note:'G4', dur:0.25}, 
-                {note:'D#5', dur:0.25}, 
-                {note:'B4', dur:0.25}, 
-                {note:'G4', dur:0.25}, 
-                {note:'E4', dur:1.0}
-            ]
+            'smoke': [{note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5, pause:0.5}, {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'Bb2', dur:0.5}, {note:'A2', dur:1.5, pause:0.5}, {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5}, {note:'G2', dur:1}, {note:'E2', dur:2}],
+            'punk': [{note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5, pause:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5, pause:0.5}, {note:['G2','D3'], dur:1.5}],
+            'blues': [{note:'D4', dur:0.5}, {note:'E4', dur:0.5}, {note:'G4', dur:0.5}, {note:'E4', dur:0.5}, {note:'D4', dur:0.5}, {note:'C4', dur:0.5}, {note:'A3', dur:1.5}],
+            'strum': [{note:['G2','B2','D3','G3','B3','G4'], dur:1}, {note:['G2','B2','D3','G3','B3','G4'], dur:1}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}],
+            'expression': [{note:'C4', dur:0.5}, {note:'D4', dur:0.5}, {note:'C4', dur:1, pause: 0.5}, {note:'G3', dur:0.5}, {note:'A3', dur:0.5}, {note:'C4', dur:1}],
+            'arpeggio': [{note:'E2', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'B3', dur:0.5}, {note:'E4', dur:0.5}, {note:'B3', dur:0.5}, {note:'C3', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'C4', dur:0.5}, {note:'E4', dur:0.5}, {note:'C4', dur:0.5}],
+            'country': [{note:'C#3', dur:0.25}, {note:'D3', dur:0.25}, {note:'C#3', dur:0.25}, {note:'B2', dur:0.5}, {note:'G2', dur:0.5}, {note:'E2', dur:0.5}, {note:'G#2', dur:1}],
+            'funk': [{note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:null, dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}],
+            'speed': [{note:'E4', dur:0.25}, {note:'D4', dur:0.25}, {note:'C4', dur:0.25}, {note:'B3', dur:0.25}, {note:'A3', dur:0.25}, {note:'G3', dur:0.25}, {note:'F#3', dur:0.25}, {note:'E3', dur:0.25}, {note:'E2', dur:1.0}],
+            'travis': [{note:'C3', dur:0.5}, {note:'G3', dur:0.25}, {note:'E4', dur:0.25}, {note:'G3', dur:0.5}, {note:'C4', dur:0.5}, {note:'C3', dur:0.5}, {note:'G3', dur:0.25}, {note:'E4', dur:0.25}, {note:'G3', dur:0.5}, {note:'C4', dur:0.5}],
+            'dorian': [{note:'A3', dur:0.5}, {note:'C4', dur:0.5}, {note:'D4', dur:0.5}, {note:'E4', dur:0.5}, {note:'F#4', dur:1.0}, {note:'G4', dur:0.5}, {note:'E4', dur:1.5}],
+            'tapping': [{note:'E5', dur:0.25}, {note:'B4', dur:0.25}, {note:'G4', dur:0.25}, {note:'E5', dur:0.25}, {note:'B4', dur:0.25}, {note:'G4', dur:0.25}, {note:'D#5', dur:0.25}, {note:'B4', dur:0.25}, {note:'G4', dur:0.25}, {note:'D#5', dur:0.25}, {note:'B4', dur:0.25}, {note:'G4', dur:0.25}, {note:'E4', dur:1.0}]
         };
 
         /* ============================================================
-         * 4. CONTENIDO DE LOS 12 MÓDULOS DEL CURSO (Estructura Expandida)
+         * 4. CONTENIDO DE LOS 12 MÓDULOS DEL CURSO
          * ============================================================ */
         const modules = [
             {
-                id: 1, 
-                title: "1. Fundamentos y Púa Alternada", 
-                description: "Postura, lectura de tablatura en 60s y tu primer riff histórico.",
-                quiz: [
-                    { 
-                        q: "¿Qué representa el número '0' en una tablatura?", 
-                        options: [
-                            "Silencio absoluto", 
-                            "Tocar la cuerda al aire", 
-                            "Pulsar el traste 10"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "¿En qué consiste la técnica de púa alternada?", 
-                        options: [
-                            "Tocar siempre hacia abajo", 
-                            "Alternar movimientos abajo y arriba continuamente", 
-                            "Usar los dedos en vez de la púa"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala y vamos al grano.</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Leer Tablatura en 60 segundos</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong>. La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la sexta).</p>
-                    
-                    <div class="bg-[#111] p-4 rounded-xl border border-gray-800 overflow-x-auto shadow-inner mb-6">
-<pre class="tab-font text-xs md:text-sm text-[#4af626] whitespace-pre">
-e|-------------------| (1ª Cuerda - Fina)
-B|-------------------| (2ª Cuerda)
-G|-------------------| (3ª Cuerda)
-D|-------------------| (4ª Cuerda)
-A|-------------------| (5ª Cuerda)
-E|--0---3---5--------| (6ª Cuerda - Gorda)
-</pre>
-                    </div>
-                    
+                id: 1, title: "1. Fundamentos y Púa Alternada", description: "Postura, lectura de tablatura en 60s y tu primer riff histórico.",
+                quiz: [{ q: "¿Qué representa el número '0' en una tablatura?", options: ["Silencio absoluto", "Tocar la cuerda al aire", "Pulsar el traste 10"], correct: 1 }, { q: "¿En qué consiste la técnica de púa alternada?", options: ["Tocar siempre hacia abajo", "Alternar movimientos abajo y arriba continuamente", "Usar los dedos en vez de la púa"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala y vamos al grano.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Leer Tablatura en 60 segundos</h3><p class="text-gray-300 mb-4 leading-relaxed">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong>. La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la sexta).</p>
+                    <div class="bg-[#111] p-4 rounded-xl border border-gray-800 overflow-x-auto shadow-inner mb-6"><pre class="tab-font text-xs md:text-sm text-[#4af626] whitespace-pre">e|-------------------| (1ª Cuerda - Fina)\nB|-------------------| (2ª Cuerda)\nG|-------------------| (3ª Cuerda)\nD|-------------------| (4ª Cuerda)\nA|-------------------| (5ª Cuerda)\nE|--0---3---5--------| (6ª Cuerda - Gorda)</pre></div>
                     <p class="text-gray-300 mb-6 leading-relaxed">Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. Púa Alternada</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑).</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="smoke">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-E|--0---3---5----0---3---6-5----0---3---5---3---0--|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. Púa Alternada</h3><p class="text-gray-300 mb-6 leading-relaxed">El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑).</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="smoke"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">E|--0---3---5----0---3---6-5----0---3---5---3---0--|</pre></div></div>`
             },
             {
-                id: 2, 
-                title: "2. Power Chords y Palm Muting", 
-                description: "La base del Rock y el Punk. Estructuras móviles y muteo de palma.",
-                quiz: [
-                    { 
-                        q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", 
-                        options: [
-                            "En el mástil", 
-                            "Justo encima del puente", 
-                            "Encima de las pastillas"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico?", 
-                        options: [
-                            "Un dedo", 
-                            "Dos dedos", 
-                            "Tres dedos obligatoriamente"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">El acorde de quinta, o <em>Power Chord</em>, es el arma definitiva del Rock. Es agresivo y contundente, especialmente con distorsión.</p>
-                    
+                id: 2, title: "2. Power Chords y Palm Muting", description: "La base del Rock y el Punk. Estructuras móviles y muteo de palma.",
+                quiz: [{ q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", options: ["En el mástil", "Justo encima del puente", "Encima de las pastillas"], correct: 1 }, { q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico?", options: ["Un dedo", "Dos dedos", "Tres dedos obligatoriamente"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">El acorde de quinta, o <em>Power Chord</em>, es el arma definitiva del Rock. Es agresivo y contundente, especialmente con distorsión.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Forma del Power Chord</h3>
                     ${drawFretboard(6, 7, [{ string: 6, fret: 3, root: true, label: '1' }, { string: 5, fret: 5, root: false, label: '3' }], 600, 180)}
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Palm Muting (P.M.)</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Apoya el lateral exterior de la palma de tu mano derecha <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="punk">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-   * * * *      * * * *      * * * * 
-A|-5-5-5-5------3-3-3-3------5-5-5-5------
-E|-3-3-3-3------1-1-1-1------3-3-3-3------
-</pre>
-                        </div>
-                    </div>
-                `
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Palm Muting (P.M.)</h3><p class="text-gray-300 mb-6 leading-relaxed">Apoya el lateral exterior de la palma de tu mano derecha <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="punk"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">   * * * *      * * * *      * * * * \nA|-5-5-5-5------3-3-3-3------5-5-5-5------\nE|-3-3-3-3------1-1-1-1------3-3-3-3------</pre></div></div>`
             },
             {
-                id: 3, 
-                title: "3. La Pentatónica y el Blues", 
-                description: "Escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends.",
-                quiz: [
-                    { 
-                        q: "¿Qué es un 'Hammer-on'?", 
-                        options: [
-                            "Golpear la guitarra", 
-                            "Pulsar una cuerda y 'martillear' con un dedo en un traste superior", 
-                            "Tirar de la cuerda"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", 
-                        options: [
-                            "Traste 3", 
-                            "Traste 5", 
-                            "Traste 7"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor.</p>
-                    
+                id: 3, title: "3. La Pentatónica y el Blues", description: "Escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends.",
+                quiz: [{ q: "¿Qué es un 'Hammer-on'?", options: ["Golpear la guitarra", "Pulsar una cuerda y 'martillear' con un dedo en un traste superior", "Tirar de la cuerda"], correct: 1 }, { q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", options: ["Traste 3", "Traste 5", "Traste 7"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">Patrón Visual: Am Pentatónica (Traste 5)</h3>
-                    ${drawFretboard(6, 10, [
-                        { string: 6, fret: 5, root: true, label: '1' }, 
-                        { string: 6, fret: 8, root: false, label: '4' }, 
-                        { string: 5, fret: 5, root: false, label: '1' }, 
-                        { string: 5, fret: 7, root: false, label: '3' }, 
-                        { string: 4, fret: 5, root: false, label: '1' }, 
-                        { string: 4, fret: 7, root: true, label: '3' }, 
-                        { string: 3, fret: 5, root: false, label: '1' }, 
-                        { string: 3, fret: 7, root: false, label: '3' }, 
-                        { string: 2, fret: 5, root: false, label: '1' }, 
-                        { string: 2, fret: 8, root: false, label: '4' }, 
-                        { string: 1, fret: 5, root: true, label: '1' }, 
-                        { string: 1, fret: 8, root: false, label: '4' }
-                    ], 600, 200)}
-                    
+                    ${drawFretboard(6, 10, [{ string: 6, fret: 5, root: true, label: '1' }, { string: 6, fret: 8, root: false, label: '4' }, { string: 5, fret: 5, root: false, label: '1' }, { string: 5, fret: 7, root: false, label: '3' }, { string: 4, fret: 5, root: false, label: '1' }, { string: 4, fret: 7, root: true, label: '3' }, { string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' }, { string: 2, fret: 5, root: false, label: '1' }, { string: 2, fret: 8, root: false, label: '4' }, { string: 1, fret: 5, root: true, label: '1' }, { string: 1, fret: 8, root: false, label: '4' }], 600, 200)}
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">Articulaciones</h3>
-                    <ul class="list-disc pl-5 text-gray-300 space-y-3 mb-6 leading-relaxed">
-                        <li><strong>Hammer-on (h):</strong> Martilleas un traste superior sin volver a usar la púa.</li>
-                        <li><strong>Pull-off (p):</strong> Retiras el dedo superior pellizcando la cuerda.</li>
-                        <li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba transversalmente.</li>
-                    </ul>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="blues">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-e|-------------------------5~------|
-B|-------5--8p5----------5---------|
-G|--7b9----------7b9r7p5-----------|
-D|---------------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <ul class="list-disc pl-5 text-gray-300 space-y-3 mb-6 leading-relaxed"><li><strong>Hammer-on (h):</strong> Martilleas un traste superior sin volver a usar la púa.</li><li><strong>Pull-off (p):</strong> Retiras el dedo superior pellizcando la cuerda.</li><li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba transversalmente.</li></ul>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="blues"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-------------------------5~------|\nB|-------5--8p5----------5---------|\nG|--7b9----------7b9r7p5-----------|\nD|---------------------------------|</pre></div></div>`
             },
             {
-                id: 4, 
-                title: "4. Acordes Abiertos y Rasgueo", 
-                description: "G, C, D, Em, Am. Rítmica contínua y dedos pivote.",
-                quiz: [
-                    { 
-                        q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", 
-                        options: [
-                            "Un dedo que se mueve rápido", 
-                            "Un dedo que permanece en el mismo traste sirviendo de ancla", 
-                            "El dedo meñique"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "¿Qué es un rasgueo?", 
-                        options: [
-                            "Tocar las cuerdas de una en una", 
-                            "Golpear varias cuerdas a la vez siguiendo un patrón rítmico", 
-                            "Tocar solo con el pulgar"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones.</p>
-                    
+                id: 4, title: "4. Acordes Abiertos y Rasgueo", description: "G, C, D, Em, Am. Rítmica contínua y dedos pivote.",
+                quiz: [{ q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", options: ["Un dedo que se mueve rápido", "Un dedo que permanece en el mismo traste sirviendo de ancla", "El dedo meñique"], correct: 1 }, { q: "¿Qué es un rasgueo?", options: ["Tocar las cuerdas de una en una", "Golpear varias cuerdas a la vez siguiendo un patrón rítmico", "Tocar solo con el pulgar"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">Los 5 Magníficos</h3>
                     <div class="flex flex-wrap justify-center mb-8 bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800">
-                        ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}
-                        ${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}
-                        ${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}
-                        ${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}
-                        ${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
+                        ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
                     </div>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El Dedo Pivote</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">El error común es parar la mano derecha al cambiar. <strong>La mano derecha es un reloj pendular.</strong> Busca dedos ancla para transiciones rápidas.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Ritmo Pop-Rock</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="strum">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
-| ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |
-| G                 | C                 |
-</pre>
-                        </div>
-                    </div>
-                `
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El Dedo Pivote</h3><p class="text-gray-300 mb-4 leading-relaxed">El error común es parar la mano derecha al cambiar. <strong>La mano derecha es un reloj pendular.</strong> Busca dedos ancla para transiciones rápidas.</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Ritmo Pop-Rock</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="strum"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">| ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |\n| G                 | C                 |</pre></div></div>`
             },
             {
-                id: 5, 
-                title: "5. Expresión Solista", 
-                description: "Vibrato de muñeca, Slides, y la Blue Note.",
-                quiz: [
-                    { 
-                        q: "¿De dónde debe provenir el movimiento para hacer un vibrato?", 
-                        options: [
-                            "De los dedos temblando", 
-                            "De un giro de muñeca usando el mástil como punto de apoyo", 
-                            "Del brazo entero"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "¿Qué es un 'Slide'?", 
-                        options: [
-                            "Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", 
-                            "Usar un pedal de volumen", 
-                            "Tirar la púa"
-                        ], 
-                        correct: 0 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Tocar las notas con <em>actitud</em> es lo que diferencia a un guitarrista real.</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Vibrato</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Ancla el pulgar y <strong>gira la muñeca</strong>.</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. La 'Blue Note'</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Añade una nota disonante a la pentatónica para ese sonido oscuro.</p>
-                    ${drawFretboard(6, 10, [
-                        { string: 3, fret: 5, root: false, label: '1' }, 
-                        { string: 3, fret: 7, root: false, label: '3' }, 
-                        { string: 3, fret: 8, root: true, label: 'Bl' }
-                    ], 600, 100)}
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="expression">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Expresión
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-G|--5S7--7--5---------|------------------|
-D|-------------7V-----|--5--7--7S10--7V--|
-</pre>
-                        </div>
-                    </div>
-                `
+                id: 5, title: "5. Expresión Solista", description: "Vibrato de muñeca, Slides, y la Blue Note.",
+                quiz: [{ q: "¿De dónde debe provenir el movimiento para hacer un vibrato?", options: ["De los dedos temblando", "De un giro de muñeca usando el mástil como punto de apoyo", "Del brazo entero"], correct: 1 }, { q: "¿Qué es un 'Slide'?", options: ["Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", "Usar un pedal de volumen", "Tirar la púa"], correct: 0 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Tocar las notas con <em>actitud</em> es lo que diferencia a un guitarrista real.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Vibrato</h3><p class="text-gray-300 mb-4 leading-relaxed">Ancla el pulgar y <strong>gira la muñeca</strong>.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. La 'Blue Note'</h3><p class="text-gray-300 mb-4 leading-relaxed">Añade una nota disonante a la pentatónica para ese sonido oscuro.</p>
+                    ${drawFretboard(6, 10, [{ string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' }, { string: 3, fret: 8, root: true, label: 'Bl' }], 600, 100)}
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="expression"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Expresión</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">G|--5S7--7--5---------|------------------|\nD|-------------7V-----|--5--7--7S10--7V--|</pre></div></div>`
             },
             {
-                id: 6, 
-                title: "6. Arpegios y Fingerpicking", 
-                description: "Descomponiendo los acordes. Púa híbrida e intros de baladas.",
-                quiz: [
-                    { 
-                        q: "¿Qué significa arpegiar un acorde?", 
-                        options: [
-                            "Tocar todas las notas a la vez", 
-                            "Tocar las notas individuales secuencialmente", 
-                            "Tocar solo los bajos"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "¿Qué es la 'Púa Híbrida'?", 
-                        options: [
-                            "Usar una púa de plástico y metal", 
-                            "Sujetar la púa con pulgar/índice y usar el dedo medio para pellizcar otras cuerdas", 
-                            "Tocar sin púa"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">El arpegio consiste en tocar las notas de un acorde de forma secuencial.</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Técnica de Mano Derecha</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Puedes hacerlo solo con púa o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas los dedos para las agudas.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio Continuo en Em y C</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="arpeggio">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Arpegio
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
-   Em                       C
-e|-------0-----------0----|-------0-----------0----|
-B|---------0-----------0--|---------1-----------1--|
-G|-----0-----0-----0-----0|-----0-----0-----0-----0|
-D|---2-----------2--------|---2-----------2--------|
-A|------------------------|-3-----------3----------|
-E|-0-----------0----------|------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                id: 6, title: "6. Arpegios y Fingerpicking", description: "Descomponiendo los acordes. Púa híbrida e intros de baladas.",
+                quiz: [{ q: "¿Qué significa arpegiar un acorde?", options: ["Tocar todas las notas a la vez", "Tocar las notas individuales secuencialmente", "Tocar solo los bajos"], correct: 1 }, { q: "¿Qué es la 'Púa Híbrida'?", options: ["Usar una púa de plástico y metal", "Sujetar la púa con pulgar/índice y usar el dedo medio para pellizcar otras cuerdas", "Tocar sin púa"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">El arpegio consiste en tocar las notas de un acorde de forma secuencial.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Técnica de Mano Derecha</h3><p class="text-gray-300 mb-4 leading-relaxed">Puedes hacerlo solo con púa o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas los dedos para las agudas.</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio Continuo en Em y C</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="arpeggio"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Arpegio</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">   Em                       C\ne|-------0-----------0----|-------0-----------0----|\nB|---------0-----------0--|---------1-----------1--|\nG|-----0-----0-----0-----0|-----0-----0-----0-----0|\nD|---2-----------2--------|---2-----------2--------|\nA|------------------------|-3-----------3----------|\nE|-0-----------0----------|------------------------|</pre></div></div>`
             },
             {
-                id: 7, 
-                title: "7. Escala Mayor y Modos", 
-                description: "Saliendo de la oscuridad. Country rock y el tono alegre.",
-                quiz: [
-                    { 
-                        q: "¿Cómo se suele describir la diferencia entre Mayor y Menor?", 
-                        options: [
-                            "La Mayor suena más alegre y la Menor más oscura", 
-                            "No hay diferencia audible", 
-                            "La Menor suena a pop"
-                        ], 
-                        correct: 0 
-                    }, 
-                    { 
-                        q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", 
-                        options: [
-                            "Sí, desplazadas en el mástil (bajando 3 trastes la tónica)", 
-                            "No, son distintos", 
-                            "Sí, en el mismo lugar"
-                        ], 
-                        correct: 0 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">El Rock Sureño, Country y Pop se basan en tonalidades mayores.</p>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Pentatónica Mayor vs Menor</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">El dibujo de la escala Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Country Rock</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="country">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Mayor
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-e|-----------------------0--|
-B|--2h3p2----------------0--|
-G|---------4--2--0-------1--|
-D|------------------2----2--|
-</pre>
-                        </div>
-                    </div>
-                `
+                id: 7, title: "7. Escala Mayor y Modos", description: "Saliendo de la oscuridad. Country rock y el tono alegre.",
+                quiz: [{ q: "¿Cómo se suele describir la diferencia entre Mayor y Menor?", options: ["La Mayor suena más alegre y la Menor más oscura", "No hay diferencia audible", "La Menor suena a pop"], correct: 0 }, { q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", options: ["Sí, desplazadas en el mástil (bajando 3 trastes la tónica)", "No, son distintos", "Sí, en el mismo lugar"], correct: 0 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">El Rock Sureño, Country y Pop se basan en tonalidades mayores.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Pentatónica Mayor vs Menor</h3><p class="text-gray-300 mb-4 leading-relaxed">El dibujo de la escala Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela.</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Country Rock</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="country"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Mayor</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-----------------------0--|\nB|--2h3p2----------------0--|\nG|---------4--2--0-------1--|\nD|------------------2----2--|</pre></div></div>`
             },
             {
-                id: 8, 
-                title: "8. Rítmica Funk y Scratches", 
-                description: "El groove, semicorcheas y muteo de mano izquierda.",
-                quiz: [
-                    { 
-                        q: "¿En qué consiste el muteo de mano izquierda?", 
-                        options: [
-                            "Bajar el volumen de la guitarra", 
-                            "Rozar las cuerdas sin apretar para generar percusión sorda", 
-                            "Apagar el ampli"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "Al tocar semicorcheas continuas, ¿cuántos golpes das por tiempo (beat)?", 
-                        options: [
-                            "2", 
-                            "3", 
-                            "4 (Abajo-Arriba-Abajo-Arriba)"
-                        ], 
-                        correct: 2 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">El funk utiliza acordes de Séptima y un movimiento incansable de la mano derecha en semicorcheas.</p>
-                    
+                id: 8, title: "8. Rítmica Funk y Scratches", description: "El groove, semicorcheas y muteo de mano izquierda.",
+                quiz: [{ q: "¿En qué consiste el muteo de mano izquierda?", options: ["Bajar el volumen de la guitarra", "Rozar las cuerdas sin apretar para generar percusión sorda", "Apagar el ampli"], correct: 1 }, { q: "Al tocar semicorcheas continuas, ¿cuántos golpes das por tiempo (beat)?", options: ["2", "3", "4 (Abajo-Arriba-Abajo-Arriba)"], correct: 2 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">El funk utiliza acordes de Séptima y un movimiento incansable de la mano derecha en semicorcheas.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">Acorde E9 (El "Acorde Funk")</h3>
-                    <div class="bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800 inline-block mb-4">
-                        ${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}
-                    </div>
-                    
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Scratches (Notas Muertas)</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Para el "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Las 'x' en la tablatura indican esto.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Final: Groove Funk</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="funk">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Groove
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
-(Acorde base: E9 - traste 7)
-e|-7--x-x-x--7--x--7-7--x-x-|
-B|-7--x-x-x--7--x--7-7--x-x-|
-G|-7--x-x-x--7--x--7-7--x-x-|
-D|-6--x-x-x--6--x--6-6--x-x-|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <div class="bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800 inline-block mb-4">${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}</div>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Scratches (Notas Muertas)</h3><p class="text-gray-300 mb-4 leading-relaxed">Para el "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Las 'x' en la tablatura indican esto.</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Final: Groove Funk</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="funk"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Groove</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">(Acorde base: E9 - traste 7)\ne|-7--x-x-x--7--x--7-7--x-x-|\nB|-7--x-x-x--7--x--7-7--x-x-|\nG|-7--x-x-x--7--x--7-7--x-x-|\nD|-6--x-x-x--6--x--6-6--x-x-|</pre></div></div>`
             },
             {
-                id: 9, 
-                title: "9. Velocidad y Púa Avanzada", 
-                description: "Sincronización milimétrica, tresillos y secuencias shred.",
-                quiz: [
-                    { 
-                        q: "Para tocar rápido de forma limpia, ¿qué es lo más importante?", 
-                        options: [
-                            "Tensar el brazo al máximo", 
-                            "Mover la púa desde el codo", 
-                            "Relajación muscular y movimientos mínimos de muñeca"
-                        ], 
-                        correct: 2 
-                    }, 
-                    { 
-                        q: "¿Qué es tocar en tresillos?", 
-                        options: [
-                            "Tocar tres notas por cada golpe de metrónomo (tiempo)", 
-                            "Tocar en el traste 3", 
-                            "Tocar tres cuerdas a la vez"
-                        ], 
-                        correct: 0 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Entramos en territorio avanzado. Para conseguir velocidad real (shred), necesitas eliminar cualquier tensión en tu brazo derecho. El movimiento proviene de giros microscópicos de muñeca o de los dedos pulgar e índice.</p>
-                    
+                id: 9, title: "9. Velocidad y Púa Avanzada", description: "Sincronización milimétrica, tresillos y secuencias shred.",
+                quiz: [{ q: "Para tocar rápido de forma limpia, ¿qué es lo más importante?", options: ["Tensar el brazo al máximo", "Mover la púa desde el codo", "Relajación muscular y movimientos mínimos de muñeca"], correct: 2 }, { q: "¿Qué es tocar en tresillos?", options: ["Tocar tres notas por cada golpe de metrónomo (tiempo)", "Tocar en el traste 3", "Tocar tres cuerdas a la vez"], correct: 0 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Entramos en territorio avanzado. Para conseguir velocidad real (shred), necesitas eliminar cualquier tensión en tu brazo derecho. El movimiento proviene de giros microscópicos de muñeca o de los dedos pulgar e índice.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">La regla de la Sincronización</h3>
                     <p class="text-gray-300 mb-6 leading-relaxed">Tus manos izquierda y derecha están probablemente desincronizadas. La solución no es tocar más rápido, sino usar metrónomo a velocidades ridículamente lentas hasta que el ataque de la púa coincida perfectamente con la pulsación del traste.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Carrera Descendente (Shred Clásico)</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="speed">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia
-                            </button>
-                        </div>
-                        <p class="text-sm text-gray-400 mb-4">Toca 4 notas por golpe de metrónomo (semicorcheas) usando estricta púa alternada abajo-arriba-abajo-arriba.</p>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-e|-----------------------------------------|
-B|-5-3-1-0---------------------------------|
-G|---------2-0-----------------------------|
-D|-------------4-2-------------------------|
-A|-----------------2~----------------------|
-E|-----------------------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Carrera Descendente</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="speed"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia</button></div>
+                    <p class="text-sm text-gray-400 mb-4">Toca 4 notas por golpe de metrónomo (semicorcheas) usando estricta púa alternada abajo-arriba-abajo-arriba.</p>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-----------------------------------------|\nB|-5-3-1-0---------------------------------|\nG|---------2-0-----------------------------|\nD|-------------4-2-------------------------|\nA|-----------------2~----------------------|\nE|-----------------------------------------|</pre></div></div>`
             },
             {
-                id: 10, 
-                title: "10. Fingerstyle y Travis Picking", 
-                description: "Independencia de pulgar para acústicas y baladas de rock.",
-                quiz: [
-                    { 
-                        q: "¿Qué caracteriza al 'Travis Picking'?", 
-                        options: [
-                            "Un patrón de bajos alternados tocado con el pulgar mientras los demás dedos tocan melodías sincopadas", 
-                            "Golpear la caja de la guitarra", 
-                            "Tocar muy fuerte con púa"
-                        ], 
-                        correct: 0 
-                    }, 
-                    { 
-                        q: "¿Qué dedos se suelen usar para las 3 cuerdas más agudas (G, B, e) en fingerstyle tradicional?", 
-                        options: [
-                            "Solo el índice", 
-                            "Índice, medio y anular (p-i-m-a)", 
-                            "Pulgar y meñique"
-                        ], 
-                        correct: 1 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Suelta la púa. El Fingerstyle te convierte en una banda completa: tu pulgar es el bajista y tus otros dedos son los cantantes.</p>
-                    
+                id: 10, title: "10. Fingerstyle y Travis Picking", description: "Independencia de pulgar para acústicas y baladas de rock.",
+                quiz: [{ q: "¿Qué caracteriza al 'Travis Picking'?", options: ["Un patrón de bajos alternados tocado con el pulgar mientras los demás dedos tocan melodías sincopadas", "Golpear la caja de la guitarra", "Tocar muy fuerte con púa"], correct: 0 }, { q: "¿Qué dedos se suelen usar para las 3 cuerdas más agudas (G, B, e) en fingerstyle tradicional?", options: ["Solo el índice", "Índice, medio y anular (p-i-m-a)", "Pulgar y meñique"], correct: 1 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Suelta la púa. El Fingerstyle te convierte en una banda completa: tu pulgar es el bajista y tus otros dedos son los cantantes.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">La regla P-I-M-A</h3>
                     <p class="text-gray-300 mb-6 leading-relaxed">Asigna tus dedos: <strong>P</strong>ulgar (bajos: E, A, D), <strong>I</strong>ndice (cuerda G), <strong>M</strong>edio (cuerda B), <strong>A</strong>nular (cuerda e).</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Patrón Travis Básico</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="travis">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Travis
-                            </button>
-                        </div>
-                        <p class="text-sm text-gray-400 mb-4">Mantén un acorde de Do Mayor (C) fijo. El pulgar salta entre la cuerda 5 y la 4 constantemente. P=Pulgar, M=Medio, I=Índice.</p>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
-   C 
-   P   I   P(M)  P   I
-e|------------------------|
-B|-----------1------------|
-G|-----0-----------0------|
-D|-------2-----------2----|
-A|-3-----------3----------|
-E|------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Patrón Travis Básico</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="travis"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Travis</button></div>
+                    <p class="text-sm text-gray-400 mb-4">Mantén un acorde de Do Mayor (C) fijo. El pulgar salta entre la cuerda 5 y la 4 constantemente.</p>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">   C \n   P   I   P(M)  P   I\ne|------------------------|\nB|-----------1------------|\nG|-----0-----------0------|\nD|-------2-----------2----|\nA|-3-----------3----------|\nE|------------------------|</pre></div></div>`
             },
             {
-                id: 11, 
-                title: "11. Modos: El Sonido Dórico", 
-                description: "Rock clásico, Fusión y la nota 'mágica' de Santana.",
-                quiz: [
-                    { 
-                        q: "¿Cuál es la diferencia principal entre la escala Menor Natural (Eólica) y el modo Dórico?", 
-                        options: [
-                            "El Dórico tiene la sexta mayor (una nota más brillante)", 
-                            "El Dórico no tiene séptima", 
-                            "El Dórico es para tocar flamenco"
-                        ], 
-                        correct: 0 
-                    }, 
-                    { 
-                        q: "¿Sobre qué tipo de progresión brilla especialmente el modo Dórico?", 
-                        options: [
-                            "Sobre progresiones menores funk/rock de dos acordes (ej. Am7 - D7)", 
-                            "Sobre acordes Power Chords distorsionados", 
-                            "Sobre acordes Mayores puros"
-                        ], 
-                        correct: 0 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Cuando te aburras de la Pentatónica, los Modos Griegos te abren un nuevo universo. El modo <strong>Dórico</strong> es una escala menor pero con un toque elegante y brillante (usado exhaustivamente por Carlos Santana o Pink Floyd).</p>
-                    
+                id: 11, title: "11. Modos: El Sonido Dórico", description: "Rock clásico, Fusión y la nota 'mágica' de Santana.",
+                quiz: [{ q: "¿Cuál es la diferencia principal entre la escala Menor Natural (Eólica) y el modo Dórico?", options: ["El Dórico tiene la sexta mayor (una nota más brillante)", "El Dórico no tiene séptima", "El Dórico es para tocar flamenco"], correct: 0 }, { q: "¿Sobre qué tipo de progresión brilla especialmente el modo Dórico?", options: ["Sobre progresiones menores funk/rock de dos acordes (ej. Am7 - D7)", "Sobre acordes Power Chords distorsionados", "Sobre acordes Mayores puros"], correct: 0 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Cuando te aburras de la Pentatónica, los Modos Griegos te abren un nuevo universo. El modo <strong>Dórico</strong> es una escala menor pero con un toque elegante y brillante (usado exhaustivamente por Carlos Santana o Pink Floyd).</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Nota Mágica: 6ª Mayor</h3>
                     <p class="text-gray-300 mb-6 leading-relaxed">Coge tu pentatónica menor, y añádele las notas 2ª mayor y 6ª mayor. Esa 6ª mayor es la que da el sabor a jazz/fusión.</p>
-                    
-                    ${drawFretboard(6, 12, [
-                        { string: 4, fret: 7, root: true, label: '1' }, 
-                        { string: 4, fret: 9, root: false, label: '2' }, 
-                        { string: 3, fret: 5, root: false, label: '3m' }, 
-                        { string: 3, fret: 7, root: false, label: '4' }, 
-                        { string: 2, fret: 5, root: false, label: '5' }, 
-                        { string: 2, fret: 7, root: true, label: '6M' }
-                    ], 600, 150)}
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Dórico Fusión</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="dorian">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Dórico
-                            </button>
-                        </div>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-e|-------------------------|
-B|-----------------7~--8-5~|
-G|-------5--7--9-----------|
-D|--7----------------------|
-A|-------------------------|
-E|-------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                    ${drawFretboard(6, 12, [{ string: 4, fret: 7, root: true, label: '1' }, { string: 4, fret: 9, root: false, label: '2' }, { string: 3, fret: 5, root: false, label: '3m' }, { string: 3, fret: 7, root: false, label: '4' }, { string: 2, fret: 5, root: false, label: '5' }, { string: 2, fret: 7, root: true, label: '6M' } ], 600, 150)}
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Dórico Fusión</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="dorian"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Dórico</button></div>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-------------------------|\nB|-----------------7~--8-5~|\nG|-------5--7--9-----------|\nD|--7----------------------|\nA|-------------------------|\nE|-------------------------|</pre></div></div>`
             },
             {
-                id: 12, 
-                title: "12. Tapping a Dos Manos", 
-                description: "El legado de Van Halen. Arpegios a la velocidad de la luz.",
-                quiz: [
-                    { 
-                        q: "¿Qué es el Tapping?", 
-                        options: [
-                            "Golpear el cuerpo de la guitarra", 
-                            "Usar un dedo de la mano de la púa (derecha) para golpear una nota en el diapasón", 
-                            "Tocar armónicos"
-                        ], 
-                        correct: 1 
-                    }, 
-                    { 
-                        q: "En la notación de tablatura moderna, ¿qué letra suele indicar un toque de Tapping?", 
-                        options: [
-                            "Una 'T'", 
-                            "Una 'H'", 
-                            "Una 'P'"
-                        ], 
-                        correct: 0 
-                    }
-                ],
-                content: `
-                    <p class="text-gray-300 mb-6 leading-relaxed">Popularizado por Eddie Van Halen a finales de los 70s, el Tapping te permite tocar saltos de notas inmensos y arpegios rapidísimos que serían imposibles solo con la mano izquierda.</p>
-                    
+                id: 12, title: "12. Tapping a Dos Manos", description: "El legado de Van Halen. Arpegios a la velocidad de la luz.",
+                quiz: [{ q: "¿Qué es el Tapping?", options: ["Golpear el cuerpo de la guitarra", "Usar un dedo de la mano de la púa (derecha) para golpear una nota en el diapasón", "Tocar armónicos"], correct: 1 }, { q: "En la notación de tablatura moderna, ¿qué letra suele indicar un toque de Tapping?", options: ["Una 'T'", "Una 'H'", "Una 'P'"], correct: 0 }],
+                content: `<p class="text-gray-300 mb-6 leading-relaxed">Popularizado por Eddie Van Halen a finales de los 70s, el Tapping te permite tocar saltos de notas inmensos y arpegios rapidísimos que serían imposibles solo con la mano izquierda.</p>
                     <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Mecánica (T - p - p)</h3>
                     <p class="text-gray-300 mb-6 leading-relaxed">Sujeta la púa con el pulgar y el medio (o escóndela). Usa tu dedo índice derecho para golpear firmemente (Tap) la cuerda en un traste alto. Inmediatamente, pellizca ligeramente la cuerda al soltar (Pull-off) hacia un dedo de tu mano izquierda que ya está pisando una nota más grave.</p>
-                    
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio de Tapping Clásico</h4>
-                        <div class="flex items-center space-x-4 mb-6">
-                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="tapping">
-                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Tapping
-                            </button>
-                        </div>
-                        <p class="text-sm text-gray-400 mb-4">T = Tap con mano derecha. p = pull off a mano izquierda.</p>
-                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
-<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
-    T        T        T 
-e|-12p7p3---12p7p3---11p7p3--|
-B|---------------------------|
-G|---------------------------|
-</pre>
-                        </div>
-                    </div>
-                `
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio de Tapping Clásico</h4>
+                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="tapping"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Tapping</button></div>
+                    <p class="text-sm text-gray-400 mb-4">T = Tap con mano derecha. p = pull off a mano izquierda.</p>
+                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">    T        T        T \ne|-12p7p3---12p7p3---11p7p3--|\nB|---------------------------|\nG|---------------------------|</pre></div></div>`
             }
         ];
-
 
         /* ============================================================
          * 5. LÓGICA DE INTERFAZ, REFERENCIA Y EVENTOS JS
@@ -1738,23 +1064,24 @@ G|---------------------------|
             document.getElementById('btn-menu-toggle').addEventListener('click', () => toggleMenu());
             overlay.addEventListener('click', () => toggleMenu(true));
 
-            // Botón de Referencia (Toggle View)
+            // ==========================================
+            // LÓGICA DEL ACORDEÓN DE REFERENCIA (NUEVO)
+            // ==========================================
             const refView = document.getElementById('reference-view');
             const mainView = document.getElementById('main-scroll');
             
+            // Toggle Vista Referencia
             document.getElementById('btn-reference-toggle').addEventListener('click', function() {
-                // Estilo del botón activo
                 this.classList.toggle('bg-accent');
                 this.classList.toggle('text-black');
                 this.classList.toggle('bg-gray-800');
                 this.classList.toggle('text-white');
                 
-                // Mostrar / Ocultar Referencia
                 if (refView.classList.contains('hidden')) {
                     refView.classList.remove('hidden');
                     refView.classList.add('flex');
                     mainView.classList.add('hidden');
-                    if(window.innerWidth < 768) toggleMenu(true); // Cerrar menú móvil si estuviera abierto
+                    if(window.innerWidth < 768) toggleMenu(true); 
                 } else {
                     refView.classList.add('hidden');
                     refView.classList.remove('flex');
@@ -1762,19 +1089,46 @@ G|---------------------------|
                 }
             });
 
-            // Cerrar menú móvil si se hace clic en un enlace del índice de referencia
-            document.querySelectorAll('#reference-view aside a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth < 768) {
-                        // Opcional: hacer scroll automático en móvil
-                        const targetId = link.getAttribute('href');
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: 'smooth' });
-                        }
+            // Funcionalidad Acordeón Exclusivo (cierra uno al abrir otro)
+            const accHeaders = document.querySelectorAll('.accordion-header');
+            
+            // Abrir el primer elemento por defecto
+            if(accHeaders.length > 0) {
+                accHeaders[0].nextElementSibling.classList.remove('hidden');
+                accHeaders[0].querySelector('.chevron').style.transform = 'rotate(180deg)';
+            }
+
+            accHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const isOpen = !content.classList.contains('hidden');
+
+                    // 1. Cerrar todos los contenidos
+                    document.querySelectorAll('.accordion-content').forEach(c => c.classList.add('hidden'));
+                    
+                    // 2. Resetear todos los iconos chevron
+                    document.querySelectorAll('.accordion-header .chevron').forEach(icon => icon.style.transform = 'rotate(0deg)');
+
+                    // 3. Si estaba cerrado, ábrelo (y rota su icono)
+                    if (!isOpen) {
+                        content.classList.remove('hidden');
+                        header.querySelector('.chevron').style.transform = 'rotate(180deg)';
                     }
                 });
             });
+
+            // Smooth Scroll para los enlaces del acordeón
+            document.querySelectorAll('#reference-view aside a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Evitar el comportamiento hash brusco
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
 
             // Modales Herramientas
             document.getElementById('btn-tuner-modal').addEventListener('click', () => openModal('modal-tuner'));
