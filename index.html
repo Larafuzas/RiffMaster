@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="RiffMaster">
   
-  <!-- Enlaces al icono en la raíz del repositorio (ahora icon.png) -->
+  <!-- Enlaces al icono en la raíz del repositorio -->
   <link rel="apple-touch-icon" href="icon.png">
   <link rel="icon" type="image/png" href="icon.png">
 
@@ -55,7 +55,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
     .tab-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
     
-    /* Animación del metrónomo - Ya sin el tag !important */
+    /* Animación del metrónomo */
     @keyframes pulse-led {
       0% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
       100% { opacity: 0.3; transform: scale(1); box-shadow: none; }
@@ -69,7 +69,7 @@
   <header class="border-b border-amp-700 bg-amp-850/90 backdrop-blur sticky top-0 z-40 px-4 py-3 flex items-center justify-between shadow-lg">
     <div class="flex items-center gap-3">
       <button id="toggle-sidebar" class="lg:hidden p-2 rounded-lg bg-amp-700 hover:bg-amp-600 text-amber-400 focus:outline-none transition">
-        <i class="ph-bold ph-list text-xl"></i>
+        <i class="ph-bold ph-list text-xl pointer-events-none"></i>
       </button>
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-amp-900 font-black shadow-md shadow-amber-500/20">
@@ -97,14 +97,14 @@
 
       <!-- Botón Afinador -->
       <button id="btn-tuner-modal" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-amp-800 hover:bg-amp-700 border border-amp-600 text-amber-400 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" aria-label="Afinador">
-        <i class="ph-bold ph-waveform text-lg sm:text-base"></i>
-        <span class="hidden md:inline">Afinador</span>
+        <i class="ph-bold ph-waveform text-lg sm:text-base pointer-events-none"></i>
+        <span class="hidden md:inline pointer-events-none">Afinador</span>
       </button>
 
       <!-- Botón Configuración / Engranaje -->
       <button id="btn-settings-modal" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-gradient-to-r from-amp-700 to-amp-800 hover:from-amp-600 hover:to-amp-700 border border-amp-600 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" aria-label="Configuración">
-        <i class="ph-bold ph-gear text-lg sm:text-base text-amber-400"></i>
-        <span class="hidden sm:inline">Sistema</span>
+        <i class="ph-bold ph-gear text-lg sm:text-base text-amber-400 pointer-events-none"></i>
+        <span class="hidden sm:inline pointer-events-none">Sistema</span>
       </button>
     </div>
   </header>
@@ -218,7 +218,7 @@
     </div>
   </div>
 
-  <!-- MODAL: Configuración / Sistema -->
+  <!-- MODAL: Configuración / Sistema v1.4.0 -->
   <div id="settings-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
       <div class="p-5 border-b border-amp-700 flex justify-between items-center bg-amp-900/80">
@@ -237,7 +237,7 @@
           <div class="bg-amp-800 border border-amp-700 rounded-xl p-4 flex flex-col gap-3 shadow-inner">
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-300 font-medium">Versión Instalada:</span>
-              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.3.0 (Build Final iOS)</span>
+              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.4.0</span>
             </div>
             <button id="btn-check-update" class="w-full py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm text-white font-bold flex items-center justify-center gap-2 transition-all">
               <i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones
@@ -249,18 +249,18 @@
         <div>
           <h4 class="text-xs font-bold text-amber-400 uppercase mb-3 tracking-widest flex items-center gap-1.5"><i class="ph-bold ph-floppy-disk"></i> Gestión de Progreso</h4>
           <p class="text-xs text-gray-400 mb-4 leading-relaxed bg-amp-900/50 p-3 rounded-lg border border-amp-800">
-            Exporta tu progreso a un archivo seguro para no perderlo. En iOS, usa esta opción para guardar en iCloud o enviar por AirDrop.
+            Exporta tu progreso a un archivo seguro. En iOS, se abrirá la hoja para guardar en Archivos (iCloud) o compartir.
           </p>
           
           <div class="space-y-3">
             <button id="btn-export-backup" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-amber-500/25 transition-all">
-              <i class="ph-bold ph-export text-lg pointer-events-none"></i> Compartir / Exportar Backup
+              <i class="ph-bold ph-export text-lg pointer-events-none"></i> Generar Backup JSON
             </button>
 
             <div class="relative group">
               <input type="file" id="input-restore" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" aria-label="Restaurar backup">
-              <button class="w-full py-3 bg-amp-800 border border-amp-600 group-hover:bg-amp-700 group-hover:border-amp-500 text-gray-200 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-sm">
-                <i class="ph-bold ph-download-simple text-lg pointer-events-none"></i> Restaurar desde JSON
+              <button class="w-full py-3 bg-amp-800 border border-amp-600 group-hover:bg-amp-700 group-hover:border-amp-500 text-gray-200 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-sm pointer-events-none">
+                <i class="ph-bold ph-download-simple text-lg"></i> Restaurar desde JSON
               </button>
             </div>
           </div>
@@ -286,32 +286,24 @@
     /* ============================================================
      * 1. GLOBALES Y MODALES (UI GENERAL)
      * ============================================================ */
-    let practiceTimerInt = null; // Timer global para la zona de práctica
-    window.Riffs = []; // Registro dinámico de Riffs (reemplaza los onclick inline)
-    const focusTrapInstances = {}; // Registro de trampas de foco
+    let practiceTimerInt = null;
+    window.Riffs = []; 
+    const focusTrapInstances = {};
 
     function trapFocus(modalEl) {
       const focusableEls = modalEl.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, details, [tabindex]:not([tabindex="-1"])');
       if(focusableEls.length === 0) return;
-      const first = focusableEls[0];  
-      const last = focusableEls[focusableEls.length - 1];
+      const first = focusableEls[0], last = focusableEls[focusableEls.length - 1];
       
       const handler = function(e) {
         if (e.key === 'Tab' || e.keyCode === 9) {
           if (e.shiftKey) {
-            if (document.activeElement === first) {
-              last.focus();
-              e.preventDefault();
-            }
+            if (document.activeElement === first) { last.focus(); e.preventDefault(); }
           } else {
-            if (document.activeElement === last) {
-              first.focus();
-              e.preventDefault();
-            }
+            if (document.activeElement === last) { first.focus(); e.preventDefault(); }
           }
         }
       };
-      
       modalEl.addEventListener('keydown', handler);
       focusTrapInstances[modalEl.id] = handler;
       first.focus();
@@ -330,7 +322,6 @@
       if (!modal) return;
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-      // Forzar reflow para que la transición de opacidad funcione
       void modal.offsetWidth; 
       modal.classList.remove('opacity-0');
       trapFocus(modal);
@@ -341,80 +332,63 @@
       if (!modal) return;
       modal.classList.add('opacity-0');
       untrapFocus(modal);
-      setTimeout(() => {
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-      }, 300);
+      setTimeout(() => { modal.classList.remove('flex'); modal.classList.add('hidden'); }, 300);
     }
 
     document.getElementById('btn-tuner-modal').addEventListener('click', () => openModal('tuner-modal'));
     document.getElementById('btn-settings-modal').addEventListener('click', () => openModal('settings-modal'));
     
-    // Delegación global para botones de cierre de modal y reproductores de audio
-    document.addEventListener('click', (e) => {
-       const btnClose = e.target.closest('.btn-close-modal');
-       if (btnClose) {
-         const targetId = btnClose.getAttribute('data-target');
-         if (targetId) closeModal(targetId);
-       }
-
-       // Eventos delegados de Audio
-       const playBtn = e.target.closest('.play-riff-btn');
-       if(playBtn) {
-          const idx = playBtn.getAttribute('data-riff-id');
-          if (idx !== null && window.Riffs[idx]) {
-              AudioEngine.playRiff(window.Riffs[idx]);
-          }
-       }
-       const noteBtn = e.target.closest('.play-note-btn');
-       if(noteBtn) {
-          const note = noteBtn.getAttribute('data-note');
-          if (note) AudioEngine.playNote(note, 2.5);
-       }
-       const navBtn = e.target.closest('.btn-nav');
-       if(navBtn) {
-          const target = navBtn.getAttribute('data-nav-target');
-          if (target !== null) selectModule(parseInt(target));
-       }
+    document.getElementById("toggle-sidebar").addEventListener('click', () => {
+      document.getElementById("sidebar").classList.remove("-translate-x-full");
+      document.getElementById("sidebar-backdrop").classList.remove("hidden");
+    });
+    document.getElementById("sidebar-backdrop").addEventListener('click', () => {
+      document.getElementById("sidebar").classList.add("-translate-x-full");
+      document.getElementById("sidebar-backdrop").classList.add("hidden");
     });
 
     /* ============================================================
-     * 2. SINTETIZADOR DE AUDIO - WEB AUDIO API (RESCATADO PARA IOS)
+     * 2. AUDIO ENGINE & iOS ROBUST UNLOCK (v1.4.0 FIX)
      * ============================================================ */
     const AudioEngine = (() => {
       let ctx = null;
+      let isUnlocked = false;
 
       function getContext() {
         if (!ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           ctx = new AudioContext();
         }
-        if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
-          ctx.resume().catch(e => console.warn("Error al reanudar AudioContext", e));
-        }
         return ctx;
       }
 
-      // iOS Unlock Hack Robusto: Se adjunta globalmente a la ventana
-      const unlockAudioContext = () => {
+      function unlockAudioContext() {
+        if (isUnlocked) return;
         const audioCtx = getContext();
+        
+        // Forced resume
         if (audioCtx.state === 'suspended') {
             audioCtx.resume();
         }
-        // Reproducir un buffer minúsculo vacío para habilitar el motor en Safari
+
+        // Create empty buffer & play it (Standard iOS Web Audio Unlock trick)
         const buffer = audioCtx.createBuffer(1, 1, 22050);
         const source = audioCtx.createBufferSource();
         source.buffer = buffer;
         source.connect(audioCtx.destination);
         source.start(0);
 
-        // Limpiar los escuchas para no ejecutar esto más de una vez
-        const unlockEvents = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
-        unlockEvents.forEach(evt => window.removeEventListener(evt, unlockAudioContext, { capture: true }));
-      };
-      
-      const setupEvents = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
-      setupEvents.forEach(evt => window.addEventListener(evt, unlockAudioContext, { once: true, capture: true }));
+        isUnlocked = true;
+        // Clean up listeners once unlocked
+        ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+            document.removeEventListener(evt, unlockAudioContext, { capture: true });
+        });
+      }
+
+      // Attach unlock listeners aggressively
+      ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+          document.addEventListener(evt, unlockAudioContext, { capture: true, once: true });
+      });
 
       const noteFreqs = {
         'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'A#2': 116.54, 'B2': 123.47,
@@ -425,7 +399,11 @@
 
       function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
         const audioCtx = getContext();
-        const startTime = audioCtx.currentTime + (timeOffset > 0 ? timeOffset : 0.01);
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        // Crucial fix for iOS: add 0.05 (50ms) to ensure event is scheduled in the future, not the exact present or past.
+        const startTime = audioCtx.currentTime + timeOffset + 0.05; 
+        const safeDuration = Math.max(duration, 0.05);
         const freq = noteFreqs[noteName] || 220;
 
         const osc = audioCtx.createOscillator();
@@ -435,23 +413,22 @@
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(isDistorted ? 2800 : 1600, startTime);
-        filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + duration);
+        filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + safeDuration);
 
         const gainNode = audioCtx.createGain();
         gainNode.gain.setValueAtTime(0.001, startTime);
         gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration);
 
         osc.connect(filter);
         filter.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
         osc.start(startTime);
-        osc.stop(startTime + duration);
+        osc.stop(startTime + safeDuration);
       }
 
       function playChord(notes, duration = 1.5, isDistorted = false) {
-        getContext(); 
         notes.forEach((note, index) => {
           playNote(note, duration, isDistorted, index * 0.035);
         });
@@ -465,9 +442,7 @@
 
       function playRiff(sequence) {
         stopCurrentSequence();
-        const audioCtx = getContext();
         let cumulativeTime = 0;
-        
         sequence.forEach((item) => {
           const tId = setTimeout(() => {
             if (Array.isArray(item.note)) {
@@ -483,19 +458,21 @@
 
       function playClick(isAccented = false) {
         const audioCtx = getContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const startTime = audioCtx.currentTime + 0.05;
+
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        const now = audioCtx.currentTime + 0.01;
         
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(isAccented ? 1200 : 800, now);
-        gain.gain.setValueAtTime(1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.frequency.setValueAtTime(isAccented ? 1200 : 800, startTime);
+        gain.gain.setValueAtTime(1, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.05);
         
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.06);
+        osc.start(startTime);
+        osc.stop(startTime + 0.06);
       }
 
       let isBackingPlaying = false;
@@ -503,7 +480,6 @@
       
       function startBackingTrack(chordProgression, bpm = 100) {
         stopBackingTrack();
-        const audioCtx = getContext();
         isBackingPlaying = true;
         const beatDurMs = (60 / bpm) * 1000;
         let beat = 0;
@@ -512,7 +488,8 @@
         backingInterval = setInterval(() => {
           if (!isBackingPlaying) return;
           const ctx = getContext();
-          const now = ctx.currentTime + 0.01;
+          if (ctx.state === 'suspended') ctx.resume();
+          const now = ctx.currentTime + 0.05;
           
           if (beat % 2 === 0) { 
             const kickOsc = ctx.createOscillator();
@@ -555,11 +532,46 @@
         }
       }
 
-      return { playNote, playChord, playRiff, playClick, stopCurrentSequence, startBackingTrack, stopBackingTrack, isBackingActive: () => isBackingPlaying, getContext };
+      return { playNote, playChord, playRiff, playClick, stopCurrentSequence, startBackingTrack, stopBackingTrack, isBackingActive: () => isBackingPlaying };
     })();
 
     /* ============================================================
-     * 3. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
+     * 3. DELEGACIÓN GLOBAL DE EVENTOS (Reemplazo total de onclicks)
+     * ============================================================ */
+    document.addEventListener('click', (e) => {
+       // Cierre de Modales
+       const btnClose = e.target.closest('.btn-close-modal');
+       if (btnClose) {
+         const targetId = btnClose.getAttribute('data-target');
+         if (targetId) closeModal(targetId);
+       }
+
+       // Botones de Play Tab/Riff
+       const playBtn = e.target.closest('.play-riff-btn');
+       if(playBtn) {
+          const idx = playBtn.getAttribute('data-riff-id');
+          if (idx !== null && window.Riffs[idx]) {
+              AudioEngine.playRiff(window.Riffs[idx]);
+          }
+       }
+       
+       // Botones de Afinador
+       const noteBtn = e.target.closest('.play-note-btn');
+       if(noteBtn) {
+          const note = noteBtn.getAttribute('data-note');
+          if (note) AudioEngine.playNote(note, 2.5);
+       }
+       
+       // Navegación de módulos inferior (Siguiente/Anterior)
+       const navBtn = e.target.closest('.btn-nav');
+       if(navBtn) {
+          const target = navBtn.getAttribute('data-nav-target');
+          if (target !== null) selectModule(parseInt(target));
+       }
+    });
+
+    /* ============================================================
+     * 4. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
      * ============================================================ */
     const SVGVisuals = {
       renderFretboard(dots = [], startFret = 0, numFrets = 5, title = "Diapasón") {
@@ -668,7 +680,7 @@
     };
 
     /* ============================================================
-     * 4. BASE DE DATOS DEL CURSO COMPLETAMENTE DETALLADA
+     * 5. BASE DE DATOS DEL CURSO COMPLETAMENTE DETALLADA (LOS 5 MÓDULOS)
      * ============================================================ */
     const CourseData = [
       {
@@ -821,9 +833,9 @@
     ];
 
     /* ============================================================
-     * 5. LÓGICA DE ALMACENAMIENTO Y UI CORE
+     * 6. LÓGICA DE ALMACENAMIENTO, SIDEBAR Y UI CORE
      * ============================================================ */
-    const StorageKey = "riffmaster_data_v3";
+    const StorageKey = "riffmaster_data_v4";
     let currentModuleIndex = 0;
 
     function showToast(msgText, isSuccess = true) {
@@ -847,7 +859,7 @@
         if(data && Array.isArray(data.completedModules)) {
            const validIds = CourseData.map(c => c.id);
            let mods = data.completedModules.filter(m => validIds.includes(m));
-           return { completedModules: [...new Set(mods)] }; // Sanitizado y únicos
+           return { completedModules: [...new Set(mods)] };
         }
         return { completedModules: [] };
       }
@@ -862,7 +874,7 @@
     function updateGlobalProgressBar() {
       const data = getProgressData();
       const rawPct = (data.completedModules.length / CourseData.length) * 100;
-      const pct = Math.max(0, Math.min(100, Math.round(rawPct))); // Clamp 0-100
+      const pct = Math.max(0, Math.min(100, Math.round(rawPct)));
       
       document.getElementById("global-progress-bar").style.width = `${pct}%`;
       document.getElementById("global-progress-text").textContent = `${pct}%`;
@@ -877,13 +889,15 @@
         const isActive = idx === currentModuleIndex;
         const btn = document.createElement("button");
         btn.className = `w-full text-left p-3.5 rounded-xl transition-all duration-200 flex items-center justify-between group ${isActive ? 'bg-amber-500/15 border border-amber-500/50 shadow-md transform scale-[1.02]' : 'bg-amp-800/40 border border-transparent hover:bg-amp-800/80 hover:border-amp-700'}`;
-        btn.onclick = () => { 
+        
+        btn.addEventListener('click', () => { 
           selectModule(idx); 
           document.getElementById("sidebar").classList.add("-translate-x-full"); 
           document.getElementById("sidebar-backdrop").classList.add("hidden"); 
-        };
+        });
+
         btn.innerHTML = `
-          <div class="flex items-center gap-3.5">
+          <div class="flex items-center gap-3.5 pointer-events-none">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-sm ${isDone ? 'bg-amber-500 text-amp-900' : isActive ? 'bg-amber-500/40 text-amber-300 border border-amber-500/50' : 'bg-amp-700 text-gray-400 border border-amp-600'}">
               ${isDone ? '<i class="ph-bold ph-check text-lg"></i>' : mod.number}
             </div>
@@ -906,11 +920,8 @@
          practiceTimerInt = null;
       }
       
-      // Reiniciamos el registro de riffs en cada render para prevenir saturación
       window.Riffs = [];
-      
       const mod = CourseData[currentModuleIndex];
-      const isCompleted = getProgressData().completedModules.includes(mod.id);
       
       let sectionsHtml = mod.sections.map(sec => {
         let secRiffId = null;
@@ -1019,7 +1030,7 @@
         </div>
       `;
 
-      // Inicialización de escuchas internos del módulo renderizado
+      // Assign dynamic listeners for this rendered module
       const btnBt = document.getElementById("btn-bt");
       if(btnBt) {
         btnBt.addEventListener('click', (e) => {
@@ -1112,29 +1123,26 @@
         });
       }
 
-      // Scroll arriba al cambiar de modulo
       document.getElementById("main-content-scroll").scrollTo({ top: 0, behavior: 'smooth' });
       renderSidebarNavigation();
     }
 
     /* ============================================================
-     * 6. LÓGICA DE METRÓNOMO Y SIDEBAR
+     * 7. METRÓNOMO Y CONTROLES DEL SISTEMA (v1.4.0)
      * ============================================================ */
-    let metroInt = null, metroBeat = 0;
-    let metroDebounceTimer;
+    let metroInt = null, metroBeat = 0, metroDebounceTimer;
     const mSld = document.getElementById("metro-bpm");
     const mTxt = document.getElementById("metro-bpm-display");
     const mBtn = document.getElementById("metro-toggle");
     const mLed = document.getElementById("metro-led");
 
-    // Fix: Debounce clean metronome slider restart
     mSld.addEventListener('input', e => { 
        mTxt.textContent = e.target.value + " BPM"; 
        clearTimeout(metroDebounceTimer);
        metroDebounceTimer = setTimeout(() => {
           if(metroInt) { 
-             mBtn.click(); // Stop
-             setTimeout(() => mBtn.click(), 50); // Start
+             mBtn.click();
+             setTimeout(() => mBtn.click(), 50);
           } 
        }, 300);
     });
@@ -1157,7 +1165,7 @@
         AudioEngine.playClick(true);
         mLed.classList.add("led-active");
         mLed.style.backgroundColor = "#ef4444";
-        mLed.style.color = "#ef4444"; // Para el currentColor del shadow
+        mLed.style.color = "#ef4444";
         setTimeout(() => { 
           mLed.classList.remove("led-active"); 
           mLed.style.backgroundColor = ""; 
@@ -1185,18 +1193,6 @@
       }
     });
 
-    document.getElementById("toggle-sidebar").addEventListener('click', () => {
-      document.getElementById("sidebar").classList.remove("-translate-x-full");
-      document.getElementById("sidebar-backdrop").classList.remove("hidden");
-    });
-    document.getElementById("sidebar-backdrop").addEventListener('click', () => {
-      document.getElementById("sidebar").classList.add("-translate-x-full");
-      document.getElementById("sidebar-backdrop").classList.add("hidden");
-    });
-
-    /* ============================================================
-     * 7. ACTUALIZACIONES SIMULADAS Y BACKUP (WEB SHARE API)
-     * ============================================================ */
     document.getElementById("btn-check-update").addEventListener("click", function() {
       const btn = this;
       btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin pointer-events-none"></i> Buscando...';
@@ -1204,7 +1200,7 @@
       setTimeout(() => {
         btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400 pointer-events-none"></i> App Actualizada';
         btn.classList.add("bg-amp-800", "border-emerald-500/40");
-        showToast("Estás usando la versión más reciente del curso (v1.3.0).", true);
+        showToast("Estás usando la versión más reciente del curso (v1.4.0).", true);
         setTimeout(() => {
           btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones';
           btn.disabled = false;
@@ -1214,7 +1210,7 @@
     });
 
     document.getElementById("btn-export-backup").addEventListener("click", async () => {
-      const rawData = JSON.stringify(getProgressData()); // Usamos data sanitizada
+      const rawData = JSON.stringify(getProgressData());
       const blob = new Blob([rawData], { type: "application/json" });
       const fileName = "RiffMaster_Backup.json";
       const file = new File([blob], fileName, { type: "application/json" });
@@ -1224,11 +1220,11 @@
           await navigator.share({
             files: [file],
             title: 'Backup RiffMaster',
-            text: 'Aquí está la copia de seguridad de mi progreso en el curso de guitarra RiffMaster.'
+            text: 'Copia de seguridad de mi progreso en el curso RiffMaster.'
           });
           showToast("Archivo compartido exitosamente.");
         } catch (e) {
-          console.log("Error o cancelación al compartir:", e);
+          console.log("Canceled share or error:", e);
         }
       } else {
         const url = URL.createObjectURL(blob);
@@ -1251,7 +1247,6 @@
         try {
           const json = JSON.parse(event.target.result);
           if(json && Array.isArray(json.completedModules)) {
-            // Sanitizamos al guardar para asegurarnos de que solo se inyectan ID válidos
             const validIds = CourseData.map(c => c.id);
             let safeMods = json.completedModules.filter(m => validIds.includes(m));
             json.completedModules = [...new Set(safeMods)];
