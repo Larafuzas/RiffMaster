@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RiffMaster - Curso Completo de Guitarra Eléctrica Sin Solfeo</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons CDN -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            amber: {
+              450: '#ff9214',
+              550: '#ea6505',
+            },
+            amp: {
+              900: '#121214',
+              850: '#18181c',
+              800: '#222228',
+              700: '#2d2d35',
+              600: '#3f3f4a',
+              amber: '#f59e0b',
+              glow: '#ff7700'
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Estilos personalizados para tablaturas y estética de amplificador */
+    .grill-pattern {
+      background-color: #121214;
+      background-image: radial-gradient(#222228 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+    .amber-glow {
+      box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.35);
+    }
+    .amber-glow-sm {
+      box-shadow: 0 0 10px -2px rgba(245, 158, 11, 0.4);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #18181c;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3f3f4a;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #f59e0b;
+    }
+    .tab-font {
+      font-family: 'Courier New', Courier, monospace;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body class="bg-amp-900 text-gray-200 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+
+  <!-- Header Superior -->
+  <header class="border-b border-amp-700 bg-amp-850/90 backdrop-blur sticky top-0 z-40 px-4 py-3 flex items-center justify-between shadow-lg">
+    <div class="flex items-center gap-3">
+      <button id="toggle-sidebar" class="lg:hidden p-2 rounded-lg bg-amp-700 hover:bg-amp-600 text-amber-400 focus:outline-none transition">
+        <i class="ph-bold ph-list text-xl"></i>
+      </button>
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-amp-900 font-black shadow-md shadow-amber-500/20">
+          <i class="ph-fill ph-guitar text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            RiffMaster <span class="text-xs uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-semibold border border-amber-500/30">Sin Solfeo</span>
+          </h1>
+          <p class="text-xs text-gray-400 hidden sm:block">Método 100% visual y práctico para guitarra eléctrica</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de progreso global y utilidades -->
+    <div class="flex items-center gap-4">
+      <!-- Progreso -->
+      <div class="hidden sm:flex flex-col items-end gap-1">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-gray-400">Progreso del Curso:</span>
+          <span id="global-progress-text" class="font-bold text-amber-400">0%</span>
+        </div>
+        <div class="w-36 h-2 bg-amp-700 rounded-full overflow-hidden">
+          <div id="global-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500 w-0"></div>
+        </div>
+      </div>
+
+      <!-- Afinador Rápido / Audio Demo -->
+      <button id="btn-tuner-modal" class="px-3 py-1.5 rounded-lg bg-amp-800 hover:bg-amp-700 border border-amp-600 text-amber-400 text-xs font-semibold flex items-center gap-1.5 transition">
+        <i class="ph-bold ph-waveform"></i>
+        <span class="hidden md:inline">Afinador Guía</span>
+      </button>
+
+      <!-- Descargar HTML Offline -->
+      <button id="btn-download-offline" title="Descargar archivo completo para uso sin conexión" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-bold text-xs flex items-center gap-1.5 shadow-md transition">
+        <i class="ph-bold ph-download-simple"></i>
+        <span class="hidden sm:inline">Guardar Offline</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal: Sidebar de Módulos + Contenido de Lección -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- Sidebar Navegación de Lecciones -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-72 sm:w-80 bg-amp-850 border-r border-amp-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col pt-16 lg:pt-0">
+      <div class="p-4 border-b border-amp-700 flex items-center justify-between">
+        <h2 class="text-xs uppercase tracking-wider font-bold text-gray-400">Módulos del Curso</h2>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-amp-700 text-amber-300 font-mono" id="completed-count">0/5 Hecho</span>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2" id="modules-list">
+        <!-- Renderizado dinámicamente con JavaScript -->
+      </nav>
+
+      <!-- Herramientas extra en el pie del sidebar: Metrónomo integrado -->
+      <div class="p-3 bg-amp-800/80 border-t border-amp-700">
+        <div class="bg-amp-900/90 rounded-xl p-3 border border-amp-700/70">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
+              <i class="ph-bold ph-timer text-amber-400"></i> Metrónomo de Estudio
+            </span>
+            <span id="metro-bpm-display" class="font-mono text-sm font-bold text-amber-400">90 BPM</span>
+          </div>
+          <div class="flex items-center gap-2 mb-3">
+            <input type="range" id="metro-bpm" min="50" max="180" value="90" class="w-full h-1.5 bg-amp-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="metro-toggle" class="flex-1 py-1.5 rounded-lg bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <i class="ph-fill ph-play" id="metro-icon"></i> <span id="metro-btn-text">Iniciar</span>
+            </button>
+            <div id="metro-led" class="w-3 h-3 rounded-full bg-amp-600 transition-colors duration-100"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay oscuro en móvil al abrir sidebar -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden backdrop-blur-sm"></div>
+
+    <!-- Área Principal de Contenido de la Lección -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar grill-pattern p-4 sm:p-6 lg:p-8 flex justify-center" id="main-content-scroll">
+      <div class="max-w-4xl w-full space-y-8" id="lesson-container">
+        <!-- Contenido inyectado dinámicamente según la lección seleccionada -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Afinador de Referencia de Cuerdas -->
+  <div id="tuner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button id="btn-close-tuner" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+        <i class="ph-bold ph-x"></i>
+      </button>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="p-2 rounded-lg bg-amber-500/20 text-amber-400">
+          <i class="ph-bold ph-waveform text-2xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Afinador Guía por Oído</h3>
+          <p class="text-xs text-gray-400">Afinación estándar: E - A - D - G - B - E</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+        Haz clic en cada cuerda para escuchar su frecuencia exacta sintetizada y afina tu guitarra eléctrica cuerda por cuerda.
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
+        <button onclick="AudioEngine.playNote('E2', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">6ª Cuerda (Gruesa)</span>
+          <span class="text-lg font-mono font-bold text-amber-400">E2 (Mi)</span>
+          <span class="text-[10px] text-gray-500 font-mono">82.4 Hz</span>
+        </button>
+        <button onclick="AudioEngine.playNote('A2', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">5ª Cuerda</span>
+          <span class="text-lg font-mono font-bold text-amber-400">A2 (La)</span>
+          <span class="text-[10px] text-gray-500 font-mono">110.0 Hz</span>
+        </button>
+        <button onclick="AudioEngine.playNote('D3', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">4ª Cuerda</span>
+          <span class="text-lg font-mono font-bold text-amber-400">D3 (Re)</span>
+          <span class="text-[10px] text-gray-500 font-mono">146.8 Hz</span>
+        </button>
+        <button onclick="AudioEngine.playNote('G3', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">3ª Cuerda</span>
+          <span class="text-lg font-mono font-bold text-amber-400">G3 (Sol)</span>
+          <span class="text-[10px] text-gray-500 font-mono">196.0 Hz</span>
+        </button>
+        <button onclick="AudioEngine.playNote('B3', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">2ª Cuerda</span>
+          <span class="text-lg font-mono font-bold text-amber-400">B3 (Si)</span>
+          <span class="text-[10px] text-gray-500 font-mono">246.9 Hz</span>
+        </button>
+        <button onclick="AudioEngine.playNote('E4', 1.8)" class="p-3 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/50 rounded-xl flex flex-col items-center gap-1 transition">
+          <span class="text-xs text-gray-400">1ª Cuerda (Fina)</span>
+          <span class="text-lg font-mono font-bold text-amber-400">E4 (Mi)</span>
+          <span class="text-[10px] text-gray-500 font-mono">329.6 Hz</span>
+        </button>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="btn-close-tuner-2" class="px-4 py-2 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm font-semibold text-white transition">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notificaciones Flotantes -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-amp-800 border border-amber-500 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <i class="ph-fill ph-check-circle text-amber-400 text-xl" id="toast-icon"></i>
+    <span id="toast-msg" class="text-sm font-medium">Mensaje</span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SCRIPT LOGIC: Data, Engine, Audio & UI    -->
+  <!-- ========================================== -->
+  <script>
+    /* ============================================================
+     * 1. SINTETIZADOR DE AUDIO INTEGRADO CON WEB AUDIO API
+     * (Modelado de guitarra eléctrica limpia/overdrive, metrónomo y bajo/batería para backing tracks)
+     * ============================================================ */
+    const AudioEngine = (() => {
+      let ctx = null;
+
+      function getContext() {
+        if (!ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          ctx = new AudioContext();
+        }
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        return ctx;
+      }
+
+      // Tabla de frecuencias estándar de notas
+      const noteFreqs = {
+        'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'A#2': 116.54, 'B2': 123.47,
+        'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00,
+        'G#3': 207.65, 'A3': 220.00, 'A#3': 233.08, 'B3': 246.94, 'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
+        'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25,
+        'D5': 587.33, 'E5': 659.25
+      };
+
+      // Simulación de cuerda pulsada con filtro cálido y leve overdrive
+      function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
+        const audioCtx = getContext();
+        const startTime = audioCtx.currentTime + timeOffset;
+        const freq = noteFreqs[noteName] || 220;
+
+        // Oscilador Principal tipo Diente de Sierra / Triángulo para armónicos de cuerda
+        const osc = audioCtx.createOscillator();
+        osc.type = isDistorted ? 'sawtooth' : 'triangle';
+        osc.frequency.setValueAtTime(freq, startTime);
+
+        // Sub-armónico sutil
+        const subOsc = audioCtx.createOscillator();
+        subOsc.type = 'sawtooth';
+        subOsc.frequency.setValueAtTime(freq * 2, startTime);
+
+        // Filtro emulador de cápsula y cuerpo de guitarra
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(isDistorted ? 2800 : 1600, startTime);
+        filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + duration);
+
+        // Ganancia / Envolvente (Ataque rápido, decay de cuerda metálica)
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.001, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.4, startTime + 0.015);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+        // Conexiones
+        osc.connect(filter);
+        subOsc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.start(startTime);
+        subOsc.start(startTime);
+        osc.stop(startTime + duration);
+        subOsc.stop(startTime + duration);
+      }
+
+      // Reproducción de acorde con rasgueo ligero (strum)
+      function playChord(notes, duration = 1.5, isDistorted = false) {
+        notes.forEach((note, index) => {
+          playNote(note, duration, isDistorted, index * 0.035);
+        });
+      }
+
+      // Reproducción de secuencia melódica o riff
+      let sequenceTimeouts = [];
+      function stopCurrentSequence() {
+        sequenceTimeouts.forEach(t => clearTimeout(t));
+        sequenceTimeouts = [];
+      }
+
+      function playRiff(sequence) {
+        stopCurrentSequence();
+        const audioCtx = getContext();
+        let cumulativeTime = 0;
+        sequence.forEach((item) => {
+          const tId = setTimeout(() => {
+            if (Array.isArray(item.note)) {
+              playChord(item.note, item.dur || 0.5, item.drive || false);
+            } else if (item.note) {
+              playNote(item.note, item.dur || 0.4, item.drive || false);
+            }
+          }, cumulativeTime * 1000);
+          sequenceTimeouts.push(tId);
+          cumulativeTime += item.gap || 0.35;
+        });
+      }
+
+      // Metrónomo Click
+      function playClick(isAccented = false) {
+        const audioCtx = getContext();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const now = audioCtx.currentTime;
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(isAccented ? 1200 : 800, now);
+
+        gain.gain.setValueAtTime(1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.06);
+      }
+
+      // Backing Track sintético de batería y bajo de apoyo
+      let isBackingPlaying = false;
+      let backingInterval = null;
+
+      function startBackingTrack(chordProgression, bpm = 100, onBeat = null) {
+        stopBackingTrack();
+        getContext();
+        isBackingPlaying = true;
+        const beatDurationMs = (60 / bpm) * 1000;
+        let beat = 0;
+        let chordIndex = 0;
+
+        backingInterval = setInterval(() => {
+          if (!isBackingPlaying) return;
+          const isDownbeat = (beat % 4 === 0);
+          
+          // Bombo en tiempos 1 y 3, Caja en 2 y 4
+          const audioCtx = getContext();
+          const now = audioCtx.currentTime;
+          
+          if (beat % 2 === 0) {
+            // Kick Drum sintetizado
+            const kickOsc = audioCtx.createOscillator();
+            const kickGain = audioCtx.createGain();
+            kickOsc.frequency.setValueAtTime(130, now);
+            kickOsc.frequency.exponentialRampToValueAtTime(35, now + 0.1);
+            kickGain.gain.setValueAtTime(0.6, now);
+            kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            kickOsc.connect(kickGain);
+            kickGain.connect(audioCtx.destination);
+            kickOsc.start(now);
+            kickOsc.stop(now + 0.15);
+          } else {
+            // Snare acústico simulado
+            const snareOsc = audioCtx.createOscillator();
+            const snareGain = audioCtx.createGain();
+            snareOsc.type = 'triangle';
+            snareOsc.frequency.setValueAtTime(220, now);
+            snareGain.gain.setValueAtTime(0.3, now);
+            snareGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            snareOsc.connect(snareGain);
+            snareGain.connect(audioCtx.destination);
+            snareOsc.start(now);
+            snareOsc.stop(now + 0.12);
+          }
+
+          // Nota de bajo fundamental en cada tiempo
+          if (chordProgression && chordProgression.length > 0) {
+            const currentRoot = chordProgression[chordIndex % chordProgression.length];
+            playNote(currentRoot, beatDurationMs / 1000 * 0.9, false);
+          }
+
+          if (onBeat) onBeat(beat % 4);
+
+          beat++;
+          if (beat % 4 === 0) {
+            chordIndex++;
+          }
+        }, beatDurationMs);
+      }
+
+      function stopBackingTrack() {
+        isBackingPlaying = false;
+        if (backingInterval) {
+          clearInterval(backingInterval);
+          backingInterval = null;
+        }
+      }
+
+      return {
+        playNote,
+        playChord,
+        playRiff,
+        playClick,
+        stopCurrentSequence,
+        startBackingTrack,
+        stopBackingTrack,
+        isBackingActive: () => isBackingPlaying
+      };
+    })();
+
+    /* ============================================================
+     * 2. GENERADOR DE SVG Y GRÁFICOS EDUCATIVOS
+     * ============================================================ */
+    const SVGVisuals = {
+      // Generador de Mástil de Guitarra (Fretboard)
+      renderFretboard(dots = [], startFret = 0, numFrets = 5, title = "Diagrama de Mástil") {
+        // dots: [{ string: 6, fret: 3, label: "G", root: true }, ...]
+        const width = 640;
+        const height = 150;
+        const fretWidth = (width - 60) / numFrets;
+        const stringGap = 20;
+        const topMargin = 28;
+
+        let fretLines = '';
+        let fretMarkers = '';
+        for (let i = 0; i <= numFrets; i++) {
+          const x = 50 + i * fretWidth;
+          const currentFretNum = startFret + i;
+          const strokeWidth = (i === 0 && startFret === 0) ? 6 : 2; // Cejuela gruesa si empieza en 0
+          const strokeColor = (i === 0 && startFret === 0) ? "#f59e0b" : "#4a4a58";
+          fretLines += `<line x1="${x}" y1="${topMargin}" x2="${x}" y2="${topMargin + 5 * stringGap}" stroke="${strokeColor}" stroke-width="${strokeWidth}" />`;
+
+          if (i > 0) {
+            // Número de traste debajo
+            fretLines += `<text x="${x - fretWidth/2}" y="${topMargin + 5 * stringGap + 18}" fill="#9ca3af" font-size="11" font-family="monospace" text-anchor="middle">Traste ${currentFretNum}</text>`;
+            // Puntos guía en trastes 3, 5, 7, 9, 12
+            if ([3, 5, 7, 9].includes(currentFretNum)) {
+              fretMarkers += `<circle cx="${x - fretWidth/2}" cy="${topMargin + 2.5 * stringGap}" r="4" fill="#3f3f4a" />`;
+            } else if (currentFretNum === 12) {
+              fretMarkers += `<circle cx="${x - fretWidth/2}" cy="${topMargin + 1.5 * stringGap}" r="3.5" fill="#f59e0b" opacity="0.6" />`;
+              fretMarkers += `<circle cx="${x - fretWidth/2}" cy="${topMargin + 3.5 * stringGap}" r="3.5" fill="#f59e0b" opacity="0.6" />`;
+            }
+          }
+        }
+
+        // Cuerdas (de 1ª arriba a 6ª abajo o 6ª arriba según orientación estándar tab)
+        // Estándar de diapasón frontal: 1ª (E fina) arriba, 6ª (E gruesa) abajo
+        const stringNames = ['e (1ª)', 'B (2ª)', 'G (3ª)', 'D (4ª)', 'A (5ª)', 'E (6ª)'];
+        let stringLines = '';
+        for (let s = 0; s < 6; s++) {
+          const y = topMargin + s * stringGap;
+          const thickness = 1 + s * 0.5; // Cuerdas más gruesas abajo
+          stringLines += `
+            <text x="42" y="${y + 4}" fill="#d1d5db" font-size="10" font-family="monospace" text-anchor="end">${stringNames[s]}</text>
+            <line x1="50" y1="${y}" x2="${50 + numFrets * fretWidth}" y2="${y}" stroke="#6b7280" stroke-width="${thickness}" />
+          `;
+        }
+
+        // Notas / Puntos de los dedos
+        let noteDots = '';
+        dots.forEach(d => {
+          // d.string: 1 a 6 (1 = e fina, 6 = E gruesa)
+          const y = topMargin + (d.string - 1) * stringGap;
+          let x = 50;
+          if (d.fret === 0) {
+            x = 35; // Cuerda al aire
+          } else {
+            const fretIndex = d.fret - startFret;
+            x = 50 + fretIndex * fretWidth - fretWidth / 2;
+          }
+          const fill = d.root ? '#f59e0b' : '#38bdf8';
+          const textFill = '#121214';
+          const label = d.label || (d.root ? 'R' : '•');
+
+          noteDots += `
+            <g class="cursor-pointer group">
+              <circle cx="${x}" cy="${y}" r="8" fill="${fill}" stroke="#18181c" stroke-width="2" />
+              <text x="${x}" y="${y + 3.5}" fill="${textFill}" font-size="9" font-family="sans-serif" font-weight="bold" text-anchor="middle">${label}</text>
+            </g>
+          `;
+        });
+
+        return `
+          <div class="my-4 p-3 bg-amp-850 rounded-xl border border-amp-700 overflow-x-auto">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">${title}</span>
+              <span class="text-[11px] text-gray-400"><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 mr-1"></span>Tónica (Raíz) &nbsp;<span class="inline-block w-2.5 h-2.5 rounded-full bg-sky-400 mr-1"></span>Nota complementaria</span>
+            </div>
+            <svg viewBox="0 0 ${width} ${height}" class="w-full min-w-[500px] select-none">
+              <rect x="50" y="${topMargin}" width="${numFrets * fretWidth}" height="${5 * stringGap}" fill="#1c1c22" rx="4" />
+              ${fretMarkers}
+              ${fretLines}
+              ${stringLines}
+              ${noteDots}
+            </svg>
+          </div>
+        `;
+      },
+
+      // Diagrama vertical de Acordes tipo cajita
+      renderChordBox(name, frets, fingers = [], rootNote = "") {
+        // frets array de 6 cuerdas [6ª, 5ª, 4ª, 3ª, 2ª, 1ª]. -1 = muteada (x), 0 = al aire (o), >0 = traste
+        const svgW = 160;
+        const svgH = 190;
+        const startX = 35;
+        const startY = 40;
+        const w = 90;
+        const h = 110;
+        const colW = w / 5;
+        const rowH = h / 4;
+
+        let gridLines = '';
+        for (let i = 0; i <= 5; i++) {
+          gridLines += `<line x1="${startX + i * colW}" y1="${startY}" x2="${startX + i * colW}" y2="${startY + h}" stroke="#52525e" stroke-width="1.5" />`;
+        }
+        for (let j = 0; j <= 4; j++) {
+          const strokeW = j === 0 ? 4 : 1.5;
+          const strokeC = j === 0 ? '#f59e0b' : '#3f3f4a';
+          gridLines += `<line x1="${startX}" y1="${startY + j * rowH}" x2="${startX + w}" y2="${startY + j * rowH}" stroke="${strokeC}" stroke-width="${strokeW}" />`;
+        }
+
+        let markers = '';
+        frets.forEach((fret, i) => {
+          const x = startX + i * colW;
+          if (fret === -1) {
+            markers += `<text x="${x}" y="${startY - 8}" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">✕</text>`;
+          } else if (fret === 0) {
+            markers += `<circle cx="${x}" cy="${startY - 12}" r="4" fill="none" stroke="#22c55e" stroke-width="2" />`;
+          } else {
+            const y = startY + (fret - 0.5) * rowH;
+            const fingerText = fingers[i] || '';
+            const isRoot = (i === 0 || i === 1);
+            markers += `
+              <circle cx="${x}" cy="${y}" r="6.5" fill="${isRoot ? '#f59e0b' : '#38bdf8'}" />
+              <text x="${x}" y="${y + 3}" fill="#111" font-size="9" font-weight="bold" text-anchor="middle">${fingerText}</text>
+            `;
+          }
+        });
+
+        return `
+          <div class="inline-flex flex-col items-center bg-amp-850 p-3 rounded-xl border border-amp-700 m-2">
+            <span class="text-base font-bold text-white mb-1 font-mono">${name}</span>
+            <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
+              <text x="${svgW/2}" y="20" fill="#9ca3af" font-size="10" text-anchor="middle">Cuerdas: E A D G B e</text>
+              ${gridLines}
+              ${markers}
+            </svg>
+            <span class="text-[10px] text-gray-400 font-mono mt-1">${rootNote}</span>
+          </div>
+        `;
+      },
+
+      // Visualizador estilizado de Tablatura Interactiva
+      renderTab(tabLines, playCallbackSnippet = null) {
+        // tabLines = ["e|-----------|", "B|-----------|", ...]
+        return `
+          <div class="my-4 bg-amp-850 rounded-xl border border-amp-700 p-4 relative group">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-amp-700/60">
+              <span class="text-xs uppercase font-mono tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
+                <i class="ph-bold ph-music-notes"></i> Tablatura de Práctica
+              </span>
+              ${playCallbackSnippet ? `
+                <button onclick="${playCallbackSnippet}" class="px-3 py-1 bg-amber-500/20 hover:bg-amber-500 hover:text-amp-900 border border-amber-500/40 text-amber-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5">
+                  <i class="ph-fill ph-play"></i> Escuchar Riff
+                </button>
+              ` : ''}
+            </div>
+            <pre class="tab-font text-amber-300 text-xs sm:text-sm overflow-x-auto leading-relaxed py-1">${tabLines.join('\n')}</pre>
+          </div>
+        `;
+      }
+    };
+
+    /* ============================================================
+     * 3. CONTENIDO COMPLETO DEL CURSO: 5 MÓDULOS DE GUITARRA
+     * ============================================================ */
+    const CourseData = [
+      {
+        id: "mod-1",
+        number: 1,
+        title: "Fundamentos & Primeros Riffs de Rock",
+        summary: "Postura, sujeción de púa, cómo leer tablaturas en 2 minutos y tu primer riff de una sola cuerda.",
+        quote: {
+          text: "La guitarra es fácil de aprender, pero requiere toda una vida de maestría.",
+          author: "B.B. King"
+        },
+        sections: [
+          {
+            title: "1. Olvídate del solfeo: Cómo leer una Tablatura en 60 segundos",
+            content: `
+              <p class="mb-3 text-gray-300">
+                En la guitarra eléctrica <strong>no usamos pentagramas tradicionales</strong>. Usamos <strong>TABLATURAS (TAB)</strong>, un mapa directo de las 6 cuerdas de tu guitarra vistas de frente.
+              </p>
+              <ul class="list-disc pl-5 space-y-1.5 text-sm text-gray-300 mb-4">
+                <li>Tiene <strong>6 líneas horizontales</strong>: La línea de arriba es la cuerda más delgada (1ª cuerda aguda, Mi/e). La línea de abajo es la cuerda más gruesa (6ª cuerda grave, Mi/E).</li>
+                <li>Los <strong>números</strong> indican el número de traste que debes presionar con los dedos de la mano izquierda.</li>
+                <li>El <strong>0</strong> significa tocar la cuerda al aire (sin pisar ningún traste).</li>
+                <li>Si los números están en fila horizontal, se tocan uno tras otro. Si están apilados verticalmente, se tocan al mismo tiempo.</li>
+              </ul>
+            `,
+            fretboard: {
+              dots: [
+                { string: 6, fret: 0, label: "0", root: true },
+                { string: 6, fret: 3, label: "3", root: false },
+                { string: 6, fret: 5, label: "5", root: false },
+                { string: 6, fret: 6, label: "6", root: false }
+              ],
+              startFret: 0,
+              fretsCount: 7,
+              title: "6ª Cuerda: Trastes al aire (0), 3, 5 y 6"
+            }
+          },
+          {
+            title: "2. Sujeción de la Púa y Técnica de Púa Alternada (Down/Up)",
+            content: `
+              <p class="mb-3 text-gray-300">
+                Sostén la púa entre la yema del pulgar y el lateral del dedo índice flexionado. Deja sobresalir apenas 2-3 milímetros de la punta.
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <div class="p-3 bg-amp-800 rounded-lg border border-amp-700">
+                  <span class="text-amber-400 font-bold text-sm block mb-1">Golpe hacia abajo (Downstroke ⊓)</span>
+                  <p class="text-xs text-gray-400">Ataca la cuerda impulsando la muñeca hacia el suelo. Da potencia y estabilidad rítmica.</p>
+                </div>
+                <div class="p-3 bg-amp-800 rounded-lg border border-amp-700">
+                  <span class="text-sky-400 font-bold text-sm block mb-1">Golpe hacia arriba (Upstroke ∨)</span>
+                  <p class="text-xs text-gray-400">Retorna la muñeca rozando la cuerda hacia arriba. Duplica tu velocidad con la mitad de esfuerzo.</p>
+                </div>
+              </div>
+            `,
+            tab: {
+              lines: [
+                "Púa:  ⊓  ∨  ⊓  ∨  ⊓  ∨  ⊓  ∨",
+                "e |--------------------------|",
+                "B |--------------------------|",
+                "G |--------------------------|",
+                "D |--------------------------|",
+                "A |--------------------------|",
+                "E |--0–0–3–3–5–5–3–3–|"
+              ],
+              audioSnippet: "AudioEngine.playRiff([{note:'E2', dur:0.3, gap:0.25},{note:'E2', dur:0.3, gap:0.25},{note:'G2', dur:0.3, gap:0.25},{note:'G2', dur:0.3, gap:0.25},{note:'A2', dur:0.3, gap:0.25},{note:'A2', dur:0.3, gap:0.25},{note:'G2', dur:0.4, gap:0.3}])"
+            }
+          }
+        ],
+        practiceRoutine: {
+          title: "Rutina Guiada: Independencia en la 6ª Cuerda",
+          instructions: "Ajusta el metrónomo a 70 BPM. Toca 4 notas por compás en la 6ª cuerda alternando púa hacia abajo y hacia arriba sin tensión en los hombros durante 3 minutos.",
+          targetBpm: 70
+        },
+        song: {
+          title: "Canción de Graduación: Riff Mítico de 'Smoke On The Water'",
+          artist: "Inspirado en Deep Purple",
+          difficulty: "Fácil - Nivel Principiante",
+          tip: "Mantén el dedo índice para el traste 3 y el anular para el traste 5. ¡No dejes que las cuerdas al aire vibren descontroladas!",
+          tab: [
+            "e |-----------------------------------------|",
+            "B |-----------------------------------------|",
+            "G |--0---3---5----0---3---6-5---0---3---5---|",
+            "D |--0---3---5----0---3---6-5---0---3---5---|",
+            "A |-----------------------------------------|",
+            "E |-----------------------------------------|"
+          ],
+          audioSnippet: "AudioEngine.playRiff([{note:['D3','G3'], drive:true, dur:0.4, gap:0.4},{note:['F3','A#3'], drive:true, dur:0.4, gap:0.4},{note:['G3','C4'], drive:true, dur:0.7, gap:0.7},{note:['D3','G3'], drive:true, dur:0.4, gap:0.4},{note:['F3','A#3'], drive:true, dur:0.4, gap:0.4},{note:['G#3','C#4'], drive:true, dur:0.3, gap:0.3},{note:['G3','C4'], drive:true, dur:0.8, gap:0.8}])",
+          backingTrack: ['G2', 'G2', 'A#2', 'C3']
+        },
+        quiz: [
+          {
+            q: "¿Qué representa la línea SUPERIOR en una tablatura de 6 líneas?",
+            options: [
+              "La cuerda más gruesa (6ª cuerda)",
+              "La cuerda más delgada y aguda (1ª cuerda)",
+              "El número de traste que debes tocar",
+              "El volumen del amplificador"
+            ],
+            correct: 1,
+            explanation: "En la tablatura estándar, la línea de arriba representa la 1ª cuerda (la más delgada, Mi agudo)."
+          },
+          {
+            q: "Si en una tablatura ves un '0' en la 5ª línea, ¿qué debes hacer?",
+            options: [
+              "Hacer una pausa y no tocar nada",
+              "Tocar la 5ª cuerda al aire, sin pisar ningún traste",
+              "Apretar el traste 10 rápidamente",
+              "Apagar el amplificador"
+            ],
+            correct: 1,
+            explanation: "El número 0 representa tocar esa cuerda al aire ('open string')."
+          },
+          {
+            q: "¿Por qué es crucial la técnica de púa alternada (abajo y arriba)?",
+            options: [
+              "Para evitar que la púa se desgaste",
+              "Porque mejora la velocidad, reduce fatiga y da precisión rítmica",
+              "Solo se utiliza para tocar música clásica",
+              "Para cambiar la afinación de la guitarra"
+            ],
+            correct: 1,
+            explanation: "Alternar abajo/arriba maximiza la economía de movimiento y permite tocar riffs a gran velocidad."
+          }
+        ]
+      },
+      {
+        id: "mod-2",
+        number: 2,
+        title: "Power Chords & Palm Muting (El Sonido del Punk y Hard Rock)",
+        summary: "Domina los acordes de quinta (5), cómo bloquear cuerdas no deseadas y el crujido metálico del Palm Muting.",
+        quote: {
+          text: "Tres acordes y la verdad. Eso es todo lo que necesitas para el Rock and Roll.",
+          author: "Lou Reed"
+        },
+        sections: [
+          {
+            title: "1. ¿Qué es un Power Chord (Acorde de Quinta)?",
+            content: `
+              <p class="mb-3 text-gray-300">
+                Los <strong>Power Chords</strong> no son ni mayores ni menores; tienen solo la tónica (raíz) y la 5ª justa. Son la base indiscutible del Rock, Punk, Grunge y Heavy Metal porque suenan demoledores con distorsión.
+              </p>
+              <p class="text-sm text-gray-300 mb-3">
+                <strong>La forma es universal y móvil:</strong> Pones el dedo 1 (índice) en la cuerda raíz y el dedo 3 (anular) dos trastes más adelante en la cuerda contigua. ¡Mueves esta misma figura por todo el mástil!
+              </p>
+            `,
+            chords: [
+              { name: "Power Chord G5 (Raíz en 6ª)", frets: [3, 5, -1, -1, -1, -1], fingers: ["1", "3", "", "", "", ""], root: "Traste 3 (Sol)" },
+              { name: "Power Chord C5 (Raíz en 5ª)", frets: [-1, 3, 5, -1, -1, -1], fingers: ["", "1", "3", "", "", ""], root: "Traste 3 (Do)" }
+            ]
+          },
+          {
+            title: "2. La Técnica del Palm Muting (Muteo con la Palma)",
+            content: `
+              <p class="mb-3 text-gray-300">
+                Apoya suavemente el lateral carnoso de tu mano derecha (cerca de la muñeca) justo <strong>encima de las silletas del puente</strong>.
+              </p>
+              <div class="p-3 bg-amp-800 rounded-lg border-l-4 border-amber-500 mb-3">
+                <span class="text-xs font-bold text-amber-300 block mb-1">El Secreto Sonoro:</span>
+                <p class="text-xs text-gray-300">Si apoyas muy adelante sobre las cuerdas, apagas la nota por completo (suena sordo). Si apoyas muy atrás sobre el puente metálico, no mutea. Busca el punto medio donde la nota suena percusiva, gruesa y con punch ("chug-chug"). En tablatura se indica como <strong>P.M. ----</strong>.</p>
+              </div>
+            `,
+            tab: {
+              lines: [
+                "P.M. ------------------------------------|",
+                "e |--------------------------------------|",
+                "B |--------------------------------------|",
+                "G |------------------5–5–5–5----------|",
+                "D |--5–5–5–5------5–5–5–5----------|",
+                "A |--5–5–5–5------3–3–3–3----------|",
+                "E |--3–3–3–3–------------------------|"
+              ],
+              audioSnippet: "AudioEngine.playRiff([{note:['G2','D3'], drive:true, dur:0.2, gap:0.2},{note:['G2','D3'], drive:true, dur:0.2, gap:0.2},{note:['G2','D3'], drive:true, dur:0.2, gap:0.2},{note:['G2','D3'], drive:true, dur:0.2, gap:0.2},{note:['C3','G3'], drive:true, dur:0.2, gap:0.2},{note:['C3','G3'], drive:true, dur:0.2, gap:0.2},{note:['C3','G3'], drive:true, dur:0.2, gap:0.2},{note:['C3','G3'], drive:true, dur:0.3, gap:0.3}])"
+            }
+          }
+        ],
+        practiceRoutine: {
+          title: "Entrenamiento: Transición Rápida de Power Chords",
+          instructions: "Alterna 4 golpes de G5 (6ª cuerda traste 3) y 4 golpes de C5 (5ª cuerda traste 3) usando palm muting. Concéntrate en mutear con la yema del dedo 1 las cuerdas agudas que no deben sonar.",
+          targetBpm: 90
+        },
+        song: {
+          title: "Canción de Graduación: Riff Estilo Punk Rock ('Basket Beat')",
+          artist: "Inspirado en Green Day & The Ramones",
+          difficulty: "Media-Baja",
+          tip: "Mantén la muñeca relajada. En los primeros 2 tiempos haz Palm Muting y en los siguientes 2 abre el sonido levantando la palma.",
+          tab: [
+            "    P.M.--|        P.M.--|        P.M.--|",
+            "e |-------------------------------------------|",
+            "B |-------------------------------------------|",
+            "G |--------------7–7–7-7------5–5–5-5–---|",
+            "D |--5–5–5-5---7–7–7-7------5–5–5-5–---|",
+            "A |--5–5–5-5---5–5–5-5------3–3–3-3–---|",
+            "E |--3–3–3-3–------------------------------|"
+          ],
+          audioSnippet: "AudioEngine.playRiff([{note:['G2','D3'], drive:true, dur:0.25, gap:0.25},{note:['G2','D3'], drive:true, dur:0.25, gap:0.25},{note:['G2','D3'], drive:true, dur:0.4, gap:0.4},{note:['D3','A3'], drive:true, dur:0.25, gap:0.25},{note:['D3','A3'], drive:true, dur:0.25, gap:0.25},{note:['D3','A3'], drive:true, dur:0.4, gap:0.4},{note:['C3','G3'], drive:true, dur:0.25, gap:0.25},{note:['C3','G3'], drive:true, dur:0.25, gap:0.25},{note:['C3','G3'], drive:true, dur:0.5, gap:0.5}])",
+          backingTrack: ['G2', 'D3', 'C3', 'D3']
+        },
+        quiz: [
+          {
+            q: "¿Por qué los Power Chords funcionan tan bien con distorsión pesada?",
+            options: [
+              "Porque solo tienen tónica y quinta, evitando el sonido sucio o disonante de las terceras",
+              "Porque obligan a usar pedales digitales obligatoriamente",
+              "Porque solo se pueden tocar con los ojos cerrados",
+              "Porque requieren afinar la guitarra en Re menor"
+            ],
+            correct: 0,
+            explanation: "Al no contener la tercera (que define mayor o menor), no se saturan con armónicos chocantes bajo distorsión alta."
+          },
+          {
+            q: "¿Dónde debe apoyarse la mano derecha para realizar el 'Palm Muting' correctamente?",
+            options: [
+              "En la pala donde están las clavijas de afinación",
+              "Justo sobre las silletas del puente metálico rozando las cuerdas",
+              "Apretando fuertemente el traste 12",
+              "En el centro exacto de la boca o pastilla media"
+            ],
+            correct: 1,
+            explanation: "El filo de la palma reposa suavemente sobre las silletas del puente para amortiguar el sustain sin ahogar el tono."
+          },
+          {
+            q: "Para tocar un Power Chord con raíz en la 5ª cuerda, ¿qué haces con la 6ª cuerda?",
+            options: [
+              "Tocarla al aire con máxima fuerza",
+              "Mutearla tocándola ligeramente con la punta del dedo índice para que no vibre",
+              "Afinarla una octava arriba",
+              "Cortarla con un alicate"
+            ],
+            correct: 1,
+            explanation: "La punta del dedo índice roza suavemente la 6ª cuerda para enmudecerla si la púa la roza por accidente."
+          }
+        ]
+      },
+      {
+        id: "mod-3",
+        number: 3,
+        title: "La Escala Pentatónica Menor & Técnica de Solos",
+        summary: "La famosa 'Caja 1' en Am: Digitaciones 1-4 y 1-3, Hammer-On, Pull-Off y bends expresivos.",
+        quote: {
+          text: "No necesitas tocar 1000 notas por segundo. Toca una nota, pero haz que importe.",
+          author: "David Gilmour"
+        },
+        sections: [
+          {
+            title: "1. El Mapa del Tesoro: Caja 1 de la Pentatónica Menor (La Menor / Am)",
+            content: `
+              <p class="mb-3 text-gray-300">
+                El 90% de los solos legendarios de Hendrix, Jimmy Page, Slash y Angus Young nacen de esta figura en el <strong>traste 5</strong>.
+              </p>
+              <p class="text-sm text-gray-300 mb-3">
+                <strong>Regla de dedos:</strong> Dedo 1 (índice) va siempre al traste 5. Dedo 3 (anular) al traste 7. Dedo 4 (meñique) al traste 8.
+              </p>
+            `,
+            fretboard: {
+              dots: [
+                { string: 6, fret: 5, label: "A", root: true },
+                { string: 6, fret: 8, label: "C", root: false },
+                { string: 5, fret: 5, label: "D", root: false },
+                { string: 5, fret: 7, label: "E", root: false },
+                { string: 4, fret: 5, label: "G", root: false },
+                { string: 4, fret: 7, label: "A", root: true },
+                { string: 3, fret: 5, label: "C", root: false },
+                { string: 3, fret: 7, label: "D", root: false },
+                { string: 2, fret: 5, label: "E", root: false },
+                { string: 2, fret: 8, label: "G", root: false },
+                { string: 1, fret: 5, label: "A", root: true },
+                { string: 1, fret: 8, label: "C", root: false }
+              ],
+              startFret: 4,
+              fretsCount: 6,
+              title: "Pentatónica Menor de La (Traste 5)"
+            }
+          },
+          {
+            title: "2. Articulaciones Solistas: Hammer-on (h), Pull-off (p) y Bends (b)",
+            content: `
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <div class="p-3 bg-amp-800 rounded-lg border border-amp-700">
+                  <span class="text-amber-400 font-bold text-xs uppercase block mb-1">Hammer-On (h)</span>
+                  <p class="text-xs text-gray-300">Picas la cuerda en traste 5 y 'martilleas' con fuerza el traste 7 con otro dedo sin volver a pulsar con la púa.</p>
+                </div>
+                <div class="p-3 bg-amp-800 rounded-lg border border-amp-700">
+                  <span class="text-sky-400 font-bold text-xs uppercase block mb-1">Pull-Off (p)</span>
+                  <p class="text-xs text-gray-300">El movimiento inverso: 'pellizcas' ligeramente la cuerda hacia abajo al retirar el dedo para que suene la nota inferior.</p>
+                </div>
+                <div class="p-3 bg-amp-800 rounded-lg border border-amp-700">
+                  <span class="text-yellow-400 font-bold text-xs uppercase block mb-1">String Bending (b)</span>
+                  <p class="text-xs text-gray-300">Empujas la cuerda hacia arriba con varios dedos apoyados juntos para elevar el tono 1/2 o 1 tono entero.</p>
+                </div>
+              </div>
+            `,
+            tab: {
+              lines: [
+                "e |--------------------------------------|",
+                "B |-----------------------5h8p5----------|",
+                "G |------------5–7b9------------7p5–---|",
+                "D |-------5h7-------------------------7–|",
+                "A |--5h7---------------------------------|",
+                "E |--------------------------------------|"
+              ],
+              audioSnippet: "AudioEngine.playRiff([{note:'A2', dur:0.3, gap:0.25},{note:'D3', dur:0.3, gap:0.25},{note:'E3', dur:0.3, gap:0.25},{note:'C4', dur:0.3, gap:0.25},{note:'D4', dur:0.4, gap:0.35},{note:'A4', dur:0.3, gap:0.25},{note:'C5', dur:0.3, gap:0.25},{note:'A4', dur:0.4, gap:0.3},{note:'G4', dur:0.3, gap:0.25},{note:'E4', dur:0.5, gap:0.4}])"
+            }
+          }
+        ],
+        practiceRoutine: {
+          title: "Ejercicio de Ligados Fluidos",
+          instructions: "Ejecuta 5h7 y 7p5 continuamente en la 3ª cuerda durante 2 minutos continuos. No uses tensión de antebrazo, gira la muñeca como si abrieras una cerradura.",
+          targetBpm: 80
+        },
+        song: {
+          title: "Canción de Graduación: Solo Estilo Hard Rock 'Thunder Lick'",
+          artist: "Inspirado en Angus Young & Eric Clapton",
+          difficulty: "Media",
+          tip: "En el bend del traste 7 en la 3ª cuerda, refuerza el dedo anular apoyando también los dedos índice y medio detrás. ¡Fuerza de tres dedos!",
+          tab: [
+            "e |------------------------------5–---------|",
+            "B |----------------------------5---8p5-------|",
+            "G |--7b9---7b9–7p5---7-5–7b9---------7p5---|",
+            "D |-----------------7----------------------7-|",
+            "A |------------------------------------------|",
+            "E |------------------------------------------|"
+          ],
+          audioSnippet: "AudioEngine.playRiff([{note:'D4', drive:true, dur:0.4, gap:0.35},{note:'D4', drive:true, dur:0.4, gap:0.35},{note:'C4', drive:true, dur:0.3, gap:0.2},{note:'A3', drive:true, dur:0.4, gap:0.3},{note:'D4', drive:true, dur:0.4, gap:0.35},{note:'E4', drive:true, dur:0.3, gap:0.2},{note:'A4', drive:true, dur:0.3, gap:0.2},{note:'G4', drive:true, dur:0.3, gap:0.2},{note:'E4', drive:true, dur:0.3, gap:0.2},{note:'D4', drive:true, dur:0.3, gap:0.2},{note:'A3', drive:true, dur:0.6, gap:0.5}])",
+          backingTrack: ['A2', 'A2', 'D3', 'E3']
+        },
+        quiz: [
+          {
+            q: "¿En qué traste se ubica la tónica (La) de la Pentatónica Menor en la 6ª cuerda?",
+            options: [
+              "Traste 1",
+              "Traste 5",
+              "Traste 12",
+              "Traste 0"
+            ],
+            correct: 1,
+            explanation: "El traste 5 de la 6ª cuerda es la nota La (A), punto de partida de la Caja 1 de Am."
+          },
+          {
+            q: "Al hacer un 'String Bend' (estirar la cuerda), ¿cuál es la mejor técnica?",
+            options: [
+              "Usar solo el dedo meñique sin apoyo",
+              "Usar el dedo anular reforzado por los dedos índice y medio detrás para empujar juntos",
+              "Tirar de la cuerda hacia afuera separándola del mástil",
+              "Usar los dientes como Jimi Hendrix siempre"
+            ],
+            correct: 1,
+            explanation: "Juntar los dedos detrás del dedo principal reparte el esfuerzo y ofrece afinación precisa y control."
+          },
+          {
+            q: "¿Qué diferencia al 'Hammer-On' del toque normal con púa?",
+            options: [
+              "La nota se produce al percutir el dedo sobre el traste sin dar un nuevo púa-golpe",
+              "Requiere golpear la madera de la guitarra con un martillo",
+              "Se toca exclusivamente con la mano derecha",
+              "Solo se puede hacer en guitarras acústicas"
+            ],
+            correct: 0,
+            explanation: "El hammer-on genera un sonido fluido y conectado (legato) martilleando el traste con la mano del diapasón."
+          }
+        ]
+      },
+      {
+        id: "mod-4",
+        number: 4,
+        title: "Acordes Abiertos & Ritmo Rock / Indie",
+        summary: "Em, G, C, D y Am: Cómo cambiar de acorde a tiempo, rasgueos en corcheas y el golpe de caja fantasma.",
+        quote: {
+          text: "El ritmo es la columna vertebral de cualquier gran guitarrista. Si no tienes ritmo, no tienes nada.",
+          author: "Keith Richards"
+        },
+        sections: [
+          {
+            title: "1. Los 5 Acordes Abiertos Esenciales del Rock",
+            content: `
+              <p class="mb-3 text-gray-300">
+                Los acordes abiertos usan cuerdas al aire vibrando libremente, logrando un sonido expansivo y lleno de armónicos.
+              </p>
+            `,
+            chords: [
+              { name: "Mi Menor (Em)", frets: [0, 2, 2, 0, 0, 0], fingers: ["", "2", "3", "", "", ""], root: "Todas las cuerdas" },
+              { name: "Sol Mayor (G)", frets: [3, 2, 0, 0, 3, 3], fingers: ["2", "1", "", "", "3", "4"], root: "Rock G (con 3ª y 4ª traste)" },
+              { name: "Do Mayor (C)", frets: [-1, 3, 2, 0, 1, 0], fingers: ["", "3", "2", "", "1", ""], root: "No tocar 6ª cuerda" },
+              { name: "Re Mayor (D)", frets: [-1, -1, 0, 2, 3, 2], fingers: ["", "", "", "1", "3", "2"], root: "Desde 4ª cuerda" }
+            ]
+          },
+          {
+            title: "2. La Técnica del 'Dedo Pivote' y Rasgueo Fluido",
+            content: `
+              <p class="mb-3 text-gray-300">
+                ¿El gran problema de los principiantes? Pausar el ritmo mientras los dedos buscan la siguiente forma.
+              </p>
+              <div class="p-3 bg-amp-800 rounded-lg border border-amp-700 space-y-2 text-xs text-gray-300 mb-4">
+                <p><strong>El Dedo Ancla / Pivote:</strong> Al pasar de Sol (G) a Do (C) o Re (D), fíjate en qué dedos no necesitan levantarse del todo o solo deben deslizarse un traste. Mantén ese contacto como brújula.</p>
+                <p><strong>El Motor Perpetuo:</strong> Tu mano derecha debe seguir moviéndose arriba y abajo como un péndulo continuo sin detenerse jamás, incluso si tu mano izquierda aún no llegó al 100%.</p>
+              </div>
+            `,
+            tab: {
+              lines: [
+                "Patrón:  ↓    ↓ ↑   ↑ ↓ ↑",
+                "Tiempo:  1    2 &   & 4 &",
+                "Acorde: [Em]        [G]          [D]          [C]",
+                "e |------0----0-0---3-3-3-|------2----2-2---0-0-0-|",
+                "B |------0----0-0---3-3-3-|------3----3-3---1-1-1-|",
+                "G |------0----0-0---0-0-0-|------2----2-2---0-0-0-|",
+                "D |------2----2-2---0-0-0-|------0----0-0---2-2-2-|",
+                "A |------2----2-2---2-2-2-|-----------------3-3-3-|",
+                "E |------0----0-0---3-3-3-|-----------------------|"
+              ],
+              audioSnippet: "AudioEngine.playRiff([{note:['E2','B2','E3','G3','B3','E4'], dur:0.4, gap:0.35},{note:['G2','B2','D3','G3','D4','G4'], dur:0.4, gap:0.35},{note:['D3','A3','D4','F#4'], dur:0.4, gap:0.35},{note:['C3','E3','G3','C4','E4'], dur:0.5, gap:0.45}])"
+            }
+          }
+        ],
+        practiceRoutine: {
+          title: "El Minuto de Cambios Limpios (Em a G)",
+          instructions: "Pon un cronómetro de 60 segundos. Alterna entre Em y G tantas veces como puedas a tempo limpio. Cuenta tus repeticiones e intenta superar tu récord diario.",
+          targetBpm: 75
+        },
+        song: {
+          title: "Canción de Graduación: Progresión Rock/Indie 'Midnight Driver'",
+          artist: "Inspirado en Creedence, Oasis & Arctic Monkeys",
+          difficulty: "Media",
+          tip: "En el acorde D, cuida no golpear la 6ª ni la 5ª cuerda. Concentra el rasgueo en las 4 cuerdas inferiores.",
+          tab: [
+            "    Em               G                D                A",
+            "e |-0---0-0-0-0-0---|-3---3-3-3-3-3---|-2---2-2-2-2-2---|-0---0-0-0-0-0---|",
+            "B |-0---0-0-0-0-0---|-3---3-3-3-3-3---|-3---3-3-3-3-3---|-2---2-2-2-2-2---|",
+            "G |-0---0-0-0-0-0---|-0---0-0-0-0-0---|-2---2-2-2-2-2---|-2---2-2-2-2-2---|",
+            "D |-2---2-2-2-2-2---|-0---0-0-0-0-0---|-0---0-0-0-0-0---|-2---2-2-2-2-2---|",
+            "A |-2---2-2-2-2-2---|-2---2-2-2-2-2---|-----------------|-0---0-0-0-0-0---|",
+            "E |-0---0-0-0-0-0---|-3---3-3-3-3-3---|-----------------|-----------------|"
+          ],
+          audioSnippet: "AudioEngine.playRiff([{note:['E2','B2','E3','G3'], dur:0.4, gap:0.35},{note:['G2','D3','G3','B3'], dur:0.4, gap:0.35},{note:['D3','A3','D4','F#4'], dur:0.4, gap:0.35},{note:['A2','E3','A3','C#4'], dur:0.6, gap:0.5}])",
+          backingTrack: ['E2', 'G2', 'D3', 'A2']
+        },
+        quiz: [
+          {
+            q: "¿Qué cuerda(s) NO debes tocar al rasguear el acorde de Re Mayor (D)?",
+            options: [
+              "La 1ª y la 2ª cuerda",
+              "La 6ª cuerda (y preferiblemente tampoco la 5ª)",
+              "Todas deben sonar siempre",
+              "La 3ª y 4ª cuerda"
+            ],
+            correct: 1,
+            explanation: "La nota más grave de Re es la 4ª cuerda al aire (Re). La 6ª (Mi) choca acústicamente con el acorde."
+          },
+          {
+            q: "¿Cuál es el error número 1 al intentar cambiar rápido de acorde?",
+            options: [
+              "Frenar el brazo derecho del rasgueo esperando a que los dedos aterricen",
+              "Tocar demasiado suave",
+              "Usar una púa de color negro",
+              "Mirar las cuerdas con atención"
+            ],
+            correct: 0,
+            explanation: "El brazo derecho debe mantener el pulso rítmico implacable; los dedos de la izquierda aprenderán a colocarse a tiempo."
+          },
+          {
+            q: "El concepto de 'dedo ancla o pivote' consiste en:",
+            options: [
+              "Apretar con el dedo pulgar detrás del mástil hasta que duela",
+              "Identificar un dedo en común entre dos acordes para no levantarlo del diapasón durante la transición",
+              "Usar solo un dedo para tocar toda la guitarra",
+              "Afinar con afinador de pinza"
+            ],
+            correct: 1,
+            explanation: "El dedo pivote permanece en su traste sirviendo de guía espacial para que los demás dedos se acomoden al instante."
+          }
+        ]
+      },
+      {
+        id: "mod-5",
+        number: 5,
+        title: "Técnicas Expresivas, Escala de Blues & Tema Final",
+        summary: "Vibrato de muñeca, slides, double stops, la 'Blue Note' y graduación con pista de acompañamiento completa.",
+        quote: {
+          text: "El blues es fácil de tocar, pero difícil de sentir.",
+          author: "Jimi Hendrix"
+        },
+        sections: [
+          {
+            title: "1. El Vibrato y los Double Stops (Dobles Paradas)",
+            content: `
+              <p class="mb-3 text-gray-300">
+                El <strong>Vibrato</strong> es la firma dactilar de un guitarrista. No agites el dedo suelto: rota todo el antebrazo y muñeca con un movimiento circular rítmico, haciendo que la nota 'cante' y tenga sustain infinito.
+              </p>
+              <p class="text-sm text-gray-300 mb-3">
+                Los <strong>Double Stops</strong> consisten en presionar y pulsar 2 cuerdas a la vez (típico de Chuck Berry y Guns N' Roses), duplicando la pegada de tus licks.
+              </p>
+            `,
+            fretboard: {
+              dots: [
+                { string: 6, fret: 5, label: "A", root: true },
+                { string: 5, fret: 5, label: "D", root: false },
+                { string: 5, fret: 6, label: "b5", root: false }, // Blue note
+                { string: 5, fret: 7, label: "E", root: false },
+                { string: 4, fret: 7, label: "A", root: true },
+                { string: 3, fret: 7, label: "D", root: false },
+                { string: 3, fret: 8, label: "b5", root: false }, // Blue note
+                { string: 2, fret: 5, label: "E", root: false },
+                { string: 1, fret: 5, label: "A", root: true }
+              ],
+              startFret: 4,
+              fretsCount: 6,
+              title: "Escala de Blues en La (Incluye la mágica 'Blue Note' en traste 8 de 3ª cuerda y traste 6 de 5ª cuerda)"
+            }
+          },
+          {
+            title: "2. Slides (Deslizamientos) y Dinámica",
+            content: `
+              <p class="mb-3 text-gray-300">
+                Toca una nota y, sin despegar la presión de la yema contra la madera, desliza el dedo a lo largo de la cuerda hasta el traste de destino.
+              </p>
+              <div class="p-3 bg-amp-800 rounded-lg border border-amp-700 text-xs text-gray-300 mb-4">
+                <span class="text-amber-400 font-bold block mb-1">En Tablatura:</span>
+                <p>Se simboliza con una barra inclinada: <code>5/7</code> (slide ascendente hacia el puente) o <code>7\\5</code> (slide descendente hacia la pala).</p>
+              </div>
+            `,
+            tab: {
+              lines: [
+                "e |-----------------------------------------|",
+                "B |------5–7–7/9~~~---7p5–---------------|",
+                "G |--5/7–------------------7p5b---5–------|",
+                "D |----------------------------------7~~~---|",
+                "A |-----------------------------------------|",
+                "E |-----------------------------------------|"
+              ],
+              audioSnippet: "AudioEngine.playRiff([{note:'C4', drive:true, dur:0.2, gap:0.15},{note:'D4', drive:true, dur:0.3, gap:0.25},{note:'E4', drive:true, dur:0.3, gap:0.25},{note:'F#4', drive:true, dur:0.5, gap:0.45},{note:'E4', drive:true, dur:0.2, gap:0.2},{note:'D4', drive:true, dur:0.3, gap:0.25},{note:'C4', drive:true, dur:0.3, gap:0.25},{note:'A3', drive:true, dur:0.7, gap:0.6}])"
+            }
+          }
+        ],
+        practiceRoutine: {
+          title: "Desarrollo del Vibrato Vocal",
+          instructions: "Toca el traste 7 en la 3ª cuerda y mantén la nota viva durante 4 tiempos aplicando un vibrato regular y amplio. Escucha que la afinación suba y baje armónicamente sin desafinar bruscamente.",
+          targetBpm: 85
+        },
+        song: {
+          title: "Obra de Graduación: 'Rock Anthem Instrumental' (Riffs + Solos)",
+          artist: "Composición Original de Graduación RiffMaster",
+          difficulty: "Avanzada / Completa",
+          tip: "¡Combina todo lo aprendido! Empieza con los Power Chords enérgicos en los primeros 2 compases y lánzate al lick de la pentatónica con bend y vibrato final.",
+          tab: [
+            "  [Parte A: Rítmica Power Chords A5 - C5 - D5]",
+            "e |---------------------------------------------------|",
+            "B |---------------------------------------------------|",
+            "G |------------------5–5–5-5---7–7–7-7------------|",
+            "D |--7–7–7-7-------5–5–5-5---7–7–7-7------------|",
+            "A |--7–7–7-7-------3–3–3-3---5–5–5-5------------|",
+            "E |--5–5–5-5----------------------------------------|",
+            "",
+            "  [Parte B: Lick Solista con Blue Note y Double Stop]",
+            "e |------------------------------5-5------------------|",
+            "B |------------------------------5-5---8p5------------|",
+            "G |--7b9---7-5-7b8r7p5---7-5~--------------7p5–7~----|",
+            "D |--------------------7------------------------------|",
+            "A |---------------------------------------------------|",
+            "E |---------------------------------------------------|"
+          ],
+          audioSnippet: "AudioEngine.playRiff([{note:['A2','E3'], drive:true, dur:0.3, gap:0.25},{note:['A2','E3'], drive:true, dur:0.3, gap:0.25},{note:['C3','G3'], drive:true, dur:0.3, gap:0.25},{note:['D3','A3'], drive:true, dur:0.5, gap:0.45},{note:'D4', drive:true, dur:0.4, gap:0.3},{note:'C4', drive:true, dur:0.2, gap:0.18},{note:'D#4', drive:true, dur:0.25, gap:0.2},{note:'C4', drive:true, dur:0.2, gap:0.18},{note:'A3', drive:true, dur:0.3, gap:0.25},{note:['E4','A4'], drive:true, dur:0.3, gap:0.25},{note:'G4', drive:true, dur:0.2, gap:0.18},{note:'E4', drive:true, dur:0.2, gap:0.18},{note:'D4', drive:true, dur:0.6, gap:0.5}])",
+          backingTrack: ['A2', 'C3', 'D3', 'A2']
+        },
+        quiz: [
+          {
+            q: "¿Cómo se produce un vibrato cálido y profesional en la guitarra?",
+            options: [
+              "Temblando los dedos de forma rápida e irregular",
+              "Rotando suavemente el antebrazo y la muñeca con control rítmico, manteniendo el dedo anclado al traste",
+              "Moviendo la guitarra de arriba hacia abajo",
+              "Apretando y soltando la clavija de afinación"
+            ],
+            correct: 1,
+            explanation: "El peso y la rotación de la muñeca (no la fuerza del dedo individual) proporcionan el vibrato fluido característico de los grandes guitarristas."
+          },
+          {
+            q: "¿Qué es la 'Blue Note' en la escala de blues?",
+            options: [
+              "Una nota que solo se puede tocar con guitarras azules",
+              "La quinta disminuida (b5), una nota tensa y expresiva que aporta el sabor y tristeza típica del blues/rock",
+              "Una nota que desafina el amplificador",
+              "Un pedal de reverberación"
+            ],
+            correct: 1,
+            explanation: "La quinta disminuida (b5) es la nota de paso que crea la tensión 'bluesy' característica."
+          },
+          {
+            q: "¿Qué significa tocar un 'Double Stop'?",
+            options: [
+              "Parar dos veces la canción",
+              "Pulsar y hacer sonar simultáneamente dos cuerdas juntas en una melodía o solo",
+              "Tocar con dos púas al mismo tiempo",
+              "Usar dos amplificadores a la vez"
+            ],
+            correct: 1,
+            explanation: "Los double stops son acordes de dos notas ejecutados con técnica solista, muy populares en el blues, rock and roll y country."
+          }
+        ]
+      }
+    ];
+
+    /* ============================================================
+     * 4. GESTOR DE PROGRESO Y ALMACENAMIENTO LOCAL (localStorage)
+     * ============================================================ */
+    const StorageKey = "riffmaster_electric_guitar_course_v1";
+
+    function getProgressData() {
+      try {
+        const raw = localStorage.getItem(StorageKey);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {
+        console.warn("localStorage inaccesible o bloqueado, usando memoria volátil.");
+      }
+      return {
+        completedModules: [],
+        lastActiveModule: "mod-1",
+        quizzesPassed: {}
+      };
+    }
+
+    function saveProgressData(data) {
+      try {
+        localStorage.setItem(StorageKey, JSON.stringify(data));
+      } catch (e) {
+        console.warn("No se pudo guardar en localStorage.");
+      }
+      updateGlobalProgressBar();
+      renderSidebarNavigation();
+    }
+
+    /* ============================================================
+     * 5. CONTROLADOR DE INTERFAZ DE USUARIO (UI CONTROLLER)
+     * ============================================================ */
+    let currentModuleIndex = 0;
+    let backingTrackActive = false;
+
+    // Inicializar elementos
+    const modulesNav = document.getElementById("modules-list");
+    const lessonContainer = document.getElementById("lesson-container");
+    const globalProgressBar = document.getElementById("global-progress-bar");
+    const globalProgressText = document.getElementById("global-progress-text");
+    const completedCountText = document.getElementById("completed-count");
+
+    // Modal Afinador
+    const tunerModal = document.getElementById("tuner-modal");
+    document.getElementById("btn-tuner-modal").addEventListener("click", () => tunerModal.classList.remove("hidden"));
+    document.getElementById("btn-close-tuner").addEventListener("click", () => tunerModal.classList.add("hidden"));
+    document.getElementById("btn-close-tuner-2").addEventListener("click", () => tunerModal.classList.add("hidden"));
+
+    // Toast flotante
+    function showToast(message, isSuccess = true) {
+      const toast = document.getElementById("toast");
+      const msg = document.getElementById("toast-msg");
+      const icon = document.getElementById("toast-icon");
+      msg.textContent = message;
+      icon.className = isSuccess ? "ph-fill ph-check-circle text-amber-400 text-xl" : "ph-fill ph-warning-circle text-red-400 text-xl";
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3200);
+    }
+
+    // Actualizar barra de progreso
+    function updateGlobalProgressBar() {
+      const data = getProgressData();
+      const total = CourseData.length;
+      const done = data.completedModules.length;
+      const pct = Math.round((done / total) * 100);
+
+      globalProgressBar.style.width = `${pct}%`;
+      globalProgressText.textContent = `${pct}%`;
+      completedCountText.textContent = `${done}/${total} Completado`;
+    }
+
+    // Renderizar la barra lateral
+    function renderSidebarNavigation() {
+      const data = getProgressData();
+      modulesNav.innerHTML = '';
+
+      CourseData.forEach((mod, idx) => {
+        const isDone = data.completedModules.includes(mod.id);
+        const isActive = idx === currentModuleIndex;
+
+        const btn = document.createElement("button");
+        btn.className = `w-full text-left p-3 rounded-xl transition flex items-center justify-between group ${
+          isActive 
+            ? 'bg-amber-500/20 border border-amber-500/50 text-white amber-glow-sm' 
+            : 'bg-amp-800/60 hover:bg-amp-800 border border-amp-700/60 text-gray-300'
+        }`;
+
+        btn.onclick = () => {
+          selectModule(idx);
+          // En móvil cerrar el menú
+          closeMobileSidebar();
+        };
+
+        btn.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
+              isDone 
+                ? 'bg-amber-500 text-amp-900' 
+                : isActive 
+                  ? 'bg-amber-500/40 text-amber-300' 
+                  : 'bg-amp-700 text-gray-400'
+            }">
+              ${isDone ? '<i class="ph-bold ph-check"></i>' : mod.number}
+            </div>
+            <div>
+              <p class="text-xs font-bold leading-tight ${isActive ? 'text-amber-400' : 'text-gray-200'}">${mod.title}</p>
+              <p class="text-[10px] text-gray-400 truncate max-w-[170px]">${mod.song.title}</p>
+            </div>
+          </div>
+          <i class="ph-bold ph-caret-right text-gray-500 group-hover:text-amber-400 transition"></i>
+        `;
+
+        modulesNav.appendChild(btn);
+      });
+    }
+
+    // Cargar contenido del módulo activo
+    function selectModule(index) {
+      currentModuleIndex = index;
+      AudioEngine.stopBackingTrack();
+      AudioEngine.stopCurrentSequence();
+      backingTrackActive = false;
+
+      const mod = CourseData[currentModuleIndex];
+      const data = getProgressData();
+      data.lastActiveModule = mod.id;
+      saveProgressData(data);
+
+      renderLessonContent(mod);
+      renderSidebarNavigation();
+      document.getElementById("main-content-scroll").scrollTop = 0;
+    }
+
+    // Renderizar cuerpo de la lección
+    function renderLessonContent(mod) {
+      const data = getProgressData();
+      const isCompleted = data.completedModules.includes(mod.id);
+
+      let sectionsHtml = '';
+      mod.sections.forEach(sec => {
+        let visualBlock = '';
+        if (sec.fretboard) {
+          visualBlock += SVGVisuals.renderFretboard(sec.fretboard.dots, sec.fretboard.startFret, sec.fretboard.fretsCount, sec.fretboard.title);
+        }
+        if (sec.chords) {
+          visualBlock += '<div class="flex flex-wrap items-center justify-center gap-2 my-2">';
+          sec.chords.forEach(c => {
+            visualBlock += SVGVisuals.renderChordBox(c.name, c.frets, c.fingers, c.root);
+          });
+          visualBlock += '</div>';
+        }
+        if (sec.tab) {
+          visualBlock += SVGVisuals.renderTab(sec.tab.lines, sec.tab.audioSnippet);
+        }
+
+        sectionsHtml += `
+          <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 mb-6 shadow-xl">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              ${sec.title}
+            </h3>
+            ${sec.content}
+            ${visualBlock}
+          </div>
+        `;
+      });
+
+      lessonContainer.innerHTML = `
+        <!-- Encabezado de Lección -->
+        <div class="bg-gradient-to-br from-amp-850 to-amp-800 border border-amp-700 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+          <div class="absolute -right-8 -top-8 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs font-bold border border-amber-500/30">
+              MÓDULO ${mod.number} DE 5
+            </span>
+            ${isCompleted ? `
+              <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center gap-1.5 border border-emerald-500/30">
+                <i class="ph-fill ph-check-circle"></i> Lección Completada
+              </span>
+            ` : `
+              <span class="px-3 py-1 rounded-full bg-amp-700 text-gray-300 text-xs flex items-center gap-1.5">
+                <i class="ph-bold ph-hourglass"></i> En Progreso
+              </span>
+            `}
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">${mod.title}</h2>
+          <p class="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl mb-6">${mod.summary}</p>
+
+          <!-- Frase Motivacional del Rock -->
+          <div class="p-4 bg-amp-900/80 rounded-xl border-l-4 border-amber-500 flex items-start gap-3">
+            <i class="ph-fill ph-quotes text-amber-400 text-2xl flex-shrink-0 mt-0.5"></i>
+            <div>
+              <p class="text-xs sm:text-sm italic text-gray-200">"${mod.quote.text}"</p>
+              <span class="text-[11px] font-bold text-amber-400 block mt-1">— ${mod.quote.author}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secciones Explicativas y Diagramas -->
+        ${sectionsHtml}
+
+        <!-- Rutina de Práctica Guiada con Temporizador de Estudio -->
+        <div class="bg-gradient-to-r from-amp-850 via-amp-800 to-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 shadow-xl">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl">
+                <i class="ph-bold ph-barbell"></i>
+              </div>
+              <div>
+                <h4 class="text-sm sm:text-base font-bold text-white">${mod.practiceRoutine.title}</h4>
+                <p class="text-xs text-gray-400">Objetivo sugerido: ${mod.practiceRoutine.targetBpm} BPM</p>
+              </div>
+            </div>
+            
+            <!-- Botón Temporizador 3 Minutos -->
+            <button id="btn-practice-timer" class="px-4 py-2 rounded-xl bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center gap-2 transition">
+              <i class="ph-bold ph-stopwatch text-base"></i>
+              <span id="timer-display">Iniciar Reto (3:00)</span>
+            </button>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 bg-amp-900/60 p-3.5 rounded-xl border border-amp-700/60 leading-relaxed">
+            ${mod.practiceRoutine.instructions}
+          </p>
+        </div>
+
+        <!-- Canción de Graduación del Módulo con Backing Track -->
+        <div class="bg-amp-850 border-2 border-amber-500/40 rounded-2xl p-5 sm:p-6 shadow-2xl relative">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div>
+              <span class="text-xs uppercase font-mono font-bold tracking-wider text-amber-400">Canción de Graduación</span>
+              <h3 class="text-xl font-black text-white">${mod.song.title}</h3>
+              <p class="text-xs text-gray-400">${mod.song.artist} • Dificultad: <span class="text-amber-400">${mod.song.difficulty}</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="${mod.song.audioSnippet}" class="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500 hover:text-amp-900 border border-amber-500/50 text-amber-400 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="ph-fill ph-speaker-high"></i> Escuchar Canción
+              </button>
+              <button id="btn-backing-toggle" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-bold text-xs flex items-center gap-1.5 shadow transition">
+                <i class="ph-bold ph-disc"></i> <span id="backing-btn-label">Backing Track (Bajo + Batería)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3 bg-amp-900/70 rounded-xl border border-amp-700 mb-4 flex items-center gap-2.5">
+            <i class="ph-bold ph-lightbulb text-amber-400 text-lg flex-shrink-0"></i>
+            <p class="text-xs text-gray-300"><strong>Consejo Pro:</strong> ${mod.song.tip}</p>
+          </div>
+
+          ${SVGVisuals.renderTab(mod.song.tab)}
+        </div>
+
+        <!-- Cuestionario Interactivo de Validación -->
+        <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 shadow-xl" id="quiz-section">
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <i class="ph-bold ph-seal-question text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-white">Cuestionario de Autoevaluación</h3>
+              <p class="text-xs text-gray-400">Responde correctamente para registrar el módulo como completado</p>
+            </div>
+          </div>
+
+          <div class="space-y-4" id="quiz-questions-list">
+            ${renderQuizQuestions(mod)}
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-amp-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span class="text-xs text-gray-400" id="quiz-status-feedback">Selecciona tus respuestas para comprobar</span>
+            <button id="btn-validate-quiz" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-bold text-sm shadow-lg transition">
+              Validar Respuestas y Completar
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Navegación Inferior (Anterior / Siguiente) -->
+        <div class="flex items-center justify-between pt-4 pb-12">
+          <button id="btn-prev-lesson" class="px-4 py-2 rounded-xl bg-amp-800 hover:bg-amp-700 border border-amp-700 text-gray-300 text-xs font-bold flex items-center gap-2 transition ${currentModuleIndex === 0 ? 'opacity-40 cursor-not-allowed' : ''}">
+            <i class="ph-bold ph-arrow-left"></i> Lección Anterior
+          </button>
+          <button id="btn-next-lesson" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amp-900 font-bold text-xs flex items-center gap-2 shadow-lg transition ${currentModuleIndex === CourseData.length - 1 ? 'opacity-40 cursor-not-allowed' : ''}">
+            Siguiente Lección <i class="ph-bold ph-arrow-right"></i>
+          </button>
+        </div>
+      `;
+
+      // Enganchar listeners de eventos
+      attachLessonEventListeners(mod);
+    }
+
+    // Renderizar preguntas del cuestionario
+    function renderQuizQuestions(mod) {
+      return mod.quiz.map((item, qIdx) => `
+        <div class="p-4 bg-amp-800 rounded-xl border border-amp-700 text-xs sm:text-sm" data-qidx="${qIdx}">
+          <p class="font-bold text-gray-200 mb-3">${qIdx + 1}. ${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-amp-900/60 hover:bg-amp-700/60 cursor-pointer border border-transparent hover:border-amp-600 transition">
+                <input type="radio" name="quiz_q_${qIdx}" value="${optIdx}" class="accent-amber-500">
+                <span class="text-gray-300 text-xs">${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="quiz-feedback hidden mt-2.5 p-2.5 rounded-lg text-xs leading-relaxed"></div>
+        </div>
+      `).join('');
+    }
+
+    // Event Listeners dentro de la lección
+    function attachLessonEventListeners(mod) {
+      // Backing Track Toggle
+      const backingBtn = document.getElementById("btn-backing-toggle");
+      const backingLabel = document.getElementById("backing-btn-label");
+      if (backingBtn) {
+        backingBtn.onclick = () => {
+          if (AudioEngine.isBackingActive()) {
+            AudioEngine.stopBackingTrack();
+            backingLabel.textContent = "Backing Track (Bajo + Batería)";
+            backingBtn.classList.remove("from-red-500", "to-red-600");
+            backingBtn.classList.add("from-amber-500", "to-amber-600");
+          } else {
+            AudioEngine.startBackingTrack(mod.song.backingTrack, 100);
+            backingLabel.textContent = "Detener Acompañamiento";
+            backingBtn.classList.remove("from-amber-500", "to-amber-600");
+            backingBtn.classList.add("from-red-500", "to-red-600");
+          }
+        };
+      }
+
+      // Temporizador de Práctica (3 minutos)
+      let timerInterval = null;
+      let secondsLeft = 180;
+      const btnTimer = document.getElementById("btn-practice-timer");
+      const timerDisplay = document.getElementById("timer-display");
+
+      if (btnTimer) {
+        btnTimer.onclick = () => {
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerDisplay.textContent = "Reanudar Reto";
+            btnTimer.classList.remove("bg-red-500", "text-white");
+          } else {
+            btnTimer.classList.add("bg-red-500", "text-white");
+            timerInterval = setInterval(() => {
+              secondsLeft--;
+              const m = Math.floor(secondsLeft / 60);
+              const s = secondsLeft % 60;
+              timerDisplay.textContent = `Práctica: ${m}:${s < 10 ? '0' : ''}${s}`;
+              if (secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                showToast("¡Reto de 3 minutos completado! Gran trabajo.", true);
+                timerDisplay.textContent = "¡Tiempo cumplido!";
+                btnTimer.classList.remove("bg-red-500");
+                btnTimer.classList.add("bg-emerald-500");
+              }
+            }, 1000);
+          }
+        };
+      }
+
+      // Validar Cuestionario
+      const btnValidateQuiz = document.getElementById("btn-validate-quiz");
+      btnValidateQuiz.onclick = () => {
+        let allCorrect = true;
+        let answeredAll = true;
+
+        mod.quiz.forEach((qItem, qIdx) => {
+          const selected = document.querySelector(`input[name="quiz_q_${qIdx}"]:checked`);
+          const card = document.querySelector(`[data-qidx="${qIdx}"]`);
+          const feedback = card.querySelector(".quiz-feedback");
+
+          if (!selected) {
+            answeredAll = false;
+            return;
+          }
+
+          const val = parseInt(selected.value, 10);
+          feedback.classList.remove("hidden");
+
+          if (val === qItem.correct) {
+            feedback.className = "quiz-feedback mt-2.5 p-2.5 rounded-lg text-xs leading-relaxed bg-emerald-950/70 border border-emerald-500/40 text-emerald-300";
+            feedback.innerHTML = `<strong>¡Correcto!</strong> ${qItem.explanation}`;
+          } else {
+            allCorrect = false;
+            feedback.className = "quiz-feedback mt-2.5 p-2.5 rounded-lg text-xs leading-relaxed bg-red-950/70 border border-red-500/40 text-red-300";
+            feedback.innerHTML = `<strong>Respuesta incorrecta:</strong> ${qItem.explanation}`;
+          }
+        });
+
+        if (!answeredAll) {
+          showToast("Por favor responde todas las preguntas del test.", false);
+          return;
+        }
+
+        if (allCorrect) {
+          const data = getProgressData();
+          if (!data.completedModules.includes(mod.id)) {
+            data.completedModules.push(mod.id);
+            saveProgressData(data);
+          }
+          showToast("¡Excelente! Has superado este módulo.", true);
+          document.getElementById("quiz-status-feedback").innerHTML = "<span class='text-emerald-400 font-bold'>✓ Módulo superado y registrado con éxito</span>";
+        } else {
+          showToast("Revisa las explicaciones e inténtalo de nuevo.", false);
+          document.getElementById("quiz-status-feedback").innerHTML = "<span class='text-red-400 font-bold'>Algunas respuestas necesitan corrección</span>";
+        }
+      };
+
+      // Navegación Inferior
+      const btnPrev = document.getElementById("btn-prev-lesson");
+      const btnNext = document.getElementById("btn-next-lesson");
+
+      if (btnPrev && currentModuleIndex > 0) {
+        btnPrev.onclick = () => selectModule(currentModuleIndex - 1);
+      }
+      if (btnNext && currentModuleIndex < CourseData.length - 1) {
+        btnNext.onclick = () => selectModule(currentModuleIndex + 1);
+      }
+    }
+
+    /* ============================================================
+     * 6. METRÓNOMO INTERACTIVO DEL SIDEBAR
+     * ============================================================ */
+    let metroRunning = false;
+    let metroTimerId = null;
+    let metroBeat = 0;
+    const metroBpmSlider = document.getElementById("metro-bpm");
+    const metroBpmDisplay = document.getElementById("metro-bpm-display");
+    const metroToggleBtn = document.getElementById("metro-toggle");
+    const metroLed = document.getElementById("metro-led");
+    const metroBtnText = document.getElementById("metro-btn-text");
+    const metroIcon = document.getElementById("metro-icon");
+
+    metroBpmSlider.addEventListener("input", (e) => {
+      const bpm = e.target.value;
+      metroBpmDisplay.textContent = `${bpm} BPM`;
+      if (metroRunning) {
+        stopMetronome();
+        startMetronome();
+      }
+    });
+
+    function startMetronome() {
+      metroRunning = true;
+      metroBtnText.textContent = "Pausar";
+      metroIcon.className = "ph-fill ph-pause";
+      metroToggleBtn.classList.add("bg-amber-500", "text-amp-900");
+      metroToggleBtn.classList.remove("bg-amp-700", "text-white");
+
+      const bpm = parseInt(metroBpmSlider.value, 10);
+      const intervalMs = (60 / bpm) * 1000;
+      metroBeat = 0;
+
+      metroTimerId = setInterval(() => {
+        const isAccent = (metroBeat % 4 === 0);
+        AudioEngine.playClick(isAccent);
+
+        // Destello visual en el LED
+        metroLed.classList.add("bg-amber-400", "shadow-[0_0_8px_#f59e0b]");
+        setTimeout(() => {
+          metroLed.classList.remove("bg-amber-400", "shadow-[0_0_8px_#f59e0b]");
+        }, 80);
+
+        metroBeat++;
+      }, intervalMs);
+    }
+
+    function stopMetronome() {
+      metroRunning = false;
+      if (metroTimerId) {
+        clearInterval(metroTimerId);
+        metroTimerId = null;
+      }
+      metroBtnText.textContent = "Iniciar";
+      metroIcon.className = "ph-fill ph-play";
+      metroToggleBtn.classList.remove("bg-amber-500", "text-amp-900");
+      metroToggleBtn.classList.add("bg-amp-700", "text-white");
+    }
+
+    metroToggleBtn.addEventListener("click", () => {
+      if (metroRunning) stopMetronome();
+      else startMetronome();
+    });
+
+    /* ============================================================
+     * 7. DESCARGA AUTOMÁTICA OFFLINE (SINGLE FILE)
+     * ============================================================ */
+    document.getElementById("btn-download-offline").addEventListener("click", () => {
+      const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Curso_Guitarra_Electrica_RiffMaster.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Archivo HTML descargado. ¡Úsalo sin conexión en cualquier lugar!", true);
+    });
+
+    // Control de Sidebar en Móvil
+    const sidebar = document.getElementById("sidebar");
+    const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+    const toggleSidebarBtn = document.getElementById("toggle-sidebar");
+
+    function openMobileSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarBackdrop.classList.remove("hidden");
+    }
+    function closeMobileSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      sidebarBackdrop.classList.add("hidden");
+    }
+
+    toggleSidebarBtn.addEventListener("click", openMobileSidebar);
+    sidebarBackdrop.addEventListener("click", closeMobileSidebar);
+
+    /* ============================================================
+     * 8. INICIALIZACIÓN DE LA APLICACIÓN
+     * ============================================================ */
+    window.onload = function() {
+      const data = getProgressData();
+      const initialIdx = CourseData.findIndex(m => m.id === data.lastActiveModule);
+      selectModule(initialIdx !== -1 ? initialIdx : 0);
+      updateGlobalProgressBar();
+    };
+  </script>
+</body>
+</html>
