@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>RiffMaster - Curso de Guitarra</title>
@@ -18,254 +18,344 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: '#0B0B0F',
-                        panel: '#16161A',
-                        panelLight: '#1C1C22',
-                        accent: '#F5A623',
-                        accentHover: '#E0961F',
-                        fretboard: '#2A1B18',
+                        dark: '#0a0a0a',
+                        panel: '#151515',
+                        accent: '#FFb300', /* Amarillo/Naranja de la captura */
+                        accentHover: '#FF8F00',
+                        fretboard: '#2d1e17',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Phosphor Icons -->
+    
+    <!-- Phosphor Icons (usado en contenido interno) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
-        body { background-color: #0B0B0F; color: #E0E0E0; font-family: 'Inter', sans-serif; }
+        body { 
+            background-color: #0a0a0a; 
+            color: #E0E0E0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+        }
         
-        /* Custom Scrollbar */
+        /* Scrollbar personalizado */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #16161A; }
+        ::-webkit-scrollbar-track { background: #151515; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
-        
-        .custom-scrollbar::-webkit-scrollbar { height: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1C1C22; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FFb300; }
 
-        .tab-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
-        .glass { background: rgba(22, 22, 26, 0.9); backdrop-filter: blur(12px); }
+        .tab-font { 
+            font-family: 'Courier New', Courier, monospace; 
+            letter-spacing: 1px; 
+        }
         
-        .locked-module {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(100%);
+        .glass { 
+            background: rgba(20, 20, 20, 0.9); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+        }
+        
+        .locked-module { 
+            opacity: 0.4; 
+            pointer-events: none; 
+            filter: grayscale(100%); 
         }
 
+        /* LEDs del metrónomo */
         .led-indicator {
-            width: 10px; height: 10px; border-radius: 50%;
-            display: inline-block; transition: all 0.1s ease;
-            box-shadow: 0 0 5px currentColor;
+            width: 12px; 
+            height: 12px; 
+            border-radius: 50%; 
+            display: inline-block; 
+            transition: all 0.1s ease;
         }
-        .led-off { background-color: #333; color: #333; box-shadow: none; }
-        .led-on { background-color: #F5A623; color: #F5A623; box-shadow: 0 0 10px #F5A623; }
+        .led-off { 
+            background-color: #333; 
+            box-shadow: none; 
+        }
+        .led-on { 
+            background-color: #FFb300; 
+            box-shadow: 0 0 12px #FFb300; 
+        }
 
-        input[type=range] {
-            accent-color: #F5A623;
+        input[type=range] { accent-color: #FFb300; }
+
+        /* Offcanvas Sidebar for Mobile */
+        .sidebar-open { transform: translateX(0%); }
+        .sidebar-closed { transform: translateX(-100%); }
+        @media (min-width: 768px) {
+            .sidebar-closed { transform: translateX(0%); }
         }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden selection:bg-accent selection:text-black">
+<body class="h-screen flex overflow-hidden selection:bg-accent selection:text-black">
 
-    <!-- Header Principal (Fijo superior) -->
-    <header class="h-16 glass border-b border-gray-800 flex items-center justify-between px-4 md:px-6 z-30 shrink-0 w-full relative">
+    <!-- ============================================== -->
+    <!-- TOP HEADER FIJO (Mobile & Desktop)             -->
+    <!-- ============================================== -->
+    <header class="h-16 w-full glass fixed top-0 z-40 border-b border-gray-800 flex items-center justify-between px-4">
+        <!-- Izquierda: Logo y Menú Hamburguesa -->
         <div class="flex items-center">
-            <!-- Menú Hamburguesa (Móvil) -->
-            <button id="btn-menu" class="md:hidden text-gray-300 hover:text-white p-2 mr-1 -ml-2 rounded-lg transition-colors">
-                <i class="ph-bold ph-list text-2xl"></i>
+            <button id="btn-menu-toggle" class="md:hidden p-2 text-white hover:text-accent mr-2 transition-colors">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
             </button>
-            <div class="flex items-center text-white select-none">
-                <i class="ph-fill ph-guitar text-accent text-2xl md:text-3xl"></i>
-                <span class="ml-2.5 font-bold text-lg md:text-xl tracking-tight">RiffMaster</span>
-            </div>
+            <i class="ph ph-guitar text-accent text-3xl"></i>
+            <span class="ml-2 font-bold text-xl text-white">RiffMaster</span>
         </div>
         
-        <div class="flex items-center space-x-2.5 md:space-x-4">
-            <!-- Barra de progreso minificada en el header -->
-            <div class="hidden sm:flex items-center space-x-2.5 mr-2">
-                <span id="progress-text" class="text-xs font-bold text-accent font-mono">0%</span>
-                <div class="w-20 md:w-32 bg-gray-800 rounded-full h-1.5">
-                    <div id="progress-bar" class="bg-accent h-1.5 rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(245,166,35,0.6)]" style="width: 0%"></div>
-                </div>
-            </div>
+        <!-- Derecha: Action Icons (Afinador, Metrónomo, Ajustes en SVG Puro) -->
+        <div class="flex items-center space-x-3">
             
-            <button id="btn-tuner" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-panelLight border border-gray-800 flex items-center justify-center text-gray-400 hover:text-accent hover:border-gray-600 transition-colors shadow-sm">
-                <i class="ph-bold ph-tuning-fork text-lg md:text-xl"></i>
+            <!-- Botón Afinador (Diapasón) -->
+            <button id="btn-tuner-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22v-6"></path>
+                    <path d="M9.5 16A4.5 4.5 0 0 1 5 11.5V3"></path>
+                    <path d="M14.5 16A4.5 4.5 0 0 0 19 11.5V3"></path>
+                </svg>
             </button>
-            <button id="btn-settings-header" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-panelLight border border-gray-800 flex items-center justify-center text-gray-400 hover:text-accent hover:border-gray-600 transition-colors shadow-sm">
-                <i class="ph-bold ph-gear text-lg md:text-xl"></i>
+            
+            <!-- Botón Metrónomo (Péndulo Clásico) -->
+            <button id="btn-metro-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5.5 21l3-15h7l3 15h-13z"></path>
+                    <path d="M8.5 17l1.5-8h4l1.5 8"></path>
+                    <line x1="12" y1="19" x2="15" y2="9"></line>
+                    <circle cx="14" cy="12" r="1.5" fill="currentColor"></circle>
+                </svg>
             </button>
+            
+            <!-- Botón Ajustes (Engranaje) -->
+            <button id="btn-settings-modal" class="p-2 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition-colors shadow-lg">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            
         </div>
     </header>
 
-    <!-- Contenedor Principal (Sidebar + Main) -->
-    <div class="flex-1 flex overflow-hidden relative w-full">
+    <!-- Overlay Oscuro para Menú Mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden md:hidden transition-opacity opacity-0"></div>
 
-        <!-- Overlay oscuro para móvil al abrir sidebar -->
-        <div id="sidebar-overlay" class="absolute inset-0 bg-black/70 z-40 hidden transition-opacity duration-300 opacity-0 md:hidden"></div>
-
-        <!-- Sidebar / Navegación -->
-        <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 z-50 w-72 bg-panel border-r border-gray-800 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 md:translate-x-0 shadow-2xl md:shadow-none">
-            <div class="flex-1 overflow-y-auto">
-                <div class="h-14 flex items-center justify-between px-5 border-b border-gray-800 md:hidden sticky top-0 bg-panel z-10">
-                    <span class="font-bold text-base text-gray-200">Lecciones</span>
-                    <button id="btn-close-menu" class="text-gray-400 hover:text-white p-2 -mr-2">
-                        <i class="ph-bold ph-x text-lg"></i>
-                    </button>
-                </div>
-                
-                <nav class="p-3 space-y-1.5 mt-1" id="nav-modules">
-                    <!-- Modules injected here -->
-                </nav>
+    <!-- ============================================== -->
+    <!-- SIDEBAR (Menú de Navegación)                   -->
+    <!-- ============================================== -->
+    <aside id="sidebar" class="fixed md:static top-0 left-0 h-full w-72 md:w-80 panel border-r border-gray-800 z-30 pt-16 transition-transform duration-300 sidebar-closed flex flex-col bg-[#111]">
+        
+        <!-- Progreso -->
+        <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+            <div>
+                <p class="text-xs text-gray-500 uppercase font-bold">Progreso del curso</p>
+                <p id="progress-text" class="text-accent font-bold text-lg">0% completado</p>
             </div>
-
-            <div class="p-4 border-t border-gray-800 space-y-3 bg-panel shrink-0">
-                <!-- Metronome -->
-                <div class="bg-panelLight border border-gray-800 p-3.5 rounded-xl shadow-inner">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Metrónomo</h4>
-                        <div id="metro-led" class="led-indicator led-off"></div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <button id="btn-metro-toggle" class="w-9 h-9 flex items-center justify-center bg-gray-800 border border-gray-700 hover:border-accent hover:bg-accent hover:text-black text-white rounded-lg transition-colors">
-                            <i class="ph-fill ph-play text-lg" id="icon-metro"></i>
-                        </button>
-                        <input type="range" id="bpm-slider" min="50" max="180" value="90" class="w-full flex-1">
-                        <span id="bpm-display" class="text-xs font-bold w-7 text-right font-mono text-accent">90</span>
-                    </div>
-                </div>
+            <div class="w-20 bg-gray-800 rounded-full h-2">
+                <div id="progress-bar" class="bg-accent h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
-        </aside>
+        </div>
+        
+        <!-- Lista de Módulos (Se inyecta por JS) -->
+        <nav class="p-4 space-y-2 overflow-y-auto flex-1 pb-24" id="nav-modules">
+            <!-- Los botones se generarán aquí -->
+        </nav>
+    </aside>
 
-        <!-- Main Content (Lectura) -->
-        <main class="flex-1 h-full bg-dark relative overflow-y-auto scroll-smooth" id="main-scroll">
+    <!-- ============================================== -->
+    <!-- CONTENIDO PRINCIPAL DE LA LECCIÓN              -->
+    <!-- ============================================== -->
+    <main class="flex-1 flex flex-col h-full bg-dark relative overflow-y-auto scroll-smooth pt-16" id="main-scroll">
+        <div class="p-5 md:p-10 max-w-4xl mx-auto w-full pb-32" id="module-content">
+            <!-- El HTML de la lección seleccionada se inyecta aquí -->
+        </div>
+    </main>
+
+
+    <!-- ============================================== -->
+    <!-- MODALES (POPUPS DE SISTEMA Y HERRAMIENTAS)     -->
+    <!-- ============================================== -->
+
+    <!-- 1. Modal Afinador -->
+    <div id="modal-tuner" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#1a1a1a] border border-gray-700 rounded-2xl w-full max-w-sm p-6 transform scale-95 transition-transform duration-300 shadow-2xl relative" id="modal-tuner-content">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-white close-modal">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="flex items-center mb-6">
+                <svg class="text-accent mr-3" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22v-6"></path><path d="M9.5 16A4.5 4.5 0 0 1 5 11.5V3"></path><path d="M14.5 16A4.5 4.5 0 0 0 19 11.5V3"></path>
+                </svg>
+                <h3 class="text-xl font-bold text-white">Afinador Clásico</h3>
+            </div>
+            <p class="text-gray-400 text-sm mb-6">Toca una cuerda para escuchar el tono de referencia puro. Úsalo para afinar a oído.</p>
             
-            <!-- Barra progreso móvil (visible solo si la de arriba se oculta, aunque la he dejado) -->
-            <div class="sm:hidden px-5 pt-4 pb-2 flex items-center justify-between border-b border-gray-800/50">
-                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Progreso del Curso</span>
-                <span id="progress-text-mobile" class="text-xs font-bold text-accent font-mono">0%</span>
-            </div>
-
-            <div class="p-5 md:p-10 max-w-4xl mx-auto w-full pb-32">
-                <h2 id="header-title" class="font-black text-2xl md:text-3xl text-white mb-2 leading-tight">Cargando...</h2>
-                <div id="module-content" class="mt-4">
-                    <!-- Content injected here -->
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Modal Afinador -->
-    <div id="modal-tuner" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[60] p-4 backdrop-blur-md opacity-0 transition-opacity duration-300">
-        <div class="bg-panel border border-[#2A2A35] rounded-2xl w-full max-w-sm p-0 transform scale-95 transition-transform duration-300 shadow-2xl flex flex-col overflow-hidden" id="modal-tuner-content">
-            <div class="flex justify-between items-center px-6 py-5 border-b border-gray-800/80 bg-panel">
-                <h3 class="text-[17px] font-bold text-white flex items-center tracking-wide">
-                    <i class="ph-bold ph-tuning-fork text-accent mr-2.5 text-xl"></i> Afinador
-                </h3>
-                <button id="btn-close-tuner" class="text-gray-400 hover:text-white transition-colors p-1 -mr-2">
-                    <i class="ph-bold ph-x text-lg"></i>
+            <div class="grid grid-cols-3 gap-4">
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="E2">
+                    E<span class="block text-xs font-normal text-gray-500 mt-1">6ª Cuerda</span>
                 </button>
-            </div>
-            <div class="p-6">
-                <p class="text-[13px] text-gray-400 mb-6 leading-relaxed text-center">Pulsa una nota para escuchar su tono estándar y afinar de oído.</p>
-                <div class="grid grid-cols-3 gap-3">
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="E2">E <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">6ª Grave</span></button>
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="A2">A <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">5ª</span></button>
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="D3">D <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">4ª</span></button>
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="G3">G <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">3ª</span></button>
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="B3">B <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">2ª</span></button>
-                    <button class="tune-btn w-full py-4 rounded-xl bg-panelLight border border-gray-800 hover:border-accent text-lg font-bold text-white transition-all shadow-sm hover:shadow-accent/20 hover:text-accent group" data-note="E4">E <span class="text-[10px] text-gray-500 block font-normal mt-1 uppercase tracking-wider group-hover:text-accent/70">1ª Fina</span></button>
-                </div>
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="A2">
+                    A<span class="block text-xs font-normal text-gray-500 mt-1">5ª Cuerda</span>
+                </button>
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="D3">
+                    D<span class="block text-xs font-normal text-gray-500 mt-1">4ª Cuerda</span>
+                </button>
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="G3">
+                    G<span class="block text-xs font-normal text-gray-500 mt-1">3ª Cuerda</span>
+                </button>
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="B3">
+                    B<span class="block text-xs font-normal text-gray-500 mt-1">2ª Cuerda</span>
+                </button>
+                <button class="tune-btn p-4 bg-gray-800 hover:bg-gray-700 hover:text-accent rounded-xl text-xl font-bold text-gray-200 transition-colors" data-note="E4">
+                    E<span class="block text-xs font-normal text-gray-500 mt-1">1ª Cuerda</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Settings Modal (v2.0.0) -->
-    <div id="modal-settings" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[60] p-4 backdrop-blur-md opacity-0 transition-opacity duration-300">
-        <div class="bg-panel border border-[#2A2A35] rounded-2xl w-full max-w-sm p-0 transform scale-95 transition-transform duration-300 shadow-2xl flex flex-col overflow-hidden" id="modal-settings-content">
+    <!-- 2. Modal Metrónomo -->
+    <div id="modal-metronome" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#1a1a1a] border border-gray-700 rounded-2xl w-full max-w-sm p-6 transform scale-95 transition-transform duration-300 shadow-2xl relative" id="modal-metro-content">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-white close-modal">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="flex items-center mb-2">
+                <svg class="text-accent mr-3" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5.5 21l3-15h7l3 15h-13z"></path><path d="M8.5 17l1.5-8h4l1.5 8"></path><line x1="12" y1="19" x2="15" y2="9"></line><circle cx="14" cy="12" r="1.5" fill="currentColor"></circle>
+                </svg>
+                <h3 class="text-xl font-bold text-white">Metrónomo (Backing)</h3>
+            </div>
+            <p class="text-gray-400 text-sm mb-8">Base sintética de bajo y batería para practicar tempos con tus riffs.</p>
             
-            <div class="flex justify-between items-center px-6 py-5 border-b border-gray-800/80 bg-panel">
-                <h3 class="text-[17px] font-bold text-white flex items-center tracking-wide">
-                    <i class="ph-fill ph-gear text-accent mr-2.5 text-xl"></i> Sistema & Configuración
-                </h3>
-                <button id="btn-close-settings" class="text-gray-400 hover:text-white transition-colors p-1 -mr-2">
-                    <i class="ph-bold ph-x text-lg"></i>
+            <div class="flex flex-col items-center">
+                <div id="metro-led" class="led-indicator led-off mb-4 w-6 h-6"></div>
+                <div class="text-6xl font-black text-white mb-2" id="bpm-display-large">90</div>
+                <p class="text-accent font-bold text-sm uppercase tracking-widest mb-8">BPM</p>
+                
+                <input type="range" id="bpm-slider" min="50" max="180" value="90" class="w-full mb-8 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                
+                <button id="btn-metro-toggle" class="w-20 h-20 rounded-full bg-accent hover:bg-accentHover flex items-center justify-center transition-colors shadow-[0_0_20px_rgba(255,179,0,0.4)] text-black">
+                    <!-- Play Icon SVG -->
+                    <svg id="icon-metro-play" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                        <path d="M8 5v14l11-7z"></path>
+                    </svg>
+                    <!-- Stop Icon SVG (Oculto por defecto) -->
+                    <svg id="icon-metro-stop" class="hidden" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                        <path d="M6 6h12v12H6z"></path>
+                    </svg>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- 3. Modal Ajustes Reconstruido -->
+    <div id="modal-settings" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#121212] border border-[#2a2a2a] rounded-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 shadow-2xl relative" id="modal-settings-content">
             
-            <div class="p-6 overflow-y-auto custom-scrollbar max-h-[80vh]">
-                <!-- Sección 1: Versión -->
-                <div class="mb-7">
-                    <h4 class="text-[11px] font-bold text-accent uppercase tracking-[0.1em] flex items-center mb-3">
-                        <i class="ph-bold ph-cloud-arrow-down mr-1.5 text-sm"></i> Versión del Curso
-                    </h4>
+            <button class="absolute top-6 right-6 text-gray-400 hover:text-white close-modal">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center border-b border-[#2a2a2a] pb-4">
+                <svg class="text-accent mr-2" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Sistema & Configuración
+            </h3>
+            
+            <div class="space-y-6">
+                <!-- Bloque Versión -->
+                <div class="border border-[#2a2a2a] bg-[#181818] p-4 rounded-xl">
+                    <p class="text-[11px] text-accent uppercase font-bold tracking-wider mb-4 flex items-center">
+                        VERSIÓN DEL CURSO
+                    </p>
                     
-                    <div class="bg-panelLight p-4 rounded-xl border border-gray-800/80">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-[14px] text-gray-300 font-medium">Versión Instalada:</span>
-                            <span class="text-sm font-mono font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">v2.0.0</span>
-                        </div>
-                        <button class="w-full bg-[#30303A] text-white text-[13px] font-bold py-3 rounded-xl flex items-center justify-center cursor-default pointer-events-none transition-colors mb-3">
-                            <i class="ph-bold ph-check text-green-400 mr-2 text-base"></i> App Actualizada
-                        </button>
-                        <button id="btn-force-update" class="w-full bg-red-900/20 hover:bg-red-900/40 text-red-400 border border-red-900/50 text-[13px] font-bold py-3 rounded-xl flex items-center justify-center transition-colors shadow-sm">
-                            <i class="ph-bold ph-arrows-clockwise mr-2 text-base"></i> Forzar Actualización
-                        </button>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-300 font-medium">Versión Instalada:</span>
+                        <span class="bg-[#2a2a2a] text-accent font-mono text-sm px-3 py-1 rounded-md">v2.1.0</span>
                     </div>
+                    
+                    <!-- Botón Forzar Actualización -->
+                    <button id="btn-force-update" class="w-full bg-[#2a2a2a] hover:bg-[#333] text-gray-200 font-medium py-3 rounded-lg flex items-center justify-center transition-colors">
+                        <svg class="mr-2" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                            <path d="M21.5 2v6h-6M2.13 15.57a9 9 0 1 0 3.87-11.14L2.5 8"></path>
+                        </svg>
+                        Forzar Actualización (Caché)
+                    </button>
                 </div>
 
-                <!-- Sección 2: Progreso -->
-                <div class="mb-7">
-                    <h4 class="text-[11px] font-bold text-accent uppercase tracking-[0.1em] flex items-center mb-3">
-                        <i class="ph-bold ph-floppy-disk mr-1.5 text-sm"></i> Gestión de Progreso
-                    </h4>
-                    
-                    <div class="bg-panelLight p-4 rounded-xl border border-gray-800/80 text-[13px] text-gray-400 mb-4 leading-relaxed">
+                <!-- Bloque Backup -->
+                <div class="border border-[#2a2a2a] bg-[#181818] p-4 rounded-xl">
+                    <p class="text-[11px] text-accent uppercase font-bold tracking-wider mb-2 flex items-center">
+                        GESTIÓN DE PROGRESO
+                    </p>
+                    <p class="text-xs text-gray-400 mb-5 leading-relaxed">
                         Exporta tu progreso a un archivo seguro. En iOS, se abrirá la hoja para guardar en Archivos (iCloud) o compartir.
-                    </div>
+                    </p>
                     
-                    <button id="btn-backup" class="w-full mb-3 bg-accent hover:bg-accentHover text-black text-[14px] font-bold py-3.5 px-4 rounded-xl flex items-center justify-center transition-colors shadow-lg shadow-accent/10 active:scale-[0.98]">
-                        <i class="ph-bold ph-upload-simple mr-2 text-lg"></i> Generar Backup JSON
+                    <button id="btn-backup" class="w-full mb-3 bg-accent hover:bg-accentHover text-black font-bold py-3 px-4 rounded-lg flex items-center justify-center transition-colors">
+                        <svg class="mr-2" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Generar Backup JSON
                     </button>
                     
-                    <div class="relative w-full mb-4">
-                        <input type="file" id="file-restore" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                        <div class="w-full bg-[#24242B] border border-gray-700 hover:bg-[#2A2A35] text-white text-[14px] font-bold py-3.5 px-4 rounded-xl flex items-center justify-center transition-colors shadow-sm">
-                            <i class="ph-bold ph-download-simple mr-2 text-lg"></i> Restaurar desde JSON
+                    <div class="relative w-full">
+                        <input type="file" id="file-restore" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <div class="w-full bg-[#2a2a2a] hover:bg-[#333] text-gray-200 font-medium py-3 px-4 rounded-lg flex items-center justify-center transition-colors pointer-events-none">
+                            <svg class="mr-2" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Restaurar desde JSON
                         </div>
                     </div>
-                    
-                    <button id="btn-reset-data" class="w-full bg-transparent text-red-400 hover:text-white hover:bg-red-600 border border-red-900/50 text-[13px] font-bold py-3 rounded-xl flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso
-                    </button>
                 </div>
                 
-                <div class="text-center mb-6">
-                    <span class="text-[10px] text-gray-500 font-mono tracking-wide">RiffMaster App - 100% Autocontenida offline.</span>
+                <p class="text-center text-[10px] text-gray-600 font-mono">RiffMaster App - 100% Autocontenida offline.</p>
+                
+                <!-- Notificación de versión OK -->
+                <div class="bg-accent/10 border border-accent/30 p-3 rounded-lg flex items-center">
+                    <div class="bg-accent rounded-full p-1 mr-3 flex-shrink-0">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="black" stroke-width="3" fill="none">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-gray-200 font-medium leading-tight">Estás usando la versión más reciente del curso (v2.1.0).</p>
                 </div>
 
-                <div class="border border-accent/40 bg-accent/5 p-4 rounded-xl flex items-center gap-3.5">
-                    <div class="w-6 h-6 rounded-full bg-accent text-black flex items-center justify-center shrink-0">
-                        <i class="ph-bold ph-check text-[14px]"></i>
-                    </div>
-                    <p class="text-[13px] text-white font-medium leading-snug">Estás usando la versión más reciente del curso (v2.0.0).</p>
+                <div class="pt-4 border-t border-[#2a2a2a]">
+                    <button id="btn-reset-data" class="w-full text-red-500 hover:text-red-400 font-medium text-sm py-2 flex items-center justify-center transition-colors">
+                        Borrar Progreso Local
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Toast Notification (Replaces alerts) -->
-    <div id="toast-notification" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-black px-6 py-3 rounded-full font-bold shadow-2xl transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none z-[70] flex items-center text-sm">
-        <i id="toast-icon" class="ph-bold ph-check-circle mr-2 text-lg"></i> <span id="toast-msg">Progreso restaurado</span>
+    
+    <!-- Toast de Notificación Global -->
+    <div id="toast-msg" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full font-bold shadow-xl transition-all duration-300 opacity-0 pointer-events-none z-50 translate-y-4">
+        ¡Completado con éxito!
     </div>
 
-    <!-- AUDIO ENGINE & LOGIC -->
+
+    <!-- ============================================== -->
+    <!-- LÓGICA JS: AUDIO, DATOS, DIBUJO SVG Y EVENTOS  -->
+    <!-- ============================================== -->
     <script>
         /* ============================================================
-         * AUDIO ENGINE & iOS ROBUST UNLOCK (Fade out 0.0001 fix)
+         * 1. MOTOR DE AUDIO (Web Audio API con desbloqueo iOS)
          * ============================================================ */
         const AudioEngine = (() => {
             let ctx = null;
@@ -286,27 +376,30 @@
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
-
+                
                 try {
                     const nav = navigator;
-                    if (nav.audioSession) {
-                        nav.audioSession.type = 'playback';
-                    }
+                    if (nav.audioSession) nav.audioSession.type = 'playback'; // Ignora el interruptor de silencio en iOS
                 } catch (e) { }
-
+                
                 if (isUnlocked) return;
+                
+                // Buffer silencioso para obligar a WebKit a activar la salida de audio
                 const buffer = audioCtx.createBuffer(1, 1, 22050);
                 const source = audioCtx.createBufferSource();
                 source.buffer = buffer;
                 source.connect(audioCtx.destination);
                 source.start(0);
+                
                 isUnlocked = true;
             }
 
+            // Atamos el desbloqueo a todo tipo de interacción táctil/clic
             ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
                 document.addEventListener(evt, unlockAudio, { capture: true });
             });
 
+            // Frecuencias científicas
             const noteFreqs = {
                 'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'Bb2': 116.54, 'B2': 123.47,
                 'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'Eb3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00, 
@@ -318,7 +411,7 @@
                 const audioCtx = getContext();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
 
-                const startTime = audioCtx.currentTime + timeOffset + 0.05;
+                const startTime = audioCtx.currentTime + timeOffset + 0.05; // Buffer de 50ms para evitar cuelgues
                 const safeDuration = Math.max(duration, 0.05);
                 const freq = noteFreqs[noteName] || 220;
 
@@ -382,7 +475,6 @@
                 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                
                 osc.start(startTime);
                 osc.stop(startTime + 0.1);
             }
@@ -390,11 +482,11 @@
             function playRiff(notes, isDistorted = true, tempo = 100) {
                 const beatDuration = 60 / tempo;
                 let currentTimeOffset = 0;
-
+                
                 notes.forEach(noteData => {
                     const { note, dur, pause } = noteData;
                     if (note && note !== 'rest') {
-                        if(Array.isArray(note)) {
+                        if (Array.isArray(note)) {
                             note.forEach(n => playNote(n, dur * beatDuration, isDistorted, currentTimeOffset));
                         } else {
                             playNote(note, dur * beatDuration, isDistorted, currentTimeOffset);
@@ -411,11 +503,14 @@
                 let step = 0;
                 
                 backingInterval = setInterval(() => {
+                    // Bombo (Bajo)
                     if(step % 4 === 0) playNote('A1', beatTime * 0.8, false, 0); 
+                    // Hi-Hat
                     if(step % 2 === 1) playClick(false); 
+                    // Caja (Bajo más corto)
                     if(step % 4 === 2) playNote('A1', beatTime * 0.4, false, 0);
                     step++;
-                }, beatTime * 500);
+                }, beatTime * 500); // 500 = octavas
             }
 
             function stopBackingTrack() {
@@ -423,15 +518,19 @@
                 if(backingInterval) clearInterval(backingInterval);
             }
 
-            return { playNote, playRiff, playClick, startBackingTrack, stopBackingTrack, get isBackingActive() { return isBackingPlaying; } };
+            return { 
+                playNote, playRiff, playClick, startBackingTrack, stopBackingTrack, 
+                get isBackingActive() { return isBackingPlaying; } 
+            };
         })();
 
+
         /* ============================================================
-         * DATA STATE & STORAGE
+         * 2. DATOS Y ESTADO (Progreso guardado)
          * ============================================================ */
-        let appState = {
+        let appState = { 
             unlocked: [1], 
-            completed: []  
+            completed: [] 
         };
 
         function loadState() {
@@ -439,8 +538,8 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (parsed.unlocked && Array.isArray(parsed.unlocked)) appState.unlocked = parsed.unlocked;
-                    if (parsed.completed && Array.isArray(parsed.completed)) appState.completed = parsed.completed;
+                    if (parsed.unlocked) appState.unlocked = parsed.unlocked;
+                    if (parsed.completed) appState.completed = parsed.completed;
                 } catch(e) {}
             }
             updateProgressBar();
@@ -453,88 +552,94 @@
 
         function updateProgressBar() {
             const total = modules.length;
-            const comp = appState.completed.length;
-            const pct = Math.min(100, Math.max(0, Math.round((comp / total) * 100)));
+            const pct = Math.min(100, Math.max(0, Math.round((appState.completed.length / total) * 100)));
             document.getElementById('progress-bar').style.width = `${pct}%`;
-            document.getElementById('progress-text').innerText = `${pct}%`;
-            document.getElementById('progress-text-mobile').innerText = `${pct}% completado`;
+            document.getElementById('progress-text').innerText = `${pct}% completado`;
         }
 
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast-notification');
-            const icon = document.getElementById('toast-icon');
-            const msgEl = document.getElementById('toast-msg');
-            msgEl.innerText = msg;
-            if (isError) {
-                toast.classList.replace('bg-green-500', 'bg-red-500');
-                toast.classList.replace('text-black', 'text-white');
-                icon.className = 'ph-bold ph-warning-circle mr-2 text-lg';
-            } else {
-                toast.classList.replace('bg-red-500', 'bg-green-500');
-                toast.classList.replace('text-white', 'text-black');
-                icon.className = 'ph-bold ph-check-circle mr-2 text-lg';
-            }
-            toast.classList.remove('opacity-0', '-translate-y-4');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-4');
-            }, 3000);
+        function showToast(msg) {
+            const t = document.getElementById('toast-msg');
+            t.innerText = msg;
+            t.classList.remove('opacity-0', 'translate-y-4');
+            setTimeout(() => t.classList.add('opacity-0', 'translate-y-4'), 3000);
         }
+
 
         /* ============================================================
-         * SVG GENERATORS (Mejorados visualmente)
+         * 3. GENERADORES SVG (Ahorran código HTML y son 100% editables)
          * ============================================================ */
-        function drawFretboard(strings, frets, dots, width=600, height=140) {
-            // FIX v2.0.0: Wrap SVG inside a horizontally scrolling container with a forced min-width
-            let svg = `<div class="overflow-x-auto w-full pb-2 custom-scrollbar mb-6"><svg viewBox="0 0 ${width} ${height}" class="min-w-[500px] w-full h-auto bg-fretboard rounded-lg shadow-inner">`;
+        
+        // Diapasón horizontal
+        function drawFretboard(strings, frets, dots, width=600, height=180) {
+            // Contenedor con overflow horizontal para evitar que se achique en móviles
+            let svg = `
+                <div class="w-full overflow-x-auto my-6 bg-[#1a1a1a] rounded-xl border border-gray-800 shadow-inner p-2">
+                    <div style="min-width: 500px;">
+                        <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto bg-fretboard rounded-lg">`;
+            
             const fretSpacing = width / frets;
             const stringSpacing = height / (strings + 1);
 
+            // Líneas de los trastes y números
             for (let i = 1; i <= frets; i++) {
                 const x = i * fretSpacing;
                 svg += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="#A0A0A0" stroke-width="3"/>`;
-                svg += `<text x="${x - fretSpacing/2}" y="${height - 5}" fill="#FFF" font-size="11" text-anchor="middle" opacity="0.6">${i}</text>`;
+                svg += `<text x="${x - fretSpacing/2}" y="${height - 5}" fill="#FFF" font-size="14" text-anchor="middle" opacity="0.5">${i}</text>`;
             }
-            svg += `<line x1="2" y1="0" x2="2" y2="${height}" stroke="#DDD" stroke-width="6"/>`;
+            // Cejuela (izq)
+            svg += `<line x1="3" y1="0" x2="3" y2="${height}" stroke="#DDD" stroke-width="6"/>`;
 
+            // Inlays (puntos blancos del diapasón)
             const standardDots = [3, 5, 7, 9, 15, 17, 19];
             for (let i = 1; i <= frets; i++) {
                 const x = (i * fretSpacing) - (fretSpacing / 2);
-                const y = height / 2;
                 if (i === 12) {
-                    svg += `<circle cx="${x}" cy="${stringSpacing * 2}" r="5" fill="#FFF" opacity="0.4"/>`;
-                    svg += `<circle cx="${x}" cy="${stringSpacing * 5}" r="5" fill="#FFF" opacity="0.4"/>`;
+                    svg += `<circle cx="${x}" cy="${stringSpacing * 2.5}" r="6" fill="#FFF" opacity="0.3"/>`;
+                    svg += `<circle cx="${x}" cy="${stringSpacing * 4.5}" r="6" fill="#FFF" opacity="0.3"/>`;
                 } else if (standardDots.includes(i)) {
-                    svg += `<circle cx="${x}" cy="${y}" r="5" fill="#FFF" opacity="0.4"/>`;
+                    svg += `<circle cx="${x}" cy="${height/2}" r="6" fill="#FFF" opacity="0.3"/>`;
                 }
             }
 
+            // Líneas de las cuerdas
             const stringNames = ['e', 'B', 'G', 'D', 'A', 'E'];
             for (let i = 1; i <= strings; i++) {
                 const y = i * stringSpacing;
-                const sw = 1 + (i * 0.4); 
+                const sw = 1 + (i * 0.4);
                 svg += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#DDD" stroke-width="${sw}"/>`;
-                svg += `<text x="10" y="${y - 4}" fill="#F5A623" font-size="11" font-weight="bold">${stringNames[i-1]}</text>`;
+                svg += `<text x="12" y="${y - 6}" fill="#FFb300" font-size="14" font-weight="bold">${stringNames[i-1]}</text>`;
             }
 
+            // Puntos de los dedos para la lección
             dots.forEach(d => {
                 const x = (d.fret * fretSpacing) - (fretSpacing / 2);
                 const y = d.string * stringSpacing;
-                const color = d.root ? '#F5A623' : '#4299E1';
-                svg += `<circle cx="${x}" cy="${y}" r="10" fill="${color}"/>`;
-                if(d.label) svg += `<text x="${x}" y="${y+3.5}" fill="#000" font-size="10" font-weight="bold" text-anchor="middle">${d.label}</text>`;
+                const color = d.root ? '#FFb300' : '#4a90e2';
+                const textColor = d.root ? '#000' : '#FFF';
+                svg += `<circle cx="${x}" cy="${y}" r="14" fill="${color}" stroke="#000" stroke-width="2"/>`;
+                if (d.label) {
+                    svg += `<text x="${x}" y="${y+5}" fill="${textColor}" font-size="14" font-weight="bold" text-anchor="middle">${d.label}</text>`;
+                }
             });
 
-            svg += `</svg></div>`;
+            svg += `
+                        </svg>
+                    </div>
+                </div>`;
             return svg;
         }
 
+        // Acordes verticales (Boxes)
         function drawChordBox(chordName, frets, stringsStatus, width=150, height=180) {
-            let svg = `<div class="inline-block text-center m-2"><svg viewBox="0 0 ${width} ${height}" class="w-24 md:w-28 h-auto">`;
-            const startX = 30; const startY = 40;
+            let svg = `
+                <div class="inline-block text-center m-2">
+                    <svg viewBox="0 0 ${width} ${height}" class="w-32 h-auto">`;
+            
+            const startX = 30; const startY = 40; 
             const w = 90; const h = 120;
             const strSpace = w / 5; const fretSpace = h / 4;
 
-            svg += `<text x="${width/2}" y="20" fill="#FFF" font-size="18" font-weight="bold" text-anchor="middle">${chordName}</text>`;
+            svg += `<text x="${width/2}" y="20" fill="#FFF" font-size="20" font-weight="bold" text-anchor="middle">${chordName}</text>`;
             
             for (let i = 0; i <= 5; i++) {
                 svg += `<line x1="${startX + i*strSpace}" y1="${startY}" x2="${startX + i*strSpace}" y2="${startY + h}" stroke="#666" stroke-width="2"/>`;
@@ -547,121 +652,213 @@
             stringsStatus.forEach((val, i) => {
                 const x = startX + i*strSpace;
                 if (val === 'X') {
-                    svg += `<text x="${x}" y="${startY - 10}" fill="#F44336" font-size="14" text-anchor="middle" font-family="monospace">X</text>`;
+                    svg += `<text x="${x}" y="${startY - 10}" fill="#ef4444" font-size="16" text-anchor="middle" font-family="monospace font-bold">X</text>`;
                 } else if (val === 0) {
-                    svg += `<circle cx="${x}" cy="${startY - 14}" r="4" fill="none" stroke="#FFF" stroke-width="2"/>`;
+                    svg += `<circle cx="${x}" cy="${startY - 14}" r="5" fill="none" stroke="#FFF" stroke-width="2"/>`;
                 } else if (val > 0) {
-                    const y = startY + (val * fretSpace) - (fretSpace / 2);
-                    svg += `<circle cx="${x}" cy="${y}" r="8" fill="#F5A623"/>`;
+                    svg += `<circle cx="${x}" cy="${startY + (val * fretSpace) - (fretSpace / 2)}" r="9" fill="#FFb300"/>`;
                 }
             });
-
-            svg += `</svg></div>`;
+            
+            svg += `
+                    </svg>
+                </div>`;
             return svg;
         }
 
         /* ============================================================
-         * MODULES DATA (8 EXTENSIVE MODULES)
+         * 4. DICCIONARIOS DE RIFFS (Partituras para Web Audio API)
+         * ============================================================ */
+        const riffData = {
+            'smoke': [
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5, pause:0.5},
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'Bb2', dur:0.5}, {note:'A2', dur:1.5, pause:0.5},
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5}, {note:'G2', dur:1}, {note:'E2', dur:2}
+            ],
+            'punk': [
+                {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5, pause:0.5},
+                {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5, pause:0.5},
+                {note:['G2','D3'], dur:1.5}
+            ],
+            'blues': [
+                {note:'D4', dur:0.5}, {note:'E4', dur:0.5}, {note:'G4', dur:0.5}, {note:'E4', dur:0.5}, 
+                {note:'D4', dur:0.5}, {note:'C4', dur:0.5}, {note:'A3', dur:1.5}
+            ],
+            'strum': [
+                {note:['G2','B2','D3','G3','B3','G4'], dur:1}, {note:['G2','B2','D3','G3','B3','G4'], dur:1},
+                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5},
+                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}
+            ],
+            'expression': [
+                {note:'C4', dur:0.5}, {note:'D4', dur:0.5}, {note:'C4', dur:1, pause: 0.5},
+                {note:'G3', dur:0.5}, {note:'A3', dur:0.5}, {note:'C4', dur:1}
+            ],
+            'arpeggio': [
+                {note:'E2', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'B3', dur:0.5}, {note:'E4', dur:0.5}, {note:'B3', dur:0.5},
+                {note:'C3', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'C4', dur:0.5}, {note:'E4', dur:0.5}, {note:'C4', dur:0.5}
+            ],
+            'country': [
+                {note:'C#3', dur:0.25}, {note:'D3', dur:0.25}, {note:'C#3', dur:0.25}, {note:'B2', dur:0.5},
+                {note:'G2', dur:0.5}, {note:'E2', dur:0.5}, {note:'G#2', dur:1}
+            ],
+            'funk': [
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, 
+                {note:null, dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, 
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25},
+                {note:null, dur:0.25}, 
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}
+            ]
+        };
+
+
+        /* ============================================================
+         * 5. CONTENIDO DE LOS 8 MÓDULOS DEL CURSO
          * ============================================================ */
         const modules = [
             {
-                id: 1,
-                title: "Módulo 1: Fundamentos y Púa Alternada",
-                icon: "ph-lightning",
+                id: 1, 
+                title: "1. Fundamentos y Púa Alternada", 
                 description: "Postura, lectura de tablatura en 60s y tu primer riff histórico.",
                 quiz: [
-                    { q: "¿Qué representa el número '0' en una tablatura?", options: ["Silencio absoluto", "Tocar la cuerda al aire", "Pulsar el traste 10"], correct: 1 },
-                    { q: "¿En qué consiste la técnica de púa alternada?", options: ["Tocar siempre hacia abajo", "Alternar movimientos abajo y arriba continuamente", "Usar los dedos en vez de la púa"], correct: 1 }
+                    { 
+                        q: "¿Qué representa el número '0' en una tablatura?", 
+                        options: ["Silencio absoluto", "Tocar la cuerda al aire", "Pulsar el traste 10"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "¿En qué consiste la técnica de púa alternada?", 
+                        options: ["Tocar siempre hacia abajo", "Alternar movimientos abajo y arriba continuamente", "Usar los dedos en vez de la púa"], 
+                        correct: 1 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 leading-relaxed text-[15px]">Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala (si tienes un ampli tipo Spark, ponlo en <em>Clean</em> o ligero <em>Crunch</em>) y vamos al grano.</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala (si tienes un ampli tipo Spark, ponlo en <em>Clean</em> o ligero <em>Crunch</em>) y vamos al grano.
+                    </p>
                     
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">1. Leer Tablatura en 60 segundos</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong> (la que está más cerca del suelo). La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la que ves más cerca de ti).</p>
-                    <div class="bg-gray-900 p-4 rounded-xl overflow-x-auto tab-font text-emerald-400 mb-6 border border-gray-800 shadow-inner whitespace-pre text-xs md:text-sm">
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Leer Tablatura en 60 segundos</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong> (la que está más cerca del suelo). La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la que ves más cerca de ti).
+                    </p>
+                    
+                    <div class="bg-[#111] p-4 rounded-xl border border-gray-800 overflow-x-auto shadow-inner mb-6">
+<pre class="tab-font text-xs md:text-sm text-[#4af626] whitespace-pre">
 e|-------------------| (1ª Cuerda - Fina)
 B|-------------------| (2ª Cuerda)
 G|-------------------| (3ª Cuerda)
 D|-------------------| (4ª Cuerda)
 A|-------------------| (5ª Cuerda)
 E|--0---3---5--------| (6ª Cuerda - Gorda)
+</pre>
                     </div>
-                    <p class="text-gray-300 mb-4 text-[15px]">Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).</p>
                     
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">2. Púa Alternada</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑), Abajo (↓), Arriba (↑).</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).
+                    </p>
                     
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto Práctico: Smoke on the Water (Simplificado)</h4>
-                        <p class="text-gray-400 mb-5 text-[14px]">Toca este riff clásico de Deep Purple solo en la 6ª cuerda usando el dedo índice y anular de la mano izquierda.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. Púa Alternada</h3>
+                    
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑), Abajo (↓), Arriba (↑).
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water</h4>
+                        <p class="text-gray-400 mb-6">Toca este riff clásico de Deep Purple solo en la 6ª cuerda usando el dedo índice y anular de la mano izquierda.</p>
                         
-                        <div class="flex flex-wrap items-center gap-3 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="smoke">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Riff
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="smoke">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
                             </button>
-                            <span class="text-xs font-mono font-bold text-gray-500 uppercase tracking-widest bg-gray-800 px-3 py-1.5 rounded-lg">Dist: ON</span>
                         </div>
                         
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-<span class="text-accent">E</span>|--0---3---5----0---3---6-5----0---3---5---3---0--|
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+E|--0---3---5----0---3---6-5----0---3---5---3---0--|
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 2,
-                title: "Módulo 2: Power Chords y Palm Muting",
-                icon: "ph-speaker-high",
+                id: 2, 
+                title: "2. Power Chords y Palm Muting", 
                 description: "La base del Rock y el Punk. Estructuras móviles y muteo de palma.",
                 quiz: [
-                    { q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", options: ["En el mástil", "Justo donde las cuerdas tocan el puente", "Encima de las pastillas centrales"], correct: 1 },
-                    { q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico de 2 notas?", options: ["Un dedo", "Dos dedos (Índice y Anular/Meñique)", "Tres dedos obligatoriamente"], correct: 1 }
+                    { 
+                        q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", 
+                        options: ["En el mástil", "Justo encima del puente", "Encima de las pastillas"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico?", 
+                        options: ["Un dedo", "Dos dedos", "Tres dedos obligatoriamente"], 
+                        correct: 1 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">El acorde de quinta, o <em>Power Chord</em> (C5, G5, etc.), es el arma definitiva del Rock. No es mayor ni menor, por lo que suena agresivo y contundente, especialmente con distorsión.</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El acorde de quinta, o <em>Power Chord</em> (C5, G5, etc.), es el arma definitiva del Rock. No es mayor ni menor, por lo que suena agresivo y contundente, especialmente con distorsión.
+                    </p>
                     
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">La Forma del Power Chord</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">La figura geométrica siempre es la misma. Dedo índice en la cuerda grave, y el dedo anular (o meñique) dos trastes más adelante en la cuerda inmediatamente inferior.</p>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Forma del Power Chord</h3>
                     
-                    ${drawFretboard(6, 7, [
-                        { string: 6, fret: 3, root: true, label: '1' },
-                        { string: 5, fret: 5, root: false, label: '3' }
-                    ], 600, 140)}
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        La figura geométrica siempre es la misma. Dedo índice en la cuerda grave, y el dedo anular (o meñique) dos trastes más adelante en la cuerda inmediatamente inferior.
+                    </p>
+                    
+                    ${drawFretboard(6, 7, [{ string: 6, fret: 3, root: true, label: '1' }, { string: 5, fret: 5, root: false, label: '3' }], 600, 180)}
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Palm Muting (P.M.)</h3>
+                    
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Apoya el lateral exterior de la palma de tu mano derecha (la zona carnosa) <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").
+                    </p>
 
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Palm Muting (P.M.)</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">Apoya el lateral exterior de la palma de tu mano derecha (la zona carnosa) <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").</p>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto Práctico: Riff Punk (Estilo Green Day)</h4>
-                        <p class="text-gray-400 mb-5 text-[14px]">Mantén la misma forma de los dedos y deslízala por el mástil. Los asteriscos (*) indican Palm Muting.</p>
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk</h4>
+                        <p class="text-gray-400 mb-6">Mantén la misma forma de los dedos y deslízala por el mástil. Los asteriscos (*) indican Palm Muting.</p>
                         
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="punk">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Riff
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="punk">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
                             </button>
                         </div>
                         
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-   <span class="text-gray-500">* * * *      * * * *      * * * *</span> 
-<span class="text-accent">A</span>|-5-5-5-5------3-3-3-3------5-5-5-5------
-<span class="text-accent">E</span>|-3-3-3-3------1-1-1-1------3-3-3-3------
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+   * * * *      * * * *      * * * * 
+A|-5-5-5-5------3-3-3-3------5-5-5-5------
+E|-3-3-3-3------1-1-1-1------3-3-3-3------
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 3,
-                title: "Módulo 3: La Pentatónica y el Blues",
-                icon: "ph-activity",
+                id: 3, 
+                title: "3. La Pentatónica y el Blues", 
                 description: "Escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends.",
                 quiz: [
-                    { q: "¿Qué es un 'Hammer-on'?", options: ["Golpear la guitarra con la mano", "Pulsar una cuerda con la púa y 'martillear' con un dedo de la mano izquierda en un traste superior para que suene", "Tirar de la cuerda para estirarla"], correct: 1 },
-                    { q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", options: ["Traste 3", "Traste 5", "Traste 7"], correct: 1 }
+                    { 
+                        q: "¿Qué es un 'Hammer-on'?", 
+                        options: ["Golpear la guitarra", "Pulsar una cuerda y 'martillear' con un dedo en un traste superior", "Tirar de la cuerda"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", 
+                        options: ["Traste 3", "Traste 5", "Traste 7"], 
+                        correct: 1 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor. Consta de 5 notas que repiten su patrón.</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor. Consta de 5 notas que repiten su patrón.
+                    </p>
                     
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Patrón Visual: Am Pentatónica (Traste 5)</h3>
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Patrón Visual: Am Pentatónica (Traste 5)</h3>
+                    
                     ${drawFretboard(6, 10, [
                         { string: 6, fret: 5, root: true, label: '1' }, { string: 6, fret: 8, root: false, label: '4' },
                         { string: 5, fret: 5, root: false, label: '1' }, { string: 5, fret: 7, root: false, label: '3' },
@@ -669,210 +866,291 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                         { string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' },
                         { string: 2, fret: 5, root: false, label: '1' }, { string: 2, fret: 8, root: false, label: '4' },
                         { string: 1, fret: 5, root: true, label: '1' }, { string: 1, fret: 8, root: false, label: '4' }
-                    ], 600, 140)}
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Articulaciones</h3>
-                    <ul class="list-disc pl-5 text-gray-300 space-y-2 mb-4 text-[15px]">
+                    ], 600, 200)}
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Articulaciones</h3>
+                    
+                    <ul class="list-disc pl-5 text-gray-300 space-y-3 mb-6 leading-relaxed">
                         <li><strong>Hammer-on (h):</strong> Pulsas la cuerda, e inmediatamente martilleas un traste superior con otro dedo sin volver a usar la púa.</li>
-                        <li><strong>Pull-off (p):</strong> Lo contrario. Tienes dos dedos pisando, pulsas con la púa, y retiras el dedo superior "pellizcando" la cuerda ligeramente.</li>
+                        <li><strong>Pull-off (p):</strong> Lo contrario. Tienes dos dedos pisando, pulsas, y retiras el dedo superior "pellizcando" la cuerda ligeramente.</li>
                         <li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba o abajo transversalmente al mástil para subir el tono de la nota.</li>
                     </ul>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto: Lick de Blues Clásico</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="blues">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Lick
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="blues">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick
                             </button>
                         </div>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-<span class="text-accent">e</span>|-------------------------5~------|
-<span class="text-accent">B</span>|-------5--8p5----------5---------|
-<span class="text-accent">G</span>|--7b9----------7b9r7p5-----------|
-<span class="text-accent">D</span>|---------------------------------|
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-------------------------5~------|
+B|-------5--8p5----------5---------|
+G|--7b9----------7b9r7p5-----------|
+D|---------------------------------|
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 4,
-                title: "Módulo 4: Acordes Abiertos y Rasgueo",
-                icon: "ph-campfire",
+                id: 4, 
+                title: "4. Acordes Abiertos y Rasgueo", 
                 description: "G, C, D, Em, Am. Rítmica contínua y dedos pivote.",
                 quiz: [
-                    { q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", options: ["Un dedo que se mueve muy rápido", "Un dedo que permanece en el mismo traste y cuerda entre dos acordes distintos, sirviendo de ancla", "El dedo meñique flotando"], correct: 1 },
-                    { q: "¿Qué acordes se suelen utilizar juntos en una progresión estilo 'Wonderwall'?", options: ["G, C, D, Em", "F#m, Bm, C#", "Solo acordes de quinta"], correct: 0 }
+                    { 
+                        q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", 
+                        options: ["Un dedo que se mueve rápido", "Un dedo que permanece en el mismo traste sirviendo de ancla", "El dedo meñique"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "¿Qué es un rasgueo?", 
+                        options: ["Tocar las cuerdas de una en una", "Golpear varias cuerdas a la vez siguiendo un patrón rítmico", "Tocar solo con el pulgar"], 
+                        correct: 1 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones de rock (Creedence, Oasis, Beatles).</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Los 5 Magníficos</h3>
-                    <div class="flex flex-wrap justify-center mb-8 gap-2">
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones de rock (Creedence, Oasis, Beatles).
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Los 5 Magníficos</h3>
+                    
+                    <div class="flex flex-wrap justify-center mb-8 bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800">
                         ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}
                         ${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}
                         ${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}
                         ${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}
                         ${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
                     </div>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">El Rasgueo y el Dedo Pivote</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">El error común de los principiantes es parar la mano derecha al cambiar de acorde. <strong>La mano derecha es un reloj pendular.</strong> Nunca se detiene, incluso si haces un rasgueo al aire mientras colocas los dedos de la izquierda.</p>
-                    <p class="text-gray-300 mb-4 text-[15px]">Busca <em>dedos pivote</em>. Al cambiar de G a D (versión rock, dejando el dedo anular en la cuerda B traste 3), no levantes el anular, úsalo como ancla y mueve el resto.</p>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto: Ritmo Pop-Rock</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="strum">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Secuencia
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El Rasgueo y el Dedo Pivote</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        El error común de los principiantes es parar la mano derecha al cambiar de acorde. <strong>La mano derecha es un reloj pendular.</strong> Nunca se detiene, incluso si haces un rasgueo al aire mientras colocas los dedos de la izquierda.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Ritmo Pop-Rock</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="strum">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia
                             </button>
                         </div>
-                        <p class="text-gray-400 mb-5 text-[14px]">Ritmo clásico. Aplícalo cambiando entre G y C cada compás.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
 | ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |
-| <span class="text-accent font-bold">G</span>                 | <span class="text-accent font-bold">C</span>                 |
+| G                 | C                 |
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 5,
-                title: "Módulo 5: Expresión Solista",
-                icon: "ph-wave-sine",
+                id: 5, 
+                title: "5. Expresión Solista", 
                 description: "Vibrato de muñeca, Slides, y la Blue Note.",
                 quiz: [
-                    { q: "¿De dónde debe provenir el movimiento para hacer un buen vibrato de rock?", options: ["De los dedos temblando", "De un giro de muñeca usando el mástil como punto de apoyo", "Del brazo entero"], correct: 1 },
-                    { q: "¿Qué es un 'Slide' (deslizamiento)?", options: ["Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", "Usar un pedal de volumen", "Tirar la púa"], correct: 0 }
+                    { 
+                        q: "¿De dónde debe provenir el movimiento para hacer un vibrato?", 
+                        options: ["De los dedos temblando", "De un giro de muñeca usando el mástil como punto de apoyo", "Del brazo entero"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "¿Qué es un 'Slide'?", 
+                        options: ["Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", "Usar un pedal de volumen", "Tirar la púa"], 
+                        correct: 0 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">Tocar las notas correctas está bien. Tocar las notas con <em>actitud</em> es lo que diferencia a una máquina de un guitarrista real. Las técnicas de expresión infunden vida y vocalidad a tu instrumento.</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">1. Vibrato</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">No agites los dedos. Ancla el lateral del dedo índice o el pulgar en el mástil y <strong>gira la muñeca</strong> (como si giraras el pomo de una puerta). Esto causa oscilaciones regulares en el tono (más graves y de vuelta al centro).</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">2. La 'Blue Note'</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">Al añadir una nota disonante (el 5to bemol o #4) a la pentatónica menor, consigues ese sonido tenso y oscuro típico del blues pesado.</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Tocar las notas correctas está bien. Tocar las notas con <em>actitud</em> es lo que diferencia a un guitarrista real. Las técnicas de expresión infunden vida a tu instrumento.
+                    </p>
                     
-                    ${drawFretboard(6, 10, [
-                        { string: 3, fret: 5, root: false, label: '1' }, 
-                        { string: 3, fret: 7, root: false, label: '3' },
-                        { string: 3, fret: 8, root: true, label: 'Bl' },
-                    ], 600, 140)}
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto: Fraseo Expresivo</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="expression">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Expresión
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Vibrato</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        No agites los dedos. Ancla el lateral del dedo índice o el pulgar en el mástil y <strong>gira la muñeca</strong>. Esto causa oscilaciones regulares en el tono.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. La 'Blue Note'</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Al añadir una nota disonante a la pentatónica menor, consigues ese sonido tenso y oscuro.
+                    </p>
+                    
+                    ${drawFretboard(6, 10, [{ string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' }, { string: 3, fret: 8, root: true, label: 'Bl' }], 600, 100)}
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="expression">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Expresión
                             </button>
                         </div>
-                        <p class="text-gray-400 mb-5 text-[14px]">S = Slide. V = Vibrato marcado. Escucha cómo el slide conecta las notas fluidamente.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-<span class="text-accent">G</span>|--5S7--7--5---------|------------------|
-<span class="text-accent">D</span>|-------------7V-----|--5--7--7S10--7V--|
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+G|--5S7--7--5---------|------------------|
+D|-------------7V-----|--5--7--7S10--7V--|
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 6,
-                title: "Módulo 6: Arpegios y Fingerpicking",
-                icon: "ph-hand-pointing",
+                id: 6, 
+                title: "6. Arpegios y Fingerpicking", 
                 description: "Descomponiendo los acordes. Púa híbrida e intros de baladas.",
                 quiz: [
-                    { q: "¿Qué significa arpegiar un acorde?", options: ["Tocar todas las notas a la vez con mucha fuerza", "Tocar las notas individuales del acorde secuencialmente una tras otra", "Tocar solo las cuerdas graves"], correct: 1 },
-                    { q: "¿Qué es la 'Púa Híbrida' (Hybrid Picking)?", options: ["Usar una púa de plástico y metal", "Sujetar la púa con pulgar/índice y usar el dedo medio o anular para pellizcar otras cuerdas simultáneamente", "Tocar sin púa"], correct: 1 }
+                    { 
+                        q: "¿Qué significa arpegiar un acorde?", 
+                        options: ["Tocar todas las notas a la vez", "Tocar las notas individuales secuencialmente", "Tocar solo los bajos"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "¿Qué es la 'Púa Híbrida'?", 
+                        options: ["Usar una púa de plástico y metal", "Sujetar la púa con pulgar/índice y usar el dedo medio para pellizcar otras cuerdas", "Tocar sin púa"], 
+                        correct: 1 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">En lugar de rasguear todas las cuerdas a la vez (strumming), el arpegio consiste en tocar las notas de un acorde de forma secuencial. Es la base de intros legendarias de rock alternativo (ej. <em>Do I Wanna Know?</em> de los Arctic Monkeys o baladas clásicas).</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Técnica de Mano Derecha</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">Puedes hacerlo solo con púa (usando púa alternada cuerda a cuerda, llamado <em>Crosspicking</em>) o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas el dedo medio y anular de la mano derecha para tirar de las cuerdas agudas.</p>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto: Arpegio Continuo en Em y C</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="arpeggio">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Arpegio
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El arpegio consiste en tocar las notas de un acorde de forma secuencial. Es la base de intros legendarias de rock alternativo.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Técnica de Mano Derecha</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Puedes hacerlo solo con púa o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas el dedo medio y anular para tirar de las agudas.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio Continuo en Em y C</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="arpeggio">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Arpegio
                             </button>
                         </div>
-                        <p class="text-gray-400 mb-5 text-[14px]">Coloca los acordes abiertos de Em y luego C. Deja que todas las notas suenen el mayor tiempo posible (let ring).</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-   <span class="text-accent font-bold">Em</span>                       <span class="text-accent font-bold">C</span>
-<span class="text-accent">e</span>|-------0-----------0----|-------0-----------0----|
-<span class="text-accent">B</span>|---------0-----------0--|---------1-----------1--|
-<span class="text-accent">G</span>|-----0-----0-----0-----0|-----0-----0-----0-----0|
-<span class="text-accent">D</span>|---2-----------2--------|---2-----------2--------|
-<span class="text-accent">A</span>|------------------------|-3-----------3----------|
-<span class="text-accent">E</span>|-0-----------0----------|------------------------|
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+   Em                       C
+e|-------0-----------0----|-------0-----------0----|
+B|---------0-----------0--|---------1-----------1--|
+G|-----0-----0-----0-----0|-----0-----0-----0-----0|
+D|---2-----------2--------|---2-----------2--------|
+A|------------------------|-3-----------3----------|
+E|-0-----------0----------|------------------------|
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 7,
-                title: "Módulo 7: Escala Mayor y Modos Básicos",
-                icon: "ph-sun",
-                description: "Saliendo de la oscuridad. Country rock y el tono alegre (Jónico).",
+                id: 7, 
+                title: "7. Escala Mayor y Modos", 
+                description: "Saliendo de la oscuridad. Country rock y el tono alegre.",
                 quiz: [
-                    { q: "A nivel sonoro/emocional, ¿cómo se suele describir la diferencia entre una progresión Mayor y una Menor?", options: ["La Mayor suena más alegre/brillante y la Menor más triste/oscura", "No hay diferencia audible", "La Menor suena a pop y la Mayor a Heavy Metal"], correct: 0 },
-                    { q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", options: ["Sí, pero se aplican desplazadas en el mástil (bajando 3 trastes la tónica)", "No, son dibujos totalmente distintos", "Sí, y se tocan exactamente en el mismo lugar"], correct: 0 }
+                    { 
+                        q: "¿Cómo se suele describir la diferencia entre Mayor y Menor?", 
+                        options: ["La Mayor suena más alegre y la Menor más oscura", "No hay diferencia audible", "La Menor suena a pop"], 
+                        correct: 0 
+                    }, 
+                    { 
+                        q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", 
+                        options: ["Sí, desplazadas en el mástil (bajando 3 trastes la tónica)", "No, son distintos", "Sí, en el mismo lugar"], 
+                        correct: 0 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">El blues y el heavy metal viven en tonalidades menores, pero el Rock Sureño, el Country Rock y el Indie más luminoso (ej. <em>Sweet Home Alabama</em>) se basan en tonalidades mayores.</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Pentatónica Mayor vs Menor</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">El truco de oro: El dibujo (la caja) de la escala Pentatónica Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela (hacia la izquierda). Por ejemplo, si tocas la caja 1 en el traste 5 sobre una pista en La menor (Am), para tocar sobre La Mayor (A), mueves ese mismo dibujo para que empiece en el traste 2 (F# menor relativo).</p>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto: Lick Country Rock Mayor</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="country">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Lick Mayor
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El blues y el metal viven en tonalidades menores, pero el Rock Sureño, Country y Pop se basan en tonalidades mayores.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Pentatónica Mayor vs Menor</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        El truco de oro: El dibujo de la escala Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Country Rock</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="country">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Mayor
                             </button>
                         </div>
-                        <p class="text-gray-400 mb-5 text-[14px]">Este lick suena alegre, con bendings y uso de cuerdas al aire típico de las guitarras Telecaster.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-<span class="text-accent">e</span>|-----------------------0--|
-<span class="text-accent">B</span>|--2h3p2----------------0--|
-<span class="text-accent">G</span>|---------4--2--0-------1--|
-<span class="text-accent">D</span>|------------------2----2--|
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-----------------------0--|
+B|--2h3p2----------------0--|
+G|---------4--2--0-------1--|
+D|------------------2----2--|
+</pre>
                         </div>
                     </div>
                 `
             },
             {
-                id: 8,
-                title: "Módulo 8: Rítmica Funk y Dominantes",
-                icon: "ph-metronome",
+                id: 8, 
+                title: "8. Rítmica Funk y Scratches", 
                 description: "El groove, semicorcheas y muteo de mano izquierda.",
                 quiz: [
-                    { q: "¿En qué consiste el muteo de mano izquierda (scratches)?", options: ["Bajar el volumen de la guitarra a cero", "Rozar las cuerdas con los dedos sin apretar contra los trastes para generar un sonido de percusión sorda al rasguear", "Apagar el amplificador"], correct: 1 },
-                    { q: "En un compás de 4/4, si tocas semicorcheas de forma continua, ¿cuántos golpes das por tiempo (beat)?", options: ["2", "3", "4 (Abajo-Arriba-Abajo-Arriba)"], correct: 2 }
+                    { 
+                        q: "¿En qué consiste el muteo de mano izquierda?", 
+                        options: ["Bajar el volumen de la guitarra", "Rozar las cuerdas sin apretar para generar percusión sorda", "Apagar el ampli"], 
+                        correct: 1 
+                    }, 
+                    { 
+                        q: "Al tocar semicorcheas continuas, ¿cuántos golpes das por tiempo (beat)?", 
+                        options: ["2", "3", "4 (Abajo-Arriba-Abajo-Arriba)"], 
+                        correct: 2 
+                    }
                 ],
                 content: `
-                    <p class="text-gray-300 mb-4 text-[15px]">Para dominar la rítmica no basta con los acordes abiertos. El funk y el rock alternativo (piensa en los Red Hot Chili Peppers o bandas indie bailables) utilizan acordes de Séptima (Dominantes o Menores 7) y un movimiento incansable de la mano derecha en semicorcheas.</p>
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Acorde E9 (El "Acorde Funk" por excelencia)</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">Este acorde suena picante y rítmico. Se toca en los trastes centrales.</p>
-                    ${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}
-
-                    <h3 class="text-xl font-bold text-white mt-8 mb-3">Scratches (Notas Muertas)</h3>
-                    <p class="text-gray-300 mb-4 text-[15px]">Para lograr el ritmo "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Los dedos tocan las cuerdas pero no las aprietan contra la madera. Si rasgueas fuertemente la mano derecha, obtendrás pura percusión. Las 'x' en la tablatura indican esto.</p>
-
-                    <div class="bg-panelLight p-6 md:p-8 rounded-2xl border-l-4 border-accent my-8 shadow-lg">
-                        <h4 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center"><i class="ph-fill ph-guitar mr-2 text-accent"></i> Reto Final: Groove Funk de Semicorcheas</h4>
-                        <div class="flex items-center space-x-4 mb-5">
-                            <button class="btn-play-riff bg-accent hover:bg-accentHover text-black font-bold py-2.5 px-6 rounded-xl flex items-center transition shadow-md shadow-accent/20 active:scale-95" data-riff="funk">
-                                <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Groove
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El funk y el rock alternativo utilizan acordes de Séptima y un movimiento incansable de la mano derecha en semicorcheas.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Acorde E9 (El "Acorde Funk")</h3>
+                    
+                    <div class="bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800 inline-block mb-4">
+                        ${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Scratches (Notas Muertas)</h3>
+                    
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Para el "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Las 'x' en la tablatura indican esto.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Final: Groove Funk</h4>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="funk">
+                                <i class="ph ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Groove
                             </button>
                         </div>
-                        <p class="text-gray-400 mb-5 text-[14px]">Mantén el brazo derecho como una máquina, moviéndose arriba y abajo sin parar. Presiona el acorde solo en las notas numéricas, suelta la presión (pero no quites la mano) en las 'x'.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
-<span class="text-gray-500">(Acorde base: E9 - traste 7)</span>
-<span class="text-accent">e</span>|-7--<span class="text-gray-500">x-x-x</span>--7--<span class="text-gray-500">x</span>--7-7--<span class="text-gray-500">x-x</span>-|
-<span class="text-accent">B</span>|-7--<span class="text-gray-500">x-x-x</span>--7--<span class="text-gray-500">x</span>--7-7--<span class="text-gray-500">x-x</span>-|
-<span class="text-accent">G</span>|-7--<span class="text-gray-500">x-x-x</span>--7--<span class="text-gray-500">x</span>--7-7--<span class="text-gray-500">x-x</span>-|
-<span class="text-accent">D</span>|-6--<span class="text-gray-500">x-x-x</span>--6--<span class="text-gray-500">x</span>--6-6--<span class="text-gray-500">x-x</span>-|
+                        
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+(Acorde base: E9 - traste 7)
+e|-7--x-x-x--7--x--7-7--x-x-|
+B|-7--x-x-x--7--x--7-7--x-x-|
+G|-7--x-x-x--7--x--7-7--x-x-|
+D|-6--x-x-x--6--x--6-6--x-x-|
+</pre>
                         </div>
                     </div>
                 `
@@ -880,54 +1158,41 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
         ];
 
         /* ============================================================
-         * UI CONTROLLERS & LOGIC
+         * 6. LÓGICA DE INTERFAZ Y NAVEGACIÓN
          * ============================================================ */
         let currentModuleId = 1;
-
-        // Mobile Sidebar Toggle
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        
-        function toggleSidebar() {
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                sidebarOverlay.classList.remove('hidden');
-                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0');
-                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
-            }
-        }
-
-        document.getElementById('btn-menu').addEventListener('click', toggleSidebar);
-        document.getElementById('btn-close-menu').addEventListener('click', toggleSidebar);
-        sidebarOverlay.addEventListener('click', toggleSidebar);
 
         function renderSidebar() {
             const nav = document.getElementById('nav-modules');
             nav.innerHTML = '';
+            
             modules.forEach(mod => {
                 const isUnlocked = appState.unlocked.includes(mod.id);
                 const isCompleted = appState.completed.includes(mod.id);
                 const isActive = mod.id === currentModuleId;
                 
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left px-3 py-3.5 rounded-xl transition-all flex items-center mb-1.5 
-                    ${isUnlocked ? (isActive ? 'bg-accent/15 text-accent font-bold border border-accent/30 shadow-sm' : 'hover:bg-gray-800/60 text-gray-300') : 'locked-module'}`;
+                btn.className = `w-full text-left p-4 rounded-xl transition-all flex items-center mb-2 font-medium
+                    ${isUnlocked ? 
+                        (isActive ? 'bg-accent text-black font-bold shadow-lg' : 'bg-[#1a1a1a] hover:bg-[#222] text-gray-300 border border-gray-800') : 
+                        'locked-module bg-transparent text-gray-600 border border-gray-800'}`;
                 
                 let trailingIcon = '';
-                if (!isUnlocked) trailingIcon = '<i class="ph-bold ph-lock-key text-gray-600 ml-auto"></i>';
-                else if (isCompleted) trailingIcon = '<i class="ph-fill ph-check-circle text-green-500 ml-auto text-lg"></i>';
+                if (!isUnlocked) {
+                    trailingIcon = '<i class="ph ph-lock-key text-gray-500 ml-auto text-xl"></i>';
+                } else if (isCompleted) {
+                    trailingIcon = '<i class="ph-fill ph-check-circle text-green-500 ml-auto text-xl"></i>';
+                }
 
-                const moduleName = mod.title.split(': ')[1] || mod.title;
-                btn.innerHTML = `<i class="ph-bold ${mod.icon} text-lg w-6 shrink-0"></i> <span class="ml-2 text-[13px] leading-tight flex-1">${mod.id}. ${moduleName}</span> ${trailingIcon}`;
+                btn.innerHTML = `
+                    <span class="text-sm truncate w-4/5">${mod.title}</span> 
+                    ${trailingIcon}
+                `;
                 
                 if (isUnlocked) {
-                    btn.addEventListener('click', () => {
-                        loadModuleUI(mod.id);
-                        if (window.innerWidth < 768) toggleSidebar();
+                    btn.addEventListener('click', () => { 
+                        loadModuleUI(mod.id); 
+                        toggleMenu(false); 
                     });
                 }
                 nav.appendChild(btn);
@@ -938,70 +1203,91 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
             currentModuleId = id;
             const mod = modules.find(m => m.id === id);
             if (!mod) return;
-
-            document.getElementById('header-title').innerText = mod.title;
             
-            let htmlContent = `<p class="text-[17px] font-medium text-gray-400 mb-8 pb-5 border-b border-gray-800/80 leading-relaxed">${mod.description}</p>${mod.content}`;
+            renderSidebar();
+
+            let htmlContent = `
+                <h2 class="font-black text-3xl md:text-4xl text-white mb-2 leading-tight">${mod.title}</h2>
+                <p class="text-xl font-light text-gray-400 mb-10 pb-6 border-b border-gray-800">${mod.description}</p>
+                ${mod.content}
+            `;
             
             const isCompleted = appState.completed.includes(id);
             if (isCompleted) {
                 htmlContent += `
-                    <div class="mt-12 bg-green-900/10 border border-green-500/30 p-8 rounded-3xl text-center shadow-lg">
-                        <i class="ph-fill ph-check-circle text-5xl md:text-6xl text-green-500 mb-4"></i>
-                        <h3 class="text-xl md:text-2xl font-bold text-green-400 mb-2">Lección Superada</h3>
-                        <p class="text-gray-400 mb-6 text-sm">¡Genial! Tienes los conocimientos de esta lección dominados.</p>
-                        ${id < modules.length ? `<button class="bg-gray-800 border border-gray-700 hover:border-gray-500 hover:bg-gray-700 text-white font-bold py-3.5 px-8 rounded-xl transition-colors btn-next shadow-md">Siguiente Lección ➔</button>` : `<p class="mt-4 font-bold text-accent text-lg">¡Has completado el curso RiffMaster al 100%!</p>`}
-                    </div>`;
+                    <div class="mt-12 bg-green-900/10 border border-green-500/30 p-8 rounded-2xl text-center shadow-lg">
+                        <i class="ph-fill ph-check-circle text-6xl text-green-500 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">Lección Superada</h3>
+                        <p class="text-gray-400 mb-6">Conocimientos dominados.</p>
+                        ${id < modules.length ? 
+                            `<button class="bg-white text-black hover:bg-gray-200 font-bold py-3 px-8 rounded-full btn-next transition" data-next="${id+1}">
+                                Siguiente Lección ➔
+                            </button>` : 
+                            `<p class="font-bold text-accent text-xl">¡Curso RiffMaster Completado!</p>`
+                        }
+                    </div>
+                `;
             } else {
                 htmlContent += `
-                    <div class="mt-12 bg-panelLight p-6 md:p-10 rounded-[2rem] border border-gray-800 shadow-2xl" id="quiz-container">
-                        <div class="flex items-center text-accent mb-5">
-                            <i class="ph-fill ph-exam text-3xl md:text-4xl mr-3"></i>
-                            <h3 class="text-xl md:text-2xl font-bold">Cuestionario de Desbloqueo</h3>
+                    <div class="mt-12 bg-[#161616] p-6 md:p-10 rounded-3xl border border-[#2a2a2a] shadow-2xl" id="quiz-container">
+                        <div class="flex items-center text-accent mb-6">
+                            <i class="ph ph-exam text-4xl mr-3"></i>
+                            <h3 class="text-2xl font-bold text-white">Desbloqueo</h3>
                         </div>
-                        <p class="text-gray-400 mb-8 text-[14px]">Responde correctamente para guardar tu progreso y acceder a la siguiente lección.</p>
-                        <form id="quiz-form" class="space-y-6">`;
+                        <p class="text-gray-400 mb-8">Responde correctamente para guardar tu progreso.</p>
+                        <form id="quiz-form" class="space-y-6">
+                `;
                 
                 mod.quiz.forEach((q, index) => {
-                    htmlContent += `<div class="bg-dark p-5 md:p-6 rounded-2xl border border-gray-800/80 shadow-inner"><p class="font-bold text-gray-200 mb-4 text-[15px] leading-relaxed">${index+1}. ${q.q}</p><div class="space-y-3">`;
-                    q.options.forEach((opt, oIndex) => {
-                        htmlContent += `<label class="flex items-start space-x-3.5 cursor-pointer p-3.5 rounded-xl hover:bg-gray-800/60 border border-transparent hover:border-gray-700 transition-colors">
-                            <input type="radio" name="q${index}" value="${oIndex}" class="form-radio text-accent focus:ring-accent mt-0.5 w-4 h-4 shrink-0" required>
-                            <span class="text-gray-300 text-[14px] leading-snug">${opt}</span>
-                        </label>`;
+                    htmlContent += `
+                        <div class="bg-[#111] p-5 rounded-xl border border-gray-800">
+                            <p class="font-bold text-white mb-4">${index+1}. ${q.q}</p>
+                            <div class="space-y-3">
+                    `;
+                    
+                    q.options.forEach((opt, oIndex) => { 
+                        htmlContent += `
+                            <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg border border-gray-800 hover:border-gray-600 transition">
+                                <input type="radio" name="q${index}" value="${oIndex}" class="form-radio text-accent focus:ring-accent w-5 h-5 bg-gray-900 border-gray-700" required>
+                                <span class="text-gray-300 text-sm font-medium leading-tight">${opt}</span>
+                            </label>
+                        `; 
                     });
                     htmlContent += `</div></div>`;
                 });
-
+                
                 htmlContent += `
-                            <button type="submit" class="w-full mt-6 bg-accent hover:bg-accentHover text-black font-bold py-4 px-4 rounded-xl shadow-[0_4px_14px_0_rgba(245,166,35,0.39)] transition-transform active:scale-[0.98] flex justify-center items-center text-base">
-                                <i class="ph-bold ph-lock-key-open text-xl mr-2"></i> Evaluar y Guardar Progreso
+                            <button type="submit" class="w-full mt-8 bg-accent hover:bg-accentHover text-black font-bold py-4 px-6 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center text-lg">
+                                <i class="ph ph-lock-key-open text-2xl mr-2"></i> Evaluar y Avanzar
                             </button>
-                            <div id="quiz-error" class="text-red-400 hidden mt-5 text-center bg-red-900/10 p-4 rounded-xl border border-red-900/30 text-[14px] font-medium"><i class="ph-bold ph-warning-circle mr-1.5 text-lg align-middle"></i> Respuesta incorrecta. Revisa el contenido e inténtalo de nuevo.</div>
+                            <div id="quiz-error" class="text-red-400 hidden mt-4 text-center font-medium bg-red-900/20 p-3 rounded-lg border border-red-900/50">
+                                Respuesta incorrecta. Revisa el contenido.
+                            </div>
                         </form>
-                    </div>`;
+                    </div>
+                `;
             }
 
             document.getElementById('module-content').innerHTML = htmlContent;
-            renderSidebar();
             
+            // Re-asignar eventos a botones generados dinámicamente
             document.querySelectorAll('.btn-play-riff').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const rId = e.currentTarget.getAttribute('data-riff');
+                btn.addEventListener('click', (e) => { 
+                    const rId = e.currentTarget.getAttribute('data-riff'); 
                     if (riffData[rId]) {
-                        AudioEngine.playRiff(riffData[rId], true, 100);
+                        AudioEngine.playRiff(riffData[rId], true, 100); 
                     }
                 });
             });
-
+            
             document.querySelectorAll('.btn-next').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const nId = parseInt(e.currentTarget.getAttribute('data-next'));
-                    loadModuleUI(nId);
-                    document.getElementById('main-scroll').scrollTop = 0;
+                btn.addEventListener('click', (e) => { 
+                    loadModuleUI(parseInt(e.currentTarget.getAttribute('data-next'))); 
+                    document.getElementById('main-scroll').scrollTop = 0; 
                 });
             });
 
+            // Lógica del Cuestionario
             const qForm = document.getElementById('quiz-form');
             if (qForm) {
                 qForm.addEventListener('submit', (e) => {
@@ -1013,26 +1299,21 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             allCorrect = false;
                         }
                     });
-
+                    
                     if (allCorrect) {
-                        if (!appState.completed.includes(id)) appState.completed.push(id);
+                        if (!appState.completed.includes(id)) {
+                            appState.completed.push(id);
+                        }
                         if (id < modules.length && !appState.unlocked.includes(id + 1)) {
                             appState.unlocked.push(id + 1);
                         }
                         saveState();
-                        
-                        document.getElementById('quiz-container').innerHTML = `
-                            <div class="text-center py-10 animate-pulse">
-                                <i class="ph-fill ph-confetti text-6xl md:text-7xl text-accent mb-4"></i>
-                                <h3 class="text-2xl md:text-3xl font-bold text-white">¡Módulo Superado!</h3>
-                                <p class="text-gray-400 mt-3">Has desbloqueado nuevo contenido.</p>
-                            </div>
-                        `;
-                        setTimeout(() => {
-                            loadModuleUI(id); 
-                            document.getElementById('main-scroll').scrollTo({top: document.getElementById('module-content').scrollHeight, behavior: 'smooth'});
-                        }, 1200);
-
+                        showToast("¡Lección superada!");
+                        loadModuleUI(id);
+                        document.getElementById('main-scroll').scrollTo({
+                            top: document.body.scrollHeight, 
+                            behavior: 'smooth'
+                        });
                     } else {
                         document.getElementById('quiz-error').classList.remove('hidden');
                     }
@@ -1041,48 +1322,80 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
         }
 
         /* ============================================================
-         * EVENT LISTENERS (GLOBAL)
+         * 7. GESTIÓN GLOBAL DE EVENTOS Y MODALES
          * ============================================================ */
+        let menuOpen = false;
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        function toggleMenu(forceClose = false) {
+            menuOpen = forceClose ? false : !menuOpen;
+            if(menuOpen) { 
+                sidebar.classList.remove('sidebar-closed'); 
+                sidebar.classList.add('sidebar-open'); 
+                overlay.classList.remove('hidden'); 
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10); 
+            } else { 
+                sidebar.classList.add('sidebar-closed'); 
+                sidebar.classList.remove('sidebar-open'); 
+                overlay.classList.add('opacity-0'); 
+                setTimeout(() => overlay.classList.add('hidden'), 300); 
+            }
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('hidden'); 
+            m.classList.add('flex');
+            setTimeout(() => { 
+                m.classList.remove('opacity-0'); 
+                m.children[0].classList.remove('scale-95'); 
+            }, 10);
+        }
+        
+        function closeModal(m) {
+            m.classList.add('opacity-0'); 
+            m.children[0].classList.add('scale-95');
+            setTimeout(() => { 
+                m.classList.add('hidden'); 
+                m.classList.remove('flex'); 
+            }, 300);
+        }
+
+        // Inicialización tras cargar DOM
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
             renderSidebar();
             loadModuleUI(currentModuleId);
 
-            // Afinador Modal
-            const modalTuner = document.getElementById('modal-tuner');
-            const modalTunerContent = document.getElementById('modal-tuner-content');
-            
-            document.getElementById('btn-tuner').addEventListener('click', () => {
-                modalTuner.classList.remove('hidden');
-                modalTuner.classList.add('flex');
-                setTimeout(() => {
-                    modalTuner.classList.remove('opacity-0');
-                    modalTunerContent.classList.remove('scale-95');
-                }, 10);
+            // Botones de Menú
+            document.getElementById('btn-menu-toggle').addEventListener('click', () => toggleMenu());
+            overlay.addEventListener('click', () => toggleMenu(true));
+
+            // Abrir Modales
+            document.getElementById('btn-tuner-modal').addEventListener('click', () => openModal('modal-tuner'));
+            document.getElementById('btn-metro-modal').addEventListener('click', () => openModal('modal-metronome'));
+            document.getElementById('btn-settings-modal').addEventListener('click', () => openModal('modal-settings'));
+
+            // Cerrar Modales
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', (e) => closeModal(e.target.closest('.fixed.inset-0')));
             });
 
-            document.getElementById('btn-close-tuner').addEventListener('click', () => {
-                modalTuner.classList.add('opacity-0');
-                modalTunerContent.classList.add('scale-95');
-                setTimeout(() => {
-                    modalTuner.classList.add('hidden');
-                    modalTuner.classList.remove('flex');
-                }, 300);
-            });
-
+            // Afinador Clics
             document.querySelectorAll('.tune-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const note = e.currentTarget.getAttribute('data-note');
-                    AudioEngine.playNote(note, 2.0, false);
+                    AudioEngine.playNote(e.currentTarget.getAttribute('data-note'), 2.0, false);
                 });
             });
 
-            // Metrónomo
+            // Lógica del Metrónomo
             const btnMetro = document.getElementById('btn-metro-toggle');
-            const iconMetro = document.getElementById('icon-metro');
+            const iconPlay = document.getElementById('icon-metro-play');
+            const iconStop = document.getElementById('icon-metro-stop');
             const ledMetro = document.getElementById('metro-led');
             const sliderBpm = document.getElementById('bpm-slider');
-            const dispBpm = document.getElementById('bpm-display');
+            const dispBpmLarge = document.getElementById('bpm-display-large');
             let metroTimeout = null;
 
             function updateMetronome() {
@@ -1093,7 +1406,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
             }
 
             sliderBpm.addEventListener('input', (e) => {
-                dispBpm.innerText = e.target.value;
+                dispBpmLarge.innerText = e.target.value;
                 if (metroTimeout) clearTimeout(metroTimeout);
                 metroTimeout = setTimeout(updateMetronome, 300);
             });
@@ -1101,127 +1414,80 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
             btnMetro.addEventListener('click', () => {
                 if (AudioEngine.isBackingActive) {
                     AudioEngine.stopBackingTrack();
-                    iconMetro.classList.replace('ph-stop', 'ph-play');
+                    iconStop.classList.add('hidden'); 
+                    iconPlay.classList.remove('hidden');
                     ledMetro.classList.replace('led-on', 'led-off');
-                    btnMetro.classList.remove('bg-accent', 'text-black', 'hover:bg-accentHover');
                 } else {
                     AudioEngine.startBackingTrack(sliderBpm.value);
-                    iconMetro.classList.replace('ph-play', 'ph-stop');
+                    iconPlay.classList.add('hidden'); 
+                    iconStop.classList.remove('hidden');
                     ledMetro.classList.replace('led-off', 'led-on');
-                    btnMetro.classList.add('bg-accent', 'text-black', 'hover:bg-accentHover');
                 }
             });
 
-            // Settings Modal
-            const modalSet = document.getElementById('modal-settings');
-            const modalContent = document.getElementById('modal-settings-content');
-            
-            document.getElementById('btn-settings-header').addEventListener('click', () => {
-                modalSet.classList.remove('hidden');
-                modalSet.classList.add('flex');
-                setTimeout(() => {
-                    modalSet.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10);
-            });
-
-            document.getElementById('btn-close-settings').addEventListener('click', () => {
-                modalSet.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    modalSet.classList.add('hidden');
-                    modalSet.classList.remove('flex');
-                }, 300);
-            });
-            
-            // Force Update
+            // Lógica de Ajustes (Forzar Update)
             document.getElementById('btn-force-update').addEventListener('click', () => {
-                window.location.href = window.location.href.split('?')[0] + '?v=' + new Date().getTime();
+                window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
             });
-
-            // Backup JSON
+            
+            // Backup Exportar
             document.getElementById('btn-backup').addEventListener('click', async () => {
-                const dataStr = JSON.stringify(appState);
-                const file = new File([dataStr], "riffmaster_backup.json", {type: "application/json"});
-                
+                const file = new File([JSON.stringify(appState)], "riffmaster_backup.json", {type: "application/json"});
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'Backup RiffMaster',
-                            text: 'Copia de seguridad de progreso de RiffMaster.'
-                        });
-                    } catch (error) { console.log('Share canceled or failed'); }
+                    try { 
+                        await navigator.share({ files: [file], title: 'Backup RiffMaster' }); 
+                    } catch (e) {}
                 } else {
-                    const url = URL.createObjectURL(file);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = "riffmaster_backup.json";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                    const url = URL.createObjectURL(file); 
+                    const a = document.createElement('a'); 
+                    a.href = url; 
+                    a.download = "riffmaster_backup.json"; 
+                    document.body.appendChild(a); 
+                    a.click(); 
+                    document.body.removeChild(a); 
                     URL.revokeObjectURL(url);
                 }
             });
 
-            // Restore JSON
+            // Restaurar Backup
             document.getElementById('file-restore').addEventListener('change', (e) => {
-                const file = e.target.files[0];
+                const file = e.target.files[0]; 
                 if (!file) return;
+                
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     try {
                         const parsed = JSON.parse(evt.target.result);
-                        if (parsed.unlocked && parsed.completed) {
-                            appState = parsed;
+                        if (parsed.unlocked) {
+                            appState = parsed; 
                             saveState();
-                            renderSidebar();
-                            loadModuleUI(1);
-                            
-                            document.getElementById('btn-close-settings').click();
-                            showToast("Progreso restaurado con éxito.");
-                        } else {
-                            showToast("Archivo JSON inválido.", true);
+                            showToast("¡Restaurado correctamente!");
+                            setTimeout(() => window.location.reload(), 1500);
                         }
-                    } catch (err) {
-                        showToast("Error leyendo archivo de backup.", true);
+                    } catch (err) { 
+                        alert("Archivo inválido."); 
                     }
                 };
                 reader.readAsText(file);
-                e.target.value = ''; // Reset input
             });
-            
-            // Reset Data (Replaces confirm())
-            let resetConfirm = false;
-            const btnReset = document.getElementById('btn-reset-data');
-            btnReset.addEventListener('click', () => {
-                if(!resetConfirm) {
-                    resetConfirm = true;
-                    btnReset.innerHTML = '<i class="ph-bold ph-warning mr-2 text-lg"></i> ¿Seguro? Clic para borrar';
-                    btnReset.classList.replace('text-red-400', 'text-white');
-                    btnReset.classList.replace('hover:text-white', 'hover:text-white');
-                    btnReset.classList.replace('bg-transparent', 'bg-red-600');
-                    btnReset.classList.replace('border-red-900/50', 'border-red-600');
-                    setTimeout(() => {
-                        resetConfirm = false;
-                        btnReset.innerHTML = '<i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso';
-                        btnReset.classList.replace('text-white', 'text-red-400');
-                        btnReset.classList.replace('bg-red-600', 'bg-transparent');
-                        btnReset.classList.replace('border-red-600', 'border-red-900/50');
-                    }, 4000);
-                } else {
-                    appState = { unlocked: [1], completed: [] };
-                    saveState();
-                    renderSidebar();
-                    loadModuleUI(1);
-                    document.getElementById('btn-close-settings').click();
-                    showToast("Todo el progreso fue borrado.");
-                    
-                    resetConfirm = false;
-                    btnReset.innerHTML = '<i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso';
-                    btnReset.classList.replace('text-white', 'text-red-400');
-                    btnReset.classList.replace('bg-red-600', 'bg-transparent');
-                    btnReset.classList.replace('border-red-600', 'border-red-900/50');
+
+            // Borrar Datos (Doble Confirmación)
+            let clicks = 0;
+            document.getElementById('btn-reset-data').addEventListener('click', (e) => {
+                if (clicks === 0) { 
+                    e.target.innerText = "¿Seguro? Pulsa otra vez"; 
+                    e.target.classList.replace('text-red-500', 'text-white'); 
+                    e.target.classList.add('bg-red-600'); 
+                    clicks++; 
+                    setTimeout(() => { 
+                        clicks=0; 
+                        e.target.innerText = "Borrar Progreso Local"; 
+                        e.target.classList.replace('text-white','text-red-500'); 
+                        e.target.classList.remove('bg-red-600'); 
+                    }, 3000); 
+                } else { 
+                    localStorage.removeItem('riffmaster_state'); 
+                    window.location.reload(); 
                 }
             });
         });
