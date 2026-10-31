@@ -237,7 +237,7 @@
           <div class="bg-amp-800 border border-amp-700 rounded-xl p-4 flex flex-col gap-3 shadow-inner">
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-300 font-medium">Versión Instalada:</span>
-              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.4.0</span>
+              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.5.0</span>
             </div>
             <button id="btn-check-update" class="w-full py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm text-white font-bold flex items-center justify-center gap-2 transition-all">
               <i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones
@@ -348,7 +348,7 @@
     });
 
     /* ============================================================
-     * 2. AUDIO ENGINE & iOS ROBUST UNLOCK (v1.4.0 FIX)
+     * 2. AUDIO ENGINE & iOS ROBUST UNLOCK (v1.5.0 FIX)
      * ============================================================ */
     const AudioEngine = (() => {
       let ctx = null;
@@ -362,16 +362,24 @@
         return ctx;
       }
 
-      function unlockAudioContext() {
-        if (isUnlocked) return;
+      function unlockAudio() {
         const audioCtx = getContext();
         
-        // Forced resume
+        // 1. Forzar la reanudación del contexto (debe ser síncrono)
         if (audioCtx.state === 'suspended') {
             audioCtx.resume();
         }
 
-        // Create empty buffer & play it (Standard iOS Web Audio Unlock trick)
+        // 2. SOLUCIÓN AL INTERRUPTOR DE SILENCIO: Enrutar al canal de medios (iOS 17+)
+        try {
+          const nav = navigator;
+          if (nav.audioSession) {
+            nav.audioSession.type = 'playback';
+          }
+        } catch (e) { /* Navegadores no compatibles */ }
+
+        // 3. Truco de desbloqueo con buffer silencioso (solo se ejecuta una vez)
+        if (isUnlocked) return;
         const buffer = audioCtx.createBuffer(1, 1, 22050);
         const source = audioCtx.createBufferSource();
         source.buffer = buffer;
@@ -379,15 +387,11 @@
         source.start(0);
 
         isUnlocked = true;
-        // Clean up listeners once unlocked
-        ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
-            document.removeEventListener(evt, unlockAudioContext, { capture: true });
-        });
       }
 
-      // Attach unlock listeners aggressively
+      // Llama a unlockAudio en CADA gesto, no solo la primera vez
       ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
-          document.addEventListener(evt, unlockAudioContext, { capture: true, once: true });
+          document.addEventListener(evt, unlockAudio, { capture: true });
       });
 
       const noteFreqs = {
@@ -401,7 +405,6 @@
         const audioCtx = getContext();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
-        // Crucial fix for iOS: add 0.05 (50ms) to ensure event is scheduled in the future, not the exact present or past.
         const startTime = audioCtx.currentTime + timeOffset + 0.05; 
         const safeDuration = Math.max(duration, 0.05);
         const freq = noteFreqs[noteName] || 220;
@@ -416,9 +419,9 @@
         filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + safeDuration);
 
         const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.001, startTime);
+        gainNode.gain.setValueAtTime(0.0001, startTime); // Inicio evitando cero absoluto
         gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration); // Final evitando cero absoluto
 
         osc.connect(filter);
         filter.connect(gainNode);
@@ -1200,7 +1203,7 @@
       setTimeout(() => {
         btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400 pointer-events-none"></i> App Actualizada';
         btn.classList.add("bg-amp-800", "border-emerald-500/40");
-        showToast("Estás usando la versión más reciente del curso (v1.4.0).", true);
+        showToast("Estás usando la versión más reciente del curso (v1.5.0).", true);
         setTimeout(() => {
           btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones';
           btn.disabled = false;
