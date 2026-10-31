@@ -2,7 +2,7 @@
 <html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>RiffMaster - Curso de Guitarra Eléctrica</title>
   
   <!-- Configuraciones para Web App en iOS -->
@@ -10,9 +10,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="RiffMaster">
   
-  <!-- Enlaces al icono en la raíz del repositorio -->
+  <!-- Enlaces al icono en la raíz del repositorio (ahora icon.png) -->
   <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/jpeg" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -55,12 +55,12 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
     .tab-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
     
-    /* Animación del metrónomo */
+    /* Animación del metrónomo - Ya sin el tag !important */
     @keyframes pulse-led {
-      0% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #f59e0b; }
+      0% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
       100% { opacity: 0.3; transform: scale(1); box-shadow: none; }
     }
-    .led-active { animation: pulse-led 0.1s ease-out; background-color: #f59e0b !important; }
+    .led-active { animation: pulse-led 0.1s ease-out; }
   </style>
 </head>
 <body class="bg-amp-900 text-gray-200 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
@@ -137,7 +137,7 @@
           </div>
           <div class="flex items-center gap-2">
             <button id="metro-toggle" class="flex-1 py-2 rounded-lg bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200">
-              <i class="ph-fill ph-play" id="metro-icon"></i> <span id="metro-btn-text">Iniciar</span>
+              <i class="ph-fill ph-play pointer-events-none" id="metro-icon"></i> <span id="metro-btn-text" class="pointer-events-none">Iniciar</span>
             </button>
             <div class="w-8 h-8 rounded-lg bg-amp-800 border border-amp-700 flex items-center justify-center">
               <div id="metro-led" class="w-3.5 h-3.5 rounded-full bg-amp-600 transition-colors duration-75"></div>
@@ -162,10 +162,10 @@
   <!-- ========================================== -->
 
   <!-- MODAL: Afinador por Oído -->
-  <div id="tuner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
+  <div id="tuner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-      <button id="btn-close-tuner" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl transition-colors">
-        <i class="ph-bold ph-x"></i>
+      <button class="btn-close-modal absolute top-4 right-4 text-gray-400 hover:text-white text-xl transition-colors" data-target="tuner-modal">
+        <i class="ph-bold ph-x pointer-events-none"></i>
       </button>
       <div class="flex items-center gap-3 mb-4">
         <div class="p-2.5 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-amp-900 shadow-md">
@@ -181,52 +181,52 @@
       </p>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        <button onclick="AudioEngine.playNote('E2', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">6ª Cuerda (Gruesa)</span>
-          <span class="text-xl font-mono font-black text-amber-400">E</span>
-          <span class="text-xs text-gray-500">Mi Grave</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="E2">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">6ª (Gruesa)</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">E</span>
+          <span class="text-xs text-gray-500 pointer-events-none">Mi Grave</span>
         </button>
-        <button onclick="AudioEngine.playNote('A2', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">5ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400">A</span>
-          <span class="text-xs text-gray-500">La</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="A2">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">5ª Cuerda</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">A</span>
+          <span class="text-xs text-gray-500 pointer-events-none">La</span>
         </button>
-        <button onclick="AudioEngine.playNote('D3', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">4ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400">D</span>
-          <span class="text-xs text-gray-500">Re</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="D3">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">4ª Cuerda</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">D</span>
+          <span class="text-xs text-gray-500 pointer-events-none">Re</span>
         </button>
-        <button onclick="AudioEngine.playNote('G3', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">3ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400">G</span>
-          <span class="text-xs text-gray-500">Sol</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="G3">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">3ª Cuerda</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">G</span>
+          <span class="text-xs text-gray-500 pointer-events-none">Sol</span>
         </button>
-        <button onclick="AudioEngine.playNote('B3', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">2ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400">B</span>
-          <span class="text-xs text-gray-500">Si</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="B3">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">2ª Cuerda</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">B</span>
+          <span class="text-xs text-gray-500 pointer-events-none">Si</span>
         </button>
-        <button onclick="AudioEngine.playNote('E4', 2.5)" class="p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300">1ª Cuerda (Fina)</span>
-          <span class="text-xl font-mono font-black text-amber-400">E</span>
-          <span class="text-xs text-gray-500">Mi Agudo</span>
+        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="E4">
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">1ª (Fina)</span>
+          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">E</span>
+          <span class="text-xs text-gray-500 pointer-events-none">Mi Agudo</span>
         </button>
       </div>
       <div class="flex justify-end">
-        <button id="btn-close-tuner-2" class="px-5 py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm font-bold text-white transition-colors">Cerrar Afinador</button>
+        <button class="btn-close-modal px-5 py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm font-bold text-white transition-colors" data-target="tuner-modal">Cerrar Afinador</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: Configuración / Sistema (Versiones y Backup IOS) -->
-  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
+  <!-- MODAL: Configuración / Sistema -->
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
       <div class="p-5 border-b border-amp-700 flex justify-between items-center bg-amp-900/80">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
           <i class="ph-bold ph-gear text-amber-400"></i> Sistema & Configuración
         </h3>
-        <button id="btn-close-settings" class="text-gray-400 hover:text-white text-xl transition-colors">
-          <i class="ph-bold ph-x"></i>
+        <button class="btn-close-modal text-gray-400 hover:text-white text-xl transition-colors" data-target="settings-modal">
+          <i class="ph-bold ph-x pointer-events-none"></i>
         </button>
       </div>
       
@@ -237,10 +237,10 @@
           <div class="bg-amp-800 border border-amp-700 rounded-xl p-4 flex flex-col gap-3 shadow-inner">
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-300 font-medium">Versión Instalada:</span>
-              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.3.0 (Build iOS Fixed)</span>
+              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.3.0 (Build Final iOS)</span>
             </div>
             <button id="btn-check-update" class="w-full py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm text-white font-bold flex items-center justify-center gap-2 transition-all">
-              <i class="ph-bold ph-arrows-clockwise"></i> Comprobar Actualizaciones
+              <i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones
             </button>
           </div>
         </div>
@@ -253,16 +253,14 @@
           </p>
           
           <div class="space-y-3">
-            <!-- Backup usando navigator.share (Compatible con iOS) -->
             <button id="btn-export-backup" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-amber-500/25 transition-all">
-              <i class="ph-bold ph-export text-lg"></i> Compartir / Exportar Backup
+              <i class="ph-bold ph-export text-lg pointer-events-none"></i> Compartir / Exportar Backup
             </button>
 
-            <!-- Restaurar Backup -->
             <div class="relative group">
-              <input type="file" id="input-restore" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+              <input type="file" id="input-restore" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" aria-label="Restaurar backup">
               <button class="w-full py-3 bg-amp-800 border border-amp-600 group-hover:bg-amp-700 group-hover:border-amp-500 text-gray-200 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-sm">
-                <i class="ph-bold ph-download-simple text-lg"></i> Restaurar desde JSON
+                <i class="ph-bold ph-download-simple text-lg pointer-events-none"></i> Restaurar desde JSON
               </button>
             </div>
           </div>
@@ -286,7 +284,102 @@
   <!-- ========================================== -->
   <script>
     /* ============================================================
-     * 1. SINTETIZADOR DE AUDIO - WEB AUDIO API (RESCATADO PARA IOS)
+     * 1. GLOBALES Y MODALES (UI GENERAL)
+     * ============================================================ */
+    let practiceTimerInt = null; // Timer global para la zona de práctica
+    window.Riffs = []; // Registro dinámico de Riffs (reemplaza los onclick inline)
+    const focusTrapInstances = {}; // Registro de trampas de foco
+
+    function trapFocus(modalEl) {
+      const focusableEls = modalEl.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, details, [tabindex]:not([tabindex="-1"])');
+      if(focusableEls.length === 0) return;
+      const first = focusableEls[0];  
+      const last = focusableEls[focusableEls.length - 1];
+      
+      const handler = function(e) {
+        if (e.key === 'Tab' || e.keyCode === 9) {
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus();
+              e.preventDefault();
+            }
+          } else {
+            if (document.activeElement === last) {
+              first.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      };
+      
+      modalEl.addEventListener('keydown', handler);
+      focusTrapInstances[modalEl.id] = handler;
+      first.focus();
+    }
+
+    function untrapFocus(modalEl) {
+      const handler = focusTrapInstances[modalEl.id];
+      if(handler) {
+        modalEl.removeEventListener('keydown', handler);
+        delete focusTrapInstances[modalEl.id];
+      }
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      // Forzar reflow para que la transición de opacidad funcione
+      void modal.offsetWidth; 
+      modal.classList.remove('opacity-0');
+      trapFocus(modal);
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.add('opacity-0');
+      untrapFocus(modal);
+      setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    document.getElementById('btn-tuner-modal').addEventListener('click', () => openModal('tuner-modal'));
+    document.getElementById('btn-settings-modal').addEventListener('click', () => openModal('settings-modal'));
+    
+    // Delegación global para botones de cierre de modal y reproductores de audio
+    document.addEventListener('click', (e) => {
+       const btnClose = e.target.closest('.btn-close-modal');
+       if (btnClose) {
+         const targetId = btnClose.getAttribute('data-target');
+         if (targetId) closeModal(targetId);
+       }
+
+       // Eventos delegados de Audio
+       const playBtn = e.target.closest('.play-riff-btn');
+       if(playBtn) {
+          const idx = playBtn.getAttribute('data-riff-id');
+          if (idx !== null && window.Riffs[idx]) {
+              AudioEngine.playRiff(window.Riffs[idx]);
+          }
+       }
+       const noteBtn = e.target.closest('.play-note-btn');
+       if(noteBtn) {
+          const note = noteBtn.getAttribute('data-note');
+          if (note) AudioEngine.playNote(note, 2.5);
+       }
+       const navBtn = e.target.closest('.btn-nav');
+       if(navBtn) {
+          const target = navBtn.getAttribute('data-nav-target');
+          if (target !== null) selectModule(parseInt(target));
+       }
+    });
+
+    /* ============================================================
+     * 2. SINTETIZADOR DE AUDIO - WEB AUDIO API (RESCATADO PARA IOS)
      * ============================================================ */
     const AudioEngine = (() => {
       let ctx = null;
@@ -296,7 +389,6 @@
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           ctx = new AudioContext();
         }
-        // Fuerza el reinicio del contexto si iOS lo suspendió
         if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
           ctx.resume().catch(e => console.warn("Error al reanudar AudioContext", e));
         }
@@ -317,15 +409,13 @@
         source.start(0);
 
         // Limpiar los escuchas para no ejecutar esto más de una vez
-        const events = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
-        events.forEach(evt => window.removeEventListener(evt, unlockAudioContext, { capture: true }));
+        const unlockEvents = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
+        unlockEvents.forEach(evt => window.removeEventListener(evt, unlockAudioContext, { capture: true }));
       };
       
-      // Adjuntar a los eventos de usuario en la fase de captura (antes de que lo haga cualquier botón)
-      const events = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
-      events.forEach(evt => window.addEventListener(evt, unlockAudioContext, { once: true, capture: true }));
+      const setupEvents = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
+      setupEvents.forEach(evt => window.addEventListener(evt, unlockAudioContext, { once: true, capture: true }));
 
-      // Frecuencias exactas para las notas de guitarra
       const noteFreqs = {
         'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'A#2': 116.54, 'B2': 123.47,
         'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00,
@@ -333,14 +423,12 @@
         'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25
       };
 
-      // Función principal para reproducir una nota sintetizada
       function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
-        const audioCtx = getContext(); // Llama síncronamente al clic del botón
-        const startTime = audioCtx.currentTime + (timeOffset > 0 ? timeOffset : 0.01); // 0.01 da margen a Safari
+        const audioCtx = getContext();
+        const startTime = audioCtx.currentTime + (timeOffset > 0 ? timeOffset : 0.01);
         const freq = noteFreqs[noteName] || 220;
 
         const osc = audioCtx.createOscillator();
-        // Sawtooth para distorsión (armónicos ricos), Triangle para limpio (tono redondo)
         osc.type = isDistorted ? 'sawtooth' : 'triangle';
         osc.frequency.setValueAtTime(freq, startTime);
 
@@ -363,7 +451,6 @@
       }
 
       function playChord(notes, duration = 1.5, isDistorted = false) {
-        // Ejecutado síncronamente
         getContext(); 
         notes.forEach((note, index) => {
           playNote(note, duration, isDistorted, index * 0.035);
@@ -376,10 +463,9 @@
         sequenceTimeouts = [];
       }
 
-      // Reproducir una tablatura/secuencia en el tiempo
       function playRiff(sequence) {
         stopCurrentSequence();
-        const audioCtx = getContext(); // Invocar síncronamente al clic del botón 'Escuchar'
+        const audioCtx = getContext();
         let cumulativeTime = 0;
         
         sequence.forEach((item) => {
@@ -395,7 +481,6 @@
         });
       }
 
-      // Sonido de clic del metrónomo
       function playClick(isAccented = false) {
         const audioCtx = getContext();
         const osc = audioCtx.createOscillator();
@@ -413,13 +498,12 @@
         osc.stop(now + 0.06);
       }
 
-      // Pista de acompañamiento sintética (Bajo y Batería)
       let isBackingPlaying = false;
       let backingInterval = null;
       
       function startBackingTrack(chordProgression, bpm = 100) {
         stopBackingTrack();
-        const audioCtx = getContext(); // Asegurar despertar al tocar 'Iniciar pista base'
+        const audioCtx = getContext();
         isBackingPlaying = true;
         const beatDurMs = (60 / bpm) * 1000;
         let beat = 0;
@@ -427,10 +511,9 @@
 
         backingInterval = setInterval(() => {
           if (!isBackingPlaying) return;
-          const ctx = getContext(); // Re-chequear estado
+          const ctx = getContext();
           const now = ctx.currentTime + 0.01;
           
-          // Batería Kick
           if (beat % 2 === 0) { 
             const kickOsc = ctx.createOscillator();
             const kickGain = ctx.createGain();
@@ -443,7 +526,6 @@
             kickOsc.start(now);
             kickOsc.stop(now + 0.15);
           } else { 
-            // Snare
             const snareOsc = ctx.createOscillator();
             const snareGain = ctx.createGain();
             snareOsc.type = 'triangle';
@@ -456,7 +538,6 @@
             snareOsc.stop(now + 0.12);
           }
 
-          // Bajo
           if (chordProgression && chordProgression.length > 0) {
             playNote(chordProgression[chordIndex % chordProgression.length], beatDurMs / 1000 * 0.9, false, 0.01);
           }
@@ -478,7 +559,7 @@
     })();
 
     /* ============================================================
-     * 2. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
+     * 3. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
      * ============================================================ */
     const SVGVisuals = {
       renderFretboard(dots = [], startFret = 0, numFrets = 5, title = "Diapasón") {
@@ -525,7 +606,7 @@
         return `
           <div class="my-5 p-4 bg-amp-850 rounded-xl border border-amp-700 overflow-x-auto shadow-inner">
             <div class="mb-3 flex items-center gap-2">
-              <i class="ph-bold ph-guitar-tea text-amber-400"></i>
+              <i class="ph-bold ph-guitar text-amber-400"></i>
               <span class="text-xs font-bold text-gray-200 uppercase tracking-wider">${title}</span>
             </div>
             <svg viewBox="0 0 ${w} ${h}" class="w-full min-w-[550px] select-none">
@@ -574,12 +655,12 @@
           </div>`;
       },
       
-      renderTab(tabLines, playCode = null) {
+      renderTab(tabLines, riffId = null) {
         return `
           <div class="my-5 bg-amp-900 rounded-xl border border-amp-700 p-4 sm:p-5 relative shadow-inner">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-amp-800">
               <span class="text-xs uppercase font-mono tracking-widest text-amber-500 font-bold flex items-center gap-2"><i class="ph-bold ph-music-notes text-base"></i> Tablatura</span>
-              ${playCode ? `<button onclick="${playCode}" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-amp-900 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5"><i class="ph-fill ph-play"></i> Escuchar Tab</button>` : ''}
+              ${riffId !== null ? `<button class="play-riff-btn px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-amp-900 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5" data-riff-id="${riffId}"><i class="ph-fill ph-play pointer-events-none"></i> Escuchar Tab</button>` : ''}
             </div>
             <pre class="tab-font text-blue-300 text-[10px] sm:text-xs overflow-x-auto py-2 leading-relaxed whitespace-pre font-bold">${tabLines.join('\n')}</pre>
           </div>`;
@@ -587,7 +668,7 @@
     };
 
     /* ============================================================
-     * 3. BASE DE DATOS DEL CURSO COMPLETAMENTE DETALLADA
+     * 4. BASE DE DATOS DEL CURSO COMPLETAMENTE DETALLADA
      * ============================================================ */
     const CourseData = [
       {
@@ -619,13 +700,15 @@
                           <p class="text-xs text-gray-400 mt-1 uppercase">Púa Arriba</p>
                         </div>
                       </div>`,
-            tab: { lines: ["Símbolos:  ⊓  ∨  ⊓  ∨  ⊓  ∨  ⊓  ∨", "E(6ª)   |--0--0--3--3--5--5--3--3--|"], audioSnippet: "AudioEngine.playRiff([{note:'E2',dur:0.3,gap:0.25},{note:'E2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.3}])" }
+            tab: { lines: ["Símbolos:  ⊓  ∨  ⊓  ∨  ⊓  ∨  ⊓  ∨", "E(6ª)   |--0--0--3--3--5--5--3--3--|"] },
+            audioRiff: [{note:'E2',dur:0.3,gap:0.25},{note:'E2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.3}]
           }
         ],
         practiceRoutine: { title: "Rutina: Resistencia de Púa", targetBpm: 70, instructions: "Usa el metrónomo (barra lateral) a 70 BPM. Toca 4 veces la cuerda E gruesa al aire por cada clic del metrónomo. Usa estricta púa alternada: Abajo, Arriba, Abajo, Arriba." },
         song: { title: "Humo en el Agua (Riff Principal)", artist: "Inspirado en Deep Purple", difficulty: "Fácil - 2 Cuerdas", tip: "Usa tu dedo índice para pisar las dos cuerdas a la vez (formando una pequeña cejilla). Este es EL riff fundacional del rock.",
           tab: ["G (3ª) |--0---3---5---0---3---6-5--|--0---3---5---3---0----------|", "D (4ª) |--0---3---5---0---3---6-5--|--0---3---5---3---0----------|"], 
-          audioSnippet: "AudioEngine.playRiff([{note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.5},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}, {note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.3},{note:['G#3','C#4'],drive:true,dur:0.2,gap:0.2},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}])", backingTrack: ['G2', 'G2', 'F2', 'C3'] },
+          audioRiff: [{note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.5},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}, {note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.3},{note:['G#3','C#4'],drive:true,dur:0.2,gap:0.2},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}], 
+          backingTrack: ['G2', 'G2', 'F2', 'C3'] },
         quiz: [{ q:"¿Qué significa la línea superior en una tablatura estándar?", options:["Es la 6ª cuerda, la más grave.","Es la 1ª cuerda, la más aguda y fina.","Indica el volumen de la nota."], correct:1, explanation:"Exacto. La tablatura se lee como si miraras el mástil de tu guitarra desde arriba." }]
       },
       {
@@ -642,13 +725,14 @@
             title: "2. Palm Muting (El Chug-Chug)",
             content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">Es la técnica reina del metal. Apoya el lateral (el canto) de tu mano derecha <strong>ligeramente</strong> sobre las cuerdas, justo donde nacen en el puente de la guitarra.</p>
                       <p class="text-sm text-amber-400 font-bold bg-amber-500/10 p-3 rounded border border-amber-500/20">Si apoyas la mano muy lejos del puente, el sonido se apaga totalmente y suena seco. Si te quedas muy atrás, no muteas nada. Busca el punto dulce (sweet spot) donde suena pesado y percusivo.</p>`,
-            tab: { lines: ["  P.M.----------------|", "A |--5--5--5--5--3--3--3--3--|", "E |--3--3--3--3--------------|"], audioSnippet: "AudioEngine.playRiff([{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2}])" }
+            tab: { lines: ["  P.M.----------------|", "A |--5--5--5--5--3--3--3--3--|", "E |--3--3--3--3--------------|"] },
+            audioRiff: [{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2}]
           }
         ],
         practiceRoutine: { title: "Rutina: Saltos de Cuerda (String Skipping)", targetBpm: 85, instructions: "Alterna 4 rasgueos del acorde G5 (raíz 6ª cuerda) y 4 del acorde C5 (raíz 5ª cuerda). Mantén la forma de la mano congelada al bajar de cuerda. Aplica distorsión mental." },
         song: { title: "Himno Punk Rock (American Idiot Style)", artist: "RiffMaster Original", difficulty: "Media - Velocidad de mano derecha", tip: "Todos los rasgueos de púa deben ser hacia ABAJO para que suene con más ataque y agresividad.",
           tab: ["D |----------7-7------5-5-5-5-5--|", "A |--5-5-5---7-7------5-5-5-5-5--|", "E |--3-3-3---5-5------3-3-3-3-3--|"], 
-          audioSnippet: "AudioEngine.playRiff([{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.35},{note:['A2','E3'],drive:true,dur:0.25,gap:0.25},{note:['A2','E3'],drive:true,dur:0.25,gap:0.5},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.5,gap:0.5}])", 
+          audioRiff: [{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.35},{note:['A2','E3'],drive:true,dur:0.25,gap:0.25},{note:['A2','E3'],drive:true,dur:0.25,gap:0.5},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.5,gap:0.5}], 
           backingTrack: ['G2', 'A2', 'C3', 'C3'] },
         quiz: [{ q:"¿Dónde debe apoyarse la mano derecha para hacer un buen Palm Mute?", options:["En el mástil, cerca del traste 12.","Sobre las pastillas/micrófonos.","Justo en las silletas del puente, rozando las cuerdas."], correct:2, explanation:"Al apoyar en el puente, amortiguas las cuerdas sin matar del todo la afinación de la nota, logrando ese sonido 'chug'." }]
       },
@@ -669,13 +753,14 @@
                         <li><strong>Hammer-On (h):</strong> Tocas una nota y luego <em>martillas</em> con otro dedo en un traste superior sin volver a usar la púa.</li>
                         <li><strong>Pull-Off (p):</strong> Tocas una nota y <em>pellizcas</em> la cuerda hacia abajo al retirar el dedo, haciendo sonar el traste de atrás.</li>
                       </ul>`,
-            tab: { lines: ["e |--------------------------|", "B |-------5h8---8p5----------|", "G |--5h7-------------7p5-----|"], audioSnippet: "AudioEngine.playRiff([{note:'C4',dur:0.2,gap:0.15},{note:'D4',dur:0.4,gap:0.35},{note:'E4',dur:0.2,gap:0.15},{note:'G4',dur:0.4,gap:0.35},{note:'G4',dur:0.2,gap:0.15},{note:'E4',dur:0.4,gap:0.35},{note:'D4',dur:0.2,gap:0.15},{note:'C4',dur:0.6,gap:0.6}])" }
+            tab: { lines: ["e |--------------------------|", "B |-------5h8---8p5----------|", "G |--5h7-------------7p5-----|"] },
+            audioRiff: [{note:'C4',dur:0.2,gap:0.15},{note:'D4',dur:0.4,gap:0.35},{note:'E4',dur:0.2,gap:0.15},{note:'G4',dur:0.4,gap:0.35},{note:'G4',dur:0.2,gap:0.15},{note:'E4',dur:0.4,gap:0.35},{note:'D4',dur:0.2,gap:0.15},{note:'C4',dur:0.6,gap:0.6}]
           }
         ],
         practiceRoutine: { title: "Rutina: Trinos (Trills) sin Púa", targetBpm: 80, instructions: "Pon tu dedo índice en el traste 5 de la cuerda G. Golpea y pellizca (hammer-on y pull-off) el traste 7 con el dedo anular repetidamente, lo más rápido posible, en un solo golpe de púa inicial. Esto desarrolla una fuerza inmensa." },
         song: { title: "Lick Clásico de Rock (Estilo Angus Young)", artist: "RiffMaster Original", difficulty: "Media - Requiere fuerza", tip: "Para hacer el BEND (b) en el traste 7, no uses solo el dedo anular. Apóyalo colocando el dedo medio e índice detrás en la misma cuerda para empujar hacia el techo con la fuerza de 3 dedos.",
           tab: ["G |--7b9--7p5-------5--7b9---|", "D |-------------7------------|"], 
-          audioSnippet: "AudioEngine.playRiff([{note:'D4',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.6,gap:0.6}])", 
+          audioRiff: [{note:'D4',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.6,gap:0.6}], 
           backingTrack: ['A2', 'C3', 'G2', 'A2'] },
         quiz: [{ q:"Para hacer un 'String Bend' (estiramiento de cuerda) controlado y afinado:", options:["Uso la fuerza de un solo dedo.","Uso el dedo anular, apoyado por el dedo medio e índice.","Tiro de la cuerda hacia afuera de la guitarra."], correct:1, explanation:"La regla de oro del bend es agrupar los dedos. El anular empuja, pero el medio y el índice son los motores." }]
       },
@@ -697,13 +782,14 @@
             title: "2. El Concepto del 'Dedo Pivote' y Transiciones",
             content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">El mayor problema de los principiantes es que pausan para cambiar de acorde. El truco está en buscar dedos comunes entre dos acordes y dejarlos plantados. Ese dedo actúa como un 'ancla' o 'pivote'.</p>
                       <p class="text-sm text-gray-300">Ejemplo: Al cambiar de <strong>Am a C</strong>, tus dedos índice y medio no se mueven en absoluto. Solo mueves el dedo anular de la 3ª cuerda (traste 2) a la 5ª cuerda (traste 3).</p>`,
-            tab: { lines: ["    [Am]        [C]", "e |--0----------0--|", "B |--1----------1--|", "G |--2----------0--|", "D |--2----------2--|", "A |--0----------3--|"], audioSnippet: "AudioEngine.playRiff([{note:['A2','E3','A3','C4','E4'],dur:1.0,gap:1.2},{note:['C3','E3','G3','C4','E4'],dur:1.0,gap:1.0}])" }
+            tab: { lines: ["    [Am]        [C]", "e |--0----------0--|", "B |--1----------1--|", "G |--2----------0--|", "D |--2----------2--|", "A |--0----------3--|"] },
+            audioRiff: [{note:['A2','E3','A3','C4','E4'],dur:1.0,gap:1.2},{note:['C3','E3','G3','C4','E4'],dur:1.0,gap:1.0}]
           }
         ],
         practiceRoutine: { title: "Rutina: El Tren Rítmico", targetBpm: 75, instructions: "Tu mano derecha debe moverse arriba y abajo constantemente, como un péndulo, incluso si no golpeas las cuerdas en ese instante. Toca Em (4 tiempos) y cambia a Am (4 tiempos). No dejes que la mano derecha se detenga jamás." },
         song: { title: "Balada del Desierto", artist: "Estilo Oasis / Creedence", difficulty: "Fácil - Ritmo", tip: "Evita golpear la 6ª cuerda (Mi grave) cuando toques el acorde de D o de C. Suena fatal. Concéntrate en rasguear desde la 5ª hacia abajo.",
           tab: ["   Em            D            Am", "E|-0-0-0-0-0---|---2---2-2--|-0-0-0-0-0---|", "B|-0-0-0-0-0---|---3---3-3--|-1-1-1-1-1---|", "G|-0-0-0-0-0---|---2---2-2--|-2-2-2-2-2---|", "D|-2-2-2-2-2---|-0---0------|-2-2-2-2-2---|"], 
-          audioSnippet: "AudioEngine.playRiff([{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['A2','E3','A3','C4'],dur:0.6,gap:0.6}])", 
+          audioRiff: [{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['A2','E3','A3','C4'],dur:0.6,gap:0.6}], 
           backingTrack: ['E2', 'D3', 'A2', 'A2'] },
         quiz: [{ q:"En el acorde de Re mayor (D), ¿qué cuerda NO debes tocar con la púa?", options:["Las cuerdas agudas (1, 2 y 3)","La 6ª cuerda (Mi grave)","Todas deben sonar"], correct:1, explanation:"El Mi grave choca armónicamente con el Re y hace que el acorde suene turbio y confuso." }]
       },
@@ -721,20 +807,21 @@
             title: "2. Slides y Double Stops",
             content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed"><strong>Slide (Deslizamiento):</strong> Toca una nota y desliza el dedo por la cuerda hasta otro traste sin dejar de presionar. Representado por (/).</p>
                       <p class="text-sm text-gray-300"><strong>Double Stops:</strong> Toca dos cuerdas simultáneamente en tus solos para que suene más grueso, al estilo Chuck Berry.</p>`,
-            tab: { lines: ["   Slide              Double Stop", "e |----------------|----------------|", "B |-------5--7/9~--|------5-5-------|", "G |--5/7-----------|------5-5-------|"], audioSnippet: "AudioEngine.playRiff([{note:'C4',drive:true,dur:0.2,gap:0.15},{note:'D4',drive:true,dur:0.4,gap:0.5},{note:'E4',drive:true,dur:0.3,gap:0.3},{note:'F#4',drive:true,dur:0.2,gap:0.15},{note:'G#4',drive:true,dur:0.8,gap:1.0},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3}])" }
+            tab: { lines: ["   Slide              Double Stop", "e |----------------|----------------|", "B |-------5--7/9~--|------5-5-------|", "G |--5/7-----------|------5-5-------|"] },
+            audioRiff: [{note:'C4',drive:true,dur:0.2,gap:0.15},{note:'D4',drive:true,dur:0.4,gap:0.5},{note:'E4',drive:true,dur:0.3,gap:0.3},{note:'F#4',drive:true,dur:0.2,gap:0.15},{note:'G#4',drive:true,dur:0.8,gap:1.0},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3}]
           }
         ],
         practiceRoutine: { title: "Rutina: Vibrato Vocal", targetBpm: 60, instructions: "Pon el metrónomo muy lento. Toca el traste 7 de la cuerda G. Intenta que el vibrato oscile rítmicamente (una oscilación por clic). No te aceleres, controla la muñeca." },
         song: { title: "Jam Final de Graduación", artist: "Tú", difficulty: "Avanzada - Integra todo", tip: "Esta es la prueba final. Activa el Backing Track, siente el ritmo y trata de clavar el vibrato (~) al final de la frase.",
           tab: ["G |--7b9--7p5-------5-7b8r7p5---7-5~~--|", "D |-------------7-------------7--------|"], 
-          audioSnippet: "AudioEngine.playRiff([{note:'D4',drive:true,dur:0.4,gap:0.3},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.25,gap:0.25},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'D#4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.2,gap:0.2},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.2,gap:0.2},{note:'D4',drive:true,dur:0.3,gap:0.3},{note:'C4',drive:true,dur:0.8,gap:0.8}])", 
+          audioRiff: [{note:'D4',drive:true,dur:0.4,gap:0.3},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.25,gap:0.25},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'D#4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.2,gap:0.2},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.2,gap:0.2},{note:'D4',drive:true,dur:0.3,gap:0.3},{note:'C4',drive:true,dur:0.8,gap:0.8}], 
           backingTrack: ['A2', 'D3', 'E3', 'A2'] },
         quiz: [{ q:"El vibrato profesional y controlado surge de:", options:["Temblar el dedo rápidamente sobre el traste.","Rotar el antebrazo y la muñeca con control rítmico, manteniendo el dedo firme.","Mover la guitarra hacia adelante y atrás."], correct:1, explanation:"El movimiento de la muñeca (como girar una llave o un pomo) aporta peso y sustento al vibrato." }]
       }
     ];
 
     /* ============================================================
-     * 4. LÓGICA DE ALMACENAMIENTO Y UI CORE
+     * 5. LÓGICA DE ALMACENAMIENTO Y UI CORE
      * ============================================================ */
     const StorageKey = "riffmaster_data_v3";
     let currentModuleIndex = 0;
@@ -755,7 +842,15 @@
     }
 
     function getProgressData() {
-      try { return JSON.parse(localStorage.getItem(StorageKey)) || { completedModules: [] }; }
+      try { 
+        const data = JSON.parse(localStorage.getItem(StorageKey)); 
+        if(data && Array.isArray(data.completedModules)) {
+           const validIds = CourseData.map(c => c.id);
+           let mods = data.completedModules.filter(m => validIds.includes(m));
+           return { completedModules: [...new Set(mods)] }; // Sanitizado y únicos
+        }
+        return { completedModules: [] };
+      }
       catch (e) { return { completedModules: [] }; }
     }
     function saveProgressData(data) {
@@ -766,7 +861,9 @@
 
     function updateGlobalProgressBar() {
       const data = getProgressData();
-      const pct = Math.round((data.completedModules.length / CourseData.length) * 100);
+      const rawPct = (data.completedModules.length / CourseData.length) * 100;
+      const pct = Math.max(0, Math.min(100, Math.round(rawPct))); // Clamp 0-100
+      
       document.getElementById("global-progress-bar").style.width = `${pct}%`;
       document.getElementById("global-progress-text").textContent = `${pct}%`;
       document.getElementById("completed-count").textContent = `${data.completedModules.length}/${CourseData.length}`;
@@ -780,7 +877,11 @@
         const isActive = idx === currentModuleIndex;
         const btn = document.createElement("button");
         btn.className = `w-full text-left p-3.5 rounded-xl transition-all duration-200 flex items-center justify-between group ${isActive ? 'bg-amber-500/15 border border-amber-500/50 shadow-md transform scale-[1.02]' : 'bg-amp-800/40 border border-transparent hover:bg-amp-800/80 hover:border-amp-700'}`;
-        btn.onclick = () => { selectModule(idx); document.getElementById("sidebar").classList.add("-translate-x-full"); document.getElementById("sidebar-backdrop").classList.add("hidden"); };
+        btn.onclick = () => { 
+          selectModule(idx); 
+          document.getElementById("sidebar").classList.add("-translate-x-full"); 
+          document.getElementById("sidebar-backdrop").classList.add("hidden"); 
+        };
         btn.innerHTML = `
           <div class="flex items-center gap-3.5">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-sm ${isDone ? 'bg-amber-500 text-amp-900' : isActive ? 'bg-amber-500/40 text-amber-300 border border-amber-500/50' : 'bg-amp-700 text-gray-400 border border-amp-600'}">
@@ -800,10 +901,25 @@
       AudioEngine.stopBackingTrack();
       AudioEngine.stopCurrentSequence();
       
+      if(practiceTimerInt) {
+         clearInterval(practiceTimerInt);
+         practiceTimerInt = null;
+      }
+      
+      // Reiniciamos el registro de riffs en cada render para prevenir saturación
+      window.Riffs = [];
+      
       const mod = CourseData[currentModuleIndex];
       const isCompleted = getProgressData().completedModules.includes(mod.id);
       
-      let sectionsHtml = mod.sections.map(sec => `
+      let sectionsHtml = mod.sections.map(sec => {
+        let secRiffId = null;
+        if(sec.audioRiff) {
+          window.Riffs.push(sec.audioRiff);
+          secRiffId = window.Riffs.length - 1;
+        }
+        
+        return `
         <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 mb-8 shadow-xl">
           <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2.5">
              <div class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
@@ -812,9 +928,15 @@
           ${sec.content}
           ${sec.fretboard ? SVGVisuals.renderFretboard(sec.fretboard.dots, sec.fretboard.startFret, sec.fretboard.fretsCount, sec.fretboard.title) : ''}
           ${sec.chords ? `<div class="flex flex-wrap gap-4 justify-center my-6">${sec.chords.map(c => SVGVisuals.renderChordBox(c.name, c.frets, c.fingers)).join('')}</div>` : ''}
-          ${sec.tab ? SVGVisuals.renderTab(sec.tab.lines, sec.tab.audioSnippet) : ''}
+          ${sec.tab ? SVGVisuals.renderTab(sec.tab.lines, secRiffId) : ''}
         </div>
-      `).join('');
+      `}).join('');
+
+      let songRiffId = null;
+      if(mod.song.audioRiff) {
+        window.Riffs.push(mod.song.audioRiff);
+        songRiffId = window.Riffs.length - 1;
+      }
 
       let quizHtml = mod.quiz.map((qItem, qIdx) => `
         <div class="p-5 bg-amp-900 rounded-xl border border-amp-700 mb-4 text-sm shadow-inner" data-qidx="${qIdx}">
@@ -851,7 +973,7 @@
           <p class="text-sm text-gray-300 mb-5 bg-amp-900 p-4 rounded-xl border border-amp-700/50 shadow-inner leading-relaxed">${mod.practiceRoutine.instructions}</p>
           <div class="flex items-center gap-3">
              <button id="btn-timer" class="px-5 py-2.5 bg-amp-700 hover:bg-amp-600 text-white rounded-lg font-bold text-sm transition-colors shadow-md flex items-center gap-2">
-                <i class="ph-bold ph-stopwatch"></i> Iniciar Reto (3:00)
+                <i class="ph-bold ph-stopwatch pointer-events-none"></i> Iniciar Reto (3:00)
              </button>
              <span id="timer-display" class="font-mono text-xl font-bold text-amber-500 hidden">03:00</span>
           </div>
@@ -864,11 +986,11 @@
           <p class="text-xs text-gray-400 uppercase tracking-widest font-mono mb-4">Estilo: ${mod.song.artist}</p>
           
           <div class="flex flex-wrap gap-3 mt-4 mb-6">
-            <button onclick="${mod.song.audioSnippet}" class="px-5 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow-sm">
-               <i class="ph-fill ph-headphones text-lg"></i> Escuchar Completo
+            <button class="play-riff-btn px-5 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow-sm" data-riff-id="${songRiffId}">
+               <i class="ph-fill ph-headphones text-lg pointer-events-none"></i> Escuchar Completo
             </button>
             <button id="btn-bt" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-amp-900 rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-amber-500/30">
-               <i class="ph-bold ph-speaker-hifi text-lg"></i> Iniciar Pista Base (Backing)
+               <i class="ph-bold ph-speaker-hifi text-lg pointer-events-none"></i> Iniciar Pista Base (Backing)
             </button>
           </div>
           
@@ -883,155 +1005,150 @@
           <h3 class="font-black text-xl text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-brain text-purple-400 text-2xl"></i> Validación de Conocimientos</h3>
           ${quizHtml}
           <button id="btn-quiz" class="mt-4 w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-black rounded-xl text-base shadow-lg hover:shadow-amber-500/25 transition-all flex justify-center items-center gap-2">
-             <i class="ph-bold ph-check-square-offset text-xl"></i> Validar Respuestas y Superar Módulo
+             <i class="ph-bold ph-check-square-offset text-xl pointer-events-none"></i> Validar Respuestas y Superar Módulo
           </button>
         </div>
 
         <div class="flex justify-between items-center pt-6 border-t border-amp-800">
-          <button onclick="selectModule(${Math.max(0, currentModuleIndex-1)})" class="text-sm px-5 py-2.5 bg-amp-800 hover:bg-amp-700 border border-amp-700 rounded-lg text-gray-300 font-bold transition-colors flex items-center gap-2 ${currentModuleIndex === 0 ? 'opacity-30 cursor-not-allowed pointer-events-none' : ''}">
-             <i class="ph-bold ph-arrow-left"></i> Anterior
+          <button class="btn-nav text-sm px-5 py-2.5 bg-amp-800 hover:bg-amp-700 border border-amp-700 rounded-lg text-gray-300 font-bold transition-colors flex items-center gap-2 ${currentModuleIndex === 0 ? 'opacity-30 cursor-not-allowed pointer-events-none' : ''}" data-nav-target="${Math.max(0, currentModuleIndex-1)}">
+             <i class="ph-bold ph-arrow-left pointer-events-none"></i> Anterior
           </button>
-          <button onclick="selectModule(${Math.min(CourseData.length-1, currentModuleIndex+1)})" class="text-sm px-5 py-2.5 bg-amber-500 hover:bg-amber-400 rounded-lg text-amp-900 font-black transition-all shadow-md flex items-center gap-2 ${currentModuleIndex === CourseData.length-1 ? 'opacity-0 pointer-events-none' : ''}">
-             Siguiente <i class="ph-bold ph-arrow-right"></i>
+          <button class="btn-nav text-sm px-5 py-2.5 bg-amber-500 hover:bg-amber-400 rounded-lg text-amp-900 font-black transition-all shadow-md flex items-center gap-2 ${currentModuleIndex === CourseData.length-1 ? 'opacity-0 pointer-events-none' : ''}" data-nav-target="${Math.min(CourseData.length-1, currentModuleIndex+1)}">
+             Siguiente <i class="ph-bold ph-arrow-right pointer-events-none"></i>
           </button>
         </div>
       `;
 
-      // Lógica de Backing Track
-      document.getElementById("btn-bt").onclick = (e) => {
-        const btn = e.currentTarget;
-        if(AudioEngine.isBackingActive()) {
-          AudioEngine.stopBackingTrack();
-          btn.innerHTML = `<i class="ph-bold ph-speaker-hifi text-lg"></i> Iniciar Pista Base (Backing)`;
-          btn.className = "px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-amp-900 rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-amber-500/30";
-        } else {
-          AudioEngine.startBackingTrack(mod.song.backingTrack, 90);
-          btn.innerHTML = `<i class="ph-bold ph-stop-circle text-lg"></i> Detener Pista Base`;
-          btn.className = "px-5 py-2.5 bg-red-500 hover:bg-red-400 text-white rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-red-500/30 animate-pulse";
-        }
-      };
-
-      let timerInt = null;
-      document.getElementById("btn-timer").onclick = (e) => {
-         const btn = e.currentTarget;
-         const disp = document.getElementById("timer-display");
-         if(timerInt) {
-            clearInterval(timerInt); timerInt = null;
-            btn.innerHTML = `<i class="ph-bold ph-stopwatch"></i> Reiniciar Reto`;
-            disp.classList.add("hidden");
-         } else {
-            let time = 180;
-            disp.classList.remove("hidden");
-            btn.innerHTML = `<i class="ph-bold ph-x"></i> Detener`;
-            timerInt = setInterval(() => {
-               time--;
-               const m = String(Math.floor(time/60)).padStart(2,'0');
-               const s = String(time%60).padStart(2,'0');
-               disp.textContent = `${m}:${s}`;
-               if(time <= 0) {
-                  clearInterval(timerInt); timerInt = null;
-                  AudioEngine.playClick(true);
-                  showToast("¡Tiempo de práctica completado! Gran trabajo.");
-                  btn.innerHTML = `<i class="ph-bold ph-stopwatch"></i> Reto Terminado`;
-               }
-            }, 1000);
-         }
-      };
-
-      document.getElementById("btn-quiz").onclick = () => {
-        let allCorrect = true, allAnswered = true;
-        mod.quiz.forEach((q, idx) => {
-          const sel = document.querySelector(`input[name="q_${idx}"]:checked`);
-          const fb = document.querySelector(`[data-qidx="${idx}"] .quiz-fb`);
-          fb.classList.remove("hidden");
-          
-          if(!sel) { 
-             allAnswered = false; 
-             return; 
-          }
-          
-          if(parseInt(sel.value) === q.correct) {
-            fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-emerald-900/40 text-emerald-400 border border-emerald-500/30 block";
-            fb.innerHTML = `<i class="ph-bold ph-check-circle inline-block mr-1"></i> <strong>Correcto:</strong> ${q.explanation}`;
+      // Inicialización de escuchas internos del módulo renderizado
+      const btnBt = document.getElementById("btn-bt");
+      if(btnBt) {
+        btnBt.addEventListener('click', (e) => {
+          const btn = e.currentTarget;
+          if(AudioEngine.isBackingActive()) {
+            AudioEngine.stopBackingTrack();
+            btn.innerHTML = `<i class="ph-bold ph-speaker-hifi text-lg pointer-events-none"></i> Iniciar Pista Base (Backing)`;
+            btn.className = "px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-amp-900 rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-amber-500/30";
           } else {
-            allCorrect = false;
-            fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-red-900/40 text-red-400 border border-red-500/30 block";
-            fb.innerHTML = `<i class="ph-bold ph-x-circle inline-block mr-1"></i> <strong>Incorrecto:</strong> ${q.explanation}`;
+            const currentBpm = parseInt(document.getElementById("metro-bpm").value) || 90;
+            AudioEngine.startBackingTrack(mod.song.backingTrack, currentBpm);
+            btn.innerHTML = `<i class="ph-bold ph-stop-circle text-lg pointer-events-none"></i> Detener Pista Base`;
+            btn.className = "px-5 py-2.5 bg-red-500 hover:bg-red-400 text-white rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-red-500/30 animate-pulse";
           }
         });
-        
-        if(!allAnswered) return showToast("Debes responder todas las preguntas para continuar.", false);
-        
-        if(allCorrect) {
-          const d = getProgressData();
-          if(!d.completedModules.includes(mod.id)) { 
-             d.completedModules.push(mod.id); 
-             saveProgressData(d); 
-          }
-          showToast("¡Módulo Superado con Éxito! Sigue rockeando.", true);
-          setTimeout(() => {
-             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-          }, 800);
-        } else {
-           showToast("Revisa las respuestas incorrectas e inténtalo de nuevo.", false);
-        }
-      };
+      }
 
-      document.getElementById("main-content-scroll").scrollTop = 0;
+      const btnTimer = document.getElementById("btn-timer");
+      if(btnTimer) {
+        btnTimer.addEventListener('click', (e) => {
+           const btn = e.currentTarget;
+           const disp = document.getElementById("timer-display");
+           if(practiceTimerInt) {
+              clearInterval(practiceTimerInt); 
+              practiceTimerInt = null;
+              btn.innerHTML = `<i class="ph-bold ph-stopwatch pointer-events-none"></i> Reiniciar Reto`;
+              disp.classList.add("hidden");
+           } else {
+              let time = 180;
+              disp.classList.remove("hidden");
+              btn.innerHTML = `<i class="ph-bold ph-x pointer-events-none"></i> Detener`;
+              practiceTimerInt = setInterval(() => {
+                 time--;
+                 const m = String(Math.floor(time/60)).padStart(2,'0');
+                 const s = String(time%60).padStart(2,'0');
+                 disp.textContent = `${m}:${s}`;
+                 if(time <= 0) {
+                    clearInterval(practiceTimerInt); practiceTimerInt = null;
+                    AudioEngine.playClick(true);
+                    showToast("¡Tiempo de práctica completado! Gran trabajo.");
+                    btn.innerHTML = `<i class="ph-bold ph-stopwatch pointer-events-none"></i> Reto Terminado`;
+                 }
+              }, 1000);
+           }
+        });
+      }
+
+      const btnQuiz = document.getElementById("btn-quiz");
+      if(btnQuiz) {
+        btnQuiz.addEventListener('click', () => {
+          let allCorrect = true, allAnswered = true;
+          mod.quiz.forEach((q, idx) => {
+            const sel = document.querySelector(`input[name="q_${idx}"]:checked`);
+            const fb = document.querySelector(`[data-qidx="${idx}"] .quiz-fb`);
+            fb.classList.remove("hidden");
+            
+            if(!sel) { 
+               allAnswered = false; 
+               return; 
+            }
+            
+            if(parseInt(sel.value) === q.correct) {
+              fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-emerald-900/40 text-emerald-400 border border-emerald-500/30 block";
+              fb.innerHTML = `<i class="ph-bold ph-check-circle inline-block mr-1 pointer-events-none"></i> <strong>Correcto:</strong> ${q.explanation}`;
+            } else {
+              allCorrect = false;
+              fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-red-900/40 text-red-400 border border-red-500/30 block";
+              fb.innerHTML = `<i class="ph-bold ph-x-circle inline-block mr-1 pointer-events-none"></i> <strong>Incorrecto:</strong> ${q.explanation}`;
+            }
+          });
+          
+          if(!allAnswered) return showToast("Debes responder todas las preguntas para continuar.", false);
+          
+          if(allCorrect) {
+            const d = getProgressData();
+            if(!d.completedModules.includes(mod.id)) { 
+               d.completedModules.push(mod.id); 
+               saveProgressData(d); 
+            }
+            showToast("¡Módulo Superado con Éxito! Sigue rockeando.", true);
+            setTimeout(() => {
+               document.getElementById('main-content-scroll').scrollTo({ 
+                 top: document.getElementById('lesson-container').scrollHeight, 
+                 behavior: 'smooth' 
+               });
+            }, 800);
+          } else {
+             showToast("Revisa las respuestas incorrectas e inténtalo de nuevo.", false);
+          }
+        });
+      }
+
+      // Scroll arriba al cambiar de modulo
+      document.getElementById("main-content-scroll").scrollTo({ top: 0, behavior: 'smooth' });
       renderSidebarNavigation();
     }
 
     /* ============================================================
-     * 5. LÓGICA DE METRÓNOMO Y MODALES (UI GENERAL)
+     * 6. LÓGICA DE METRÓNOMO Y SIDEBAR
      * ============================================================ */
-    
-    const modalTuner = document.getElementById("tuner-modal");
-    document.getElementById("btn-tuner-modal").onclick = () => {
-       modalTuner.classList.remove("hidden");
-       setTimeout(() => modalTuner.classList.remove("opacity-0"), 10);
-    };
-    const closeTuner = () => {
-       modalTuner.classList.add("opacity-0");
-       setTimeout(() => modalTuner.classList.add("hidden"), 300);
-    };
-    document.getElementById("btn-close-tuner").onclick = closeTuner;
-    document.getElementById("btn-close-tuner-2").onclick = closeTuner;
-
-    const modalSettings = document.getElementById("settings-modal");
-    document.getElementById("btn-settings-modal").onclick = () => {
-       modalSettings.classList.remove("hidden");
-       setTimeout(() => modalSettings.classList.remove("opacity-0"), 10);
-    };
-    document.getElementById("btn-close-settings").onclick = () => {
-       modalSettings.classList.add("opacity-0");
-       setTimeout(() => modalSettings.classList.add("hidden"), 300);
-    };
-
     let metroInt = null, metroBeat = 0;
+    let metroDebounceTimer;
     const mSld = document.getElementById("metro-bpm");
     const mTxt = document.getElementById("metro-bpm-display");
     const mBtn = document.getElementById("metro-toggle");
     const mLed = document.getElementById("metro-led");
 
-    mSld.oninput = e => { 
+    // Fix: Debounce clean metronome slider restart
+    mSld.addEventListener('input', e => { 
        mTxt.textContent = e.target.value + " BPM"; 
-       if(metroInt) { 
-          clearInterval(metroInt); 
-          mBtn.click(); 
-          mBtn.click(); 
-       } 
-    };
+       clearTimeout(metroDebounceTimer);
+       metroDebounceTimer = setTimeout(() => {
+          if(metroInt) { 
+             mBtn.click(); // Stop
+             setTimeout(() => mBtn.click(), 50); // Start
+          } 
+       }, 300);
+    });
 
-    mBtn.onclick = () => {
+    mBtn.addEventListener('click', () => {
       if(metroInt) {
         clearInterval(metroInt); 
         metroInt = null;
         document.getElementById("metro-btn-text").textContent = "Iniciar";
-        document.getElementById("metro-icon").className = "ph-fill ph-play";
+        document.getElementById("metro-icon").className = "ph-fill ph-play pointer-events-none";
         mBtn.className = "flex-1 py-2 rounded-lg bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200";
       } else {
         document.getElementById("metro-btn-text").textContent = "Pausar";
-        document.getElementById("metro-icon").className = "ph-fill ph-pause";
+        document.getElementById("metro-icon").className = "ph-fill ph-pause pointer-events-none";
         mBtn.className = "flex-1 py-2 rounded-lg bg-amber-500 text-amp-900 font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200 shadow-[0_0_15px_rgba(245,158,11,0.4)]";
         
         const bpm = parseInt(mSld.value);
@@ -1039,7 +1156,13 @@
         
         AudioEngine.playClick(true);
         mLed.classList.add("led-active");
-        setTimeout(() => mLed.classList.remove("led-active"), 100);
+        mLed.style.backgroundColor = "#ef4444";
+        mLed.style.color = "#ef4444"; // Para el currentColor del shadow
+        setTimeout(() => { 
+          mLed.classList.remove("led-active"); 
+          mLed.style.backgroundColor = ""; 
+          mLed.style.color = "";
+        }, 100);
         metroBeat++;
 
         metroInt = setInterval(() => {
@@ -1047,41 +1170,43 @@
           AudioEngine.playClick(isAccent);
           
           mLed.classList.add("led-active");
-          if(isAccent) mLed.style.backgroundColor = "#ef4444";
-          else mLed.style.backgroundColor = "#f59e0b";
+          const accentColor = isAccent ? "#ef4444" : "#f59e0b";
+          mLed.style.backgroundColor = accentColor;
+          mLed.style.color = accentColor;
           
           setTimeout(() => {
              mLed.classList.remove("led-active");
              mLed.style.backgroundColor = "";
+             mLed.style.color = "";
           }, 100);
           
           metroBeat++;
         }, (60/bpm)*1000);
       }
-    };
+    });
 
-    document.getElementById("toggle-sidebar").onclick = () => {
+    document.getElementById("toggle-sidebar").addEventListener('click', () => {
       document.getElementById("sidebar").classList.remove("-translate-x-full");
       document.getElementById("sidebar-backdrop").classList.remove("hidden");
-    };
-    document.getElementById("sidebar-backdrop").onclick = () => {
+    });
+    document.getElementById("sidebar-backdrop").addEventListener('click', () => {
       document.getElementById("sidebar").classList.add("-translate-x-full");
       document.getElementById("sidebar-backdrop").classList.add("hidden");
-    };
+    });
 
     /* ============================================================
-     * 6. ACTUALIZACIONES SIMULADAS Y BACKUP (WEB SHARE API)
+     * 7. ACTUALIZACIONES SIMULADAS Y BACKUP (WEB SHARE API)
      * ============================================================ */
     document.getElementById("btn-check-update").addEventListener("click", function() {
       const btn = this;
-      btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Buscando...';
+      btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin pointer-events-none"></i> Buscando...';
       btn.disabled = true;
       setTimeout(() => {
-        btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i> App Actualizada';
+        btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400 pointer-events-none"></i> App Actualizada';
         btn.classList.add("bg-amp-800", "border-emerald-500/40");
         showToast("Estás usando la versión más reciente del curso (v1.3.0).", true);
         setTimeout(() => {
-          btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise"></i> Comprobar Actualizaciones';
+          btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones';
           btn.disabled = false;
           btn.classList.remove("bg-amp-800", "border-emerald-500/40");
         }, 4000);
@@ -1089,7 +1214,7 @@
     });
 
     document.getElementById("btn-export-backup").addEventListener("click", async () => {
-      const rawData = localStorage.getItem(StorageKey) || JSON.stringify(getProgressData());
+      const rawData = JSON.stringify(getProgressData()); // Usamos data sanitizada
       const blob = new Blob([rawData], { type: "application/json" });
       const fileName = "RiffMaster_Backup.json";
       const file = new File([blob], fileName, { type: "application/json" });
@@ -1126,8 +1251,13 @@
         try {
           const json = JSON.parse(event.target.result);
           if(json && Array.isArray(json.completedModules)) {
+            // Sanitizamos al guardar para asegurarnos de que solo se inyectan ID válidos
+            const validIds = CourseData.map(c => c.id);
+            let safeMods = json.completedModules.filter(m => validIds.includes(m));
+            json.completedModules = [...new Set(safeMods)];
+            
             localStorage.setItem(StorageKey, JSON.stringify(json));
-            modalSettings.classList.add("hidden");
+            closeModal('settings-modal');
             showToast("¡Progreso restaurado correctamente! Recargando...", true);
             setTimeout(() => location.reload(), 1500);
           } else {
