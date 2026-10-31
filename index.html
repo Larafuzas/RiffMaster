@@ -152,7 +152,7 @@
             <div class="space-y-4">
                 <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
                     <p class="text-sm text-gray-400 uppercase font-bold tracking-wider mb-2">Acerca de</p>
-                    <p class="text-white font-medium">RiffMaster App <span class="text-accent text-sm ml-2">v1.6.0 (iOS Ready)</span></p>
+                    <p class="text-white font-medium">RiffMaster App <span class="text-accent text-sm ml-2 font-bold">v1.7.0 (Actualizada)</span></p>
                     <p class="text-xs text-gray-500 mt-1">Motor de Audio: Web Audio API (Buffered + AudioSession)</p>
                 </div>
 
@@ -184,7 +184,7 @@
     <!-- AUDIO ENGINE & LOGIC -->
     <script>
         /* ============================================================
-         * AUDIO ENGINE & iOS ROBUST UNLOCK (v1.6.0 FIX)
+         * AUDIO ENGINE & iOS ROBUST UNLOCK
          * ============================================================ */
         const AudioEngine = (() => {
             let ctx = null;
@@ -221,7 +221,7 @@
                 source.connect(audioCtx.destination);
                 source.start(0);
                 isUnlocked = true;
-                console.log("AudioContext unlocked.");
+                console.log("AudioContext unlocked (v1.7.0).");
             }
 
             ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
@@ -255,7 +255,6 @@
 
                 gainNode.gain.setValueAtTime(0, startTime);
                 gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
-                // Uso de 0.0001 para evitar el bug de WebKit en iOS al decaer a 0
                 gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration);
 
                 osc.connect(filter);
@@ -316,7 +315,6 @@
                 notes.forEach(noteData => {
                     const { note, dur, pause } = noteData;
                     if (note && note !== 'rest') {
-                        // Soporte para acordes en riffs (ej. ['E2', 'B2'])
                         if(Array.isArray(note)) {
                             note.forEach(n => playNote(n, dur * beatDuration, isDistorted, currentTimeOffset));
                         } else {
@@ -337,13 +335,12 @@
                 const beatTime = 60 / bpm;
                 let step = 0;
                 
-                // Patrón básico de bajo: Tónica en tiempo 1 y 3.
                 backingInterval = setInterval(() => {
-                    if(step % 4 === 0) playNote('A1', beatTime * 0.8, false, 0); // Bajo
-                    if(step % 2 === 1) playClick(false); // Hi-hat simulado
+                    if(step % 4 === 0) playNote('A1', beatTime * 0.8, false, 0); 
+                    if(step % 2 === 1) playClick(false); 
                     if(step % 4 === 2) playNote('A1', beatTime * 0.4, false, 0);
                     step++;
-                }, beatTime * 500); // 8ths notes interval
+                }, beatTime * 500);
             }
 
             function stopBackingTrack() {
@@ -359,8 +356,8 @@
          * DATA STATE & STORAGE
          * ============================================================ */
         let appState = {
-            unlocked: [1], // Módulos disponibles. El 1 siempre lo está.
-            completed: []  // Módulos superados con cuestionario.
+            unlocked: [1], 
+            completed: []  
         };
 
         function loadState() {
@@ -389,24 +386,20 @@
         }
 
         /* ============================================================
-         * SVG GENERATORS
+         * SVG GENERATORS (Ahorran 1200 líneas de código manual)
          * ============================================================ */
         function drawFretboard(strings, frets, dots, width=600, height=200) {
             let svg = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-auto bg-fretboard rounded-lg shadow-inner my-4">`;
             const fretSpacing = width / frets;
             const stringSpacing = height / (strings + 1);
 
-            // Trastes (verticales)
             for (let i = 1; i <= frets; i++) {
                 const x = i * fretSpacing;
                 svg += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="#A0A0A0" stroke-width="3"/>`;
-                // Número de traste abajo
                 svg += `<text x="${x - fretSpacing/2}" y="${height - 5}" fill="#FFF" font-size="12" text-anchor="middle" opacity="0.6">${i}</text>`;
             }
-            // Cejuela (Nut)
             svg += `<line x1="2" y1="0" x2="2" y2="${height}" stroke="#DDD" stroke-width="6"/>`;
 
-            // Inlays (Marcadores)
             const standardDots = [3, 5, 7, 9, 15, 17, 19];
             for (let i = 1; i <= frets; i++) {
                 const x = (i * fretSpacing) - (fretSpacing / 2);
@@ -419,16 +412,14 @@
                 }
             }
 
-            // Cuerdas (horizontales)
             const stringNames = ['e', 'B', 'G', 'D', 'A', 'E'];
             for (let i = 1; i <= strings; i++) {
                 const y = i * stringSpacing;
-                const sw = 1 + (i * 0.4); // Cuerdas graves más gruesas
+                const sw = 1 + (i * 0.4); 
                 svg += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#DDD" stroke-width="${sw}"/>`;
                 svg += `<text x="10" y="${y - 4}" fill="#FF5722" font-size="12" font-weight="bold">${stringNames[i-1]}</text>`;
             }
 
-            // Puntos de los dedos (dots array)
             dots.forEach(d => {
                 const x = (d.fret * fretSpacing) - (fretSpacing / 2);
                 const y = d.string * stringSpacing;
@@ -442,7 +433,6 @@
         }
 
         function drawChordBox(chordName, frets, stringsStatus, width=150, height=180) {
-            // stringsStatus: array de 6 [E, A, D, G, B, e]. Ej: ['X', 3, 2, 0, 1, 0]
             let svg = `<div class="inline-block text-center m-2"><svg viewBox="0 0 ${width} ${height}" class="w-32 h-auto">`;
             const startX = 30; const startY = 40;
             const w = 90; const h = 120;
@@ -450,11 +440,9 @@
 
             svg += `<text x="${width/2}" y="20" fill="#FFF" font-size="18" font-weight="bold" text-anchor="middle">${chordName}</text>`;
             
-            // Grid
             for (let i = 0; i <= 5; i++) {
                 svg += `<line x1="${startX + i*strSpace}" y1="${startY}" x2="${startX + i*strSpace}" y2="${startY + h}" stroke="#888" stroke-width="2"/>`;
             }
-            // Cejuela
             svg += `<line x1="${startX}" y1="${startY}" x2="${startX + w}" y2="${startY}" stroke="#FFF" stroke-width="6"/>`;
             for (let i = 1; i <= 4; i++) {
                 svg += `<line x1="${startX}" y1="${startY + i*fretSpace}" x2="${startX + w}" y2="${startY + i*fretSpace}" stroke="#888" stroke-width="2"/>`;
@@ -468,7 +456,6 @@
                     svg += `<circle cx="${x}" cy="${startY - 14}" r="4" fill="none" stroke="#FFF" stroke-width="2"/>`;
                 } else if (val > 0) {
                     const y = startY + (val * fretSpace) - (fretSpace / 2);
-                    // Suponemos que la tónica es el primer número que no es X ni 0 buscando de izquierda a derecha. Simplificación visual.
                     svg += `<circle cx="${x}" cy="${y}" r="8" fill="#FF5722"/>`;
                 }
             });
@@ -478,7 +465,7 @@
         }
 
         /* ============================================================
-         * MODULES DATA (8 EXTENSIVE MODULES WITH QUIZZES)
+         * MODULES DATA (8 EXTENSIVE MODULES)
          * ============================================================ */
         const modules = [
             {
@@ -672,7 +659,7 @@ D|---------------------------------|
                     ${drawFretboard(6, 10, [
                         { string: 3, fret: 5, root: false, label: '1' }, 
                         { string: 3, fret: 7, root: false, label: '3' },
-                        { string: 3, fret: 8, root: true, label: 'Bl' }, /* Blue note en rojo */
+                        { string: 3, fret: 8, root: true, label: 'Bl' },
                     ], 600, 100)}
 
                     <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
@@ -832,8 +819,8 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 {note:'G2', dur:0.5}, {note:'E2', dur:0.5}, {note:'G#2', dur:1}
             ],
             'funk': [
-                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, // Golpe real
-                {note:null, dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, // Muteos (silencios percusivos)
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, 
+                {note:null, dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, 
                 {note:['D3','F#3','C4','E4','F#4'], dur:0.25},
                 {note:null, dur:0.25}, 
                 {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}
@@ -879,7 +866,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
             
             let htmlContent = `<p class="text-xl font-light text-gray-400 mb-8 border-b border-gray-800 pb-4">${mod.description}</p>${mod.content}`;
             
-            // Check completed status
             const isCompleted = appState.completed.includes(id);
             if (isCompleted) {
                 htmlContent += `
@@ -890,7 +876,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                         ${id < modules.length ? `<button class="mt-4 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full btn-next" data-next="${id+1}">Ir a la siguiente lección ➔</button>` : `<p class="mt-4 font-bold text-accent">¡Has completado el curso RiffMaster al 100%!</p>`}
                     </div>`;
             } else {
-                // Render Quiz
                 htmlContent += `
                     <div class="mt-12 bg-gray-800/80 p-6 md:p-8 rounded-2xl border border-gray-700 shadow-xl" id="quiz-container">
                         <div class="flex items-center text-accent mb-4">
@@ -923,7 +908,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
             document.getElementById('module-content').innerHTML = htmlContent;
             renderSidebar();
             
-            // Re-bind events in dynamic content
             document.querySelectorAll('.btn-play-riff').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const rId = e.currentTarget.getAttribute('data-riff');
@@ -954,7 +938,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                     });
 
                     if (allCorrect) {
-                        // Success Logic
                         if (!appState.completed.includes(id)) appState.completed.push(id);
                         if (id < modules.length && !appState.unlocked.includes(id + 1)) {
                             appState.unlocked.push(id + 1);
@@ -969,7 +952,7 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                             </div>
                         `;
                         setTimeout(() => {
-                            loadModuleUI(id); // Reload to show green success state
+                            loadModuleUI(id); 
                             document.getElementById('main-scroll').scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
                         }, 1500);
 
@@ -988,7 +971,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
             renderSidebar();
             loadModuleUI(currentModuleId);
 
-            // Tuner Buttons
             document.querySelectorAll('.tune-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const note = e.target.getAttribute('data-note');
@@ -996,7 +978,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 });
             });
 
-            // Metronome Logic
             const btnMetro = document.getElementById('btn-metro-toggle');
             const iconMetro = document.getElementById('icon-metro');
             const ledMetro = document.getElementById('metro-led');
@@ -1031,7 +1012,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 }
             });
 
-            // Settings Modal & Backup Logic
             const modalSet = document.getElementById('modal-settings');
             const modalContent = document.getElementById('modal-settings-content');
             
@@ -1053,7 +1033,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 }, 300);
             });
 
-            // Backup Export (iOS Compatible via share)
             document.getElementById('btn-backup').addEventListener('click', async () => {
                 const dataStr = JSON.stringify(appState);
                 const file = new File([dataStr], "riffmaster_backup.json", {type: "application/json"});
@@ -1067,7 +1046,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                         });
                     } catch (error) { console.log('Share canceled or failed'); }
                 } else {
-                    // Fallback para escritorio
                     const url = URL.createObjectURL(file);
                     const a = document.createElement('a');
                     a.href = url;
@@ -1079,7 +1057,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 }
             });
 
-            // Restore Import
             document.getElementById('file-restore').addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -1100,7 +1077,6 @@ D|-6--x-x-x--6--x--6-6--x-x-|
                 reader.readAsText(file);
             });
 
-            // Reset Data
             document.getElementById('btn-reset-data').addEventListener('click', () => {
                 if(confirm("¿Estás seguro de que deseas borrar TODO tu progreso? Esta acción no se puede deshacer.")) {
                     appState = { unlocked: [1], completed: [] };
