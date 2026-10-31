@@ -1,1286 +1,1116 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>RiffMaster - Curso de Guitarra Eléctrica</title>
-  
-  <!-- Configuraciones para Web App en iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="RiffMaster">
-  
-  <!-- Enlaces al icono en la raíz del repositorio -->
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>RiffMaster - Curso de Guitarra</title>
+    
+    <!-- Iconos para iOS y Web App -->
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" href="icon.png">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons CDN -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            amber: { 450: '#ff9214', 550: '#ea6505' },
-            amp: {
-              900: '#121214', 850: '#18181c', 800: '#222228',
-              700: '#2d2d35', 600: '#3f3f4a', amber: '#f59e0b', glow: '#ff7700'
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#121212',
+                        panel: '#1E1E1E',
+                        accent: '#FF5722',
+                        accentHover: '#E64A19',
+                        fretboard: '#3E2723',
+                    }
+                }
             }
-          },
-          fontFamily: {
-            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-          }
         }
-      }
-    }
-  </script>
-  <style>
-    body {
-      -webkit-tap-highlight-color: transparent;
-    }
-    .grill-pattern {
-      background-color: #121214;
-      background-image: radial-gradient(#222228 1px, transparent 1px);
-      background-size: 8px 8px;
-    }
-    .amber-glow { box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.35); }
-    .amber-glow-sm { box-shadow: 0 0 10px -2px rgba(245, 158, 11, 0.4); }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #18181c; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f4a; border-radius: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
-    .tab-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
-    
-    /* Animación del metrónomo */
-    @keyframes pulse-led {
-      0% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
-      100% { opacity: 0.3; transform: scale(1); box-shadow: none; }
-    }
-    .led-active { animation: pulse-led 0.1s ease-out; }
-  </style>
+    </script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body { background-color: #121212; color: #E0E0E0; font-family: 'Inter', sans-serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1E1E1E; }
+        ::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF5722; }
+
+        .tab-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
+        .glass { background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(10px); }
+        
+        .locked-module {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+
+        .led-indicator {
+            width: 12px; height: 12px; border-radius: 50%;
+            display: inline-block; transition: all 0.1s ease;
+            box-shadow: 0 0 5px currentColor;
+        }
+        .led-off { background-color: #333; color: #333; box-shadow: none; }
+        .led-on { background-color: #FF5722; color: #FF5722; box-shadow: 0 0 10px #FF5722; }
+
+        /* Modal transitions */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
+        
+        input[type=range] {
+            accent-color: #FF5722;
+        }
+    </style>
 </head>
-<body class="bg-amp-900 text-gray-200 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+<body class="h-screen flex overflow-hidden selection:bg-accent selection:text-white">
 
-  <!-- Header Superior -->
-  <header class="border-b border-amp-700 bg-amp-850/90 backdrop-blur sticky top-0 z-40 px-4 py-3 flex items-center justify-between shadow-lg">
-    <div class="flex items-center gap-3">
-      <button id="toggle-sidebar" class="lg:hidden p-2 rounded-lg bg-amp-700 hover:bg-amp-600 text-amber-400 focus:outline-none transition">
-        <i class="ph-bold ph-list text-xl pointer-events-none"></i>
-      </button>
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-amp-900 font-black shadow-md shadow-amber-500/20">
-          <i class="ph-fill ph-lightning text-2xl"></i>
-        </div>
-        <div>
-          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            RiffMaster <span class="text-[10px] uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">Sin Solfeo</span>
-          </h1>
-        </div>
-      </div>
-    </div>
-
-    <!-- Controles de Utilidad en el Header -->
-    <div class="flex items-center gap-2 sm:gap-4">
-      <div class="hidden sm:flex flex-col items-end gap-1 mr-2">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="text-gray-400">Progreso:</span>
-          <span id="global-progress-text" class="font-bold text-amber-400">0%</span>
-        </div>
-        <div class="w-32 h-1.5 bg-amp-700 rounded-full overflow-hidden">
-          <div id="global-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all w-0"></div>
-        </div>
-      </div>
-
-      <!-- Botón Afinador -->
-      <button id="btn-tuner-modal" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-amp-800 hover:bg-amp-700 border border-amp-600 text-amber-400 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" aria-label="Afinador">
-        <i class="ph-bold ph-waveform text-lg sm:text-base pointer-events-none"></i>
-        <span class="hidden md:inline pointer-events-none">Afinador</span>
-      </button>
-
-      <!-- Botón Configuración / Engranaje -->
-      <button id="btn-settings-modal" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-gradient-to-r from-amp-700 to-amp-800 hover:from-amp-600 hover:to-amp-700 border border-amp-600 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" aria-label="Configuración">
-        <i class="ph-bold ph-gear text-lg sm:text-base text-amber-400 pointer-events-none"></i>
-        <span class="hidden sm:inline pointer-events-none">Sistema</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Layout Principal -->
-  <div class="flex-1 flex overflow-hidden relative">
-    
     <!-- Sidebar / Navegación -->
-    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-72 sm:w-80 bg-amp-850 border-r border-amp-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col pt-16 lg:pt-0">
-      <div class="p-4 border-b border-amp-700 flex items-center justify-between bg-amp-900/50">
-        <h2 class="text-xs uppercase tracking-wider font-bold text-gray-400">Temario del Curso</h2>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-amp-700 text-amber-300 font-mono" id="completed-count">0/5</span>
-      </div>
-
-      <nav class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2" id="modules-list">
-        <!-- Renderizado dinámico de los módulos -->
-      </nav>
-
-      <!-- Metrónomo en el Sidebar -->
-      <div class="p-3 bg-amp-800/80 border-t border-amp-700 backdrop-blur">
-        <div class="bg-amp-900/90 rounded-xl p-3 border border-amp-700/70 shadow-inner">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
-              <i class="ph-bold ph-timer text-amber-400"></i> Metrónomo
-            </span>
-            <span id="metro-bpm-display" class="font-mono text-sm font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">90 BPM</span>
-          </div>
-          <div class="flex items-center gap-2 mb-3">
-            <input type="range" id="metro-bpm" min="40" max="200" value="90" class="w-full h-1.5 bg-amp-700 rounded-lg appearance-none cursor-pointer accent-amber-500 outline-none focus:ring-2 focus:ring-amber-500/50">
-          </div>
-          <div class="flex items-center gap-2">
-            <button id="metro-toggle" class="flex-1 py-2 rounded-lg bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200">
-              <i class="ph-fill ph-play pointer-events-none" id="metro-icon"></i> <span id="metro-btn-text" class="pointer-events-none">Iniciar</span>
-            </button>
-            <div class="w-8 h-8 rounded-lg bg-amp-800 border border-amp-700 flex items-center justify-center">
-              <div id="metro-led" class="w-3.5 h-3.5 rounded-full bg-amp-600 transition-colors duration-75"></div>
+    <aside class="w-20 md:w-64 glass border-r border-gray-800 flex flex-col justify-between z-20">
+        <div>
+            <div class="h-16 flex items-center justify-center md:justify-start md:px-6 border-b border-gray-800">
+                <i class="ph ph-guitar text-accent text-3xl"></i>
+                <span class="ml-3 font-bold text-xl hidden md:block text-white">RiffMaster</span>
             </div>
-          </div>
+            
+            <nav class="p-2 space-y-2 mt-4" id="nav-modules">
+                <!-- Modules injected here -->
+            </nav>
         </div>
-      </div>
+
+        <div class="p-4 border-t border-gray-800 space-y-4">
+            <!-- Tuner -->
+            <div class="bg-gray-900 p-3 rounded-xl text-center hidden md:block">
+                <h4 class="text-xs text-gray-400 mb-2 uppercase font-bold tracking-wider">Afinador</h4>
+                <div class="flex justify-between">
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="E2">E</button>
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="A2">A</button>
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="D3">D</button>
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="G3">G</button>
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="B3">B</button>
+                    <button class="tune-btn text-sm font-bold text-gray-300 hover:text-accent" data-note="E4">E</button>
+                </div>
+            </div>
+
+            <!-- Metronome -->
+            <div class="bg-gray-900 p-3 rounded-xl hidden md:block">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-xs text-gray-400 uppercase font-bold tracking-wider">Metrónomo</h4>
+                    <div id="metro-led" class="led-indicator led-off"></div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="btn-metro-toggle" class="p-2 bg-gray-800 hover:bg-accent rounded-lg transition-colors">
+                        <i class="ph ph-play" id="icon-metro"></i>
+                    </button>
+                    <input type="range" id="bpm-slider" min="50" max="180" value="90" class="w-full">
+                    <span id="bpm-display" class="text-xs font-bold w-8 text-right">90</span>
+                </div>
+            </div>
+
+            <!-- System Settings -->
+            <button id="btn-settings" class="w-full p-3 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center justify-center md:justify-start transition-colors">
+                <i class="ph ph-gear text-xl"></i>
+                <span class="ml-3 hidden md:block text-sm font-bold">Sistema</span>
+            </button>
+        </div>
     </aside>
 
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-20 hidden lg:hidden backdrop-blur-sm"></div>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full bg-dark relative overflow-y-auto scroll-smooth" id="main-scroll">
+        <!-- Header con Progreso -->
+        <header class="h-16 glass sticky top-0 border-b border-gray-800 flex items-center justify-between px-6 z-10">
+            <h2 id="header-title" class="font-bold text-lg md:text-xl text-white">Cargando...</h2>
+            <div class="flex items-center space-x-4 w-1/3 justify-end">
+                <span id="progress-text" class="text-xs font-bold text-gray-400">0%</span>
+                <div class="w-24 md:w-48 bg-gray-800 rounded-full h-2">
+                    <div id="progress-bar" class="bg-accent h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
 
-    <!-- Área de Contenido Principal -->
-    <main class="flex-1 overflow-y-auto custom-scrollbar grill-pattern p-4 sm:p-6 lg:p-8 flex justify-center scroll-smooth" id="main-content-scroll">
-      <div class="max-w-4xl w-full space-y-6 sm:space-y-8 pb-20" id="lesson-container">
-        <!-- El contenido del curso se inyecta aquí dinámicamente -->
-      </div>
+        <div class="p-6 md:p-10 max-w-4xl mx-auto w-full pb-32" id="module-content">
+            <!-- Content injected here -->
+        </div>
     </main>
-  </div>
 
-  <!-- ========================================== -->
-  <!-- MODALES DE LA APLICACIÓN                   -->
-  <!-- ========================================== -->
-
-  <!-- MODAL: Afinador por Oído -->
-  <div id="tuner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
-    <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-      <button class="btn-close-modal absolute top-4 right-4 text-gray-400 hover:text-white text-xl transition-colors" data-target="tuner-modal">
-        <i class="ph-bold ph-x pointer-events-none"></i>
-      </button>
-      <div class="flex items-center gap-3 mb-4">
-        <div class="p-2.5 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-amp-900 shadow-md">
-          <i class="ph-bold ph-waveform text-2xl"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-white tracking-wide">Afinador por Oído</h3>
-          <p class="text-xs text-amber-400 font-mono mt-0.5">Estándar: E A D G B E</p>
-        </div>
-      </div>
-      <p class="text-sm text-gray-300 mb-5 leading-relaxed bg-amp-800 p-3 rounded-lg border border-amp-700">
-        Toca cada botón para reproducir el tono exacto. Gira la clavija de tu guitarra hasta que el sonido de tu cuerda coincida con el que escuchas.
-      </p>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="E2">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">6ª (Gruesa)</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">E</span>
-          <span class="text-xs text-gray-500 pointer-events-none">Mi Grave</span>
-        </button>
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="A2">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">5ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">A</span>
-          <span class="text-xs text-gray-500 pointer-events-none">La</span>
-        </button>
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="D3">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">4ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">D</span>
-          <span class="text-xs text-gray-500 pointer-events-none">Re</span>
-        </button>
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="G3">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">3ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">G</span>
-          <span class="text-xs text-gray-500 pointer-events-none">Sol</span>
-        </button>
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="B3">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">2ª Cuerda</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">B</span>
-          <span class="text-xs text-gray-500 pointer-events-none">Si</span>
-        </button>
-        <button class="play-note-btn p-4 bg-amp-800 hover:bg-amp-700 border border-amp-700 hover:border-amber-500/70 rounded-xl flex flex-col items-center gap-1.5 transition group shadow-sm hover:shadow-amber-500/20" data-note="E4">
-          <span class="text-[10px] text-gray-400 uppercase tracking-widest group-hover:text-gray-300 pointer-events-none">1ª (Fina)</span>
-          <span class="text-xl font-mono font-black text-amber-400 pointer-events-none">E</span>
-          <span class="text-xs text-gray-500 pointer-events-none">Mi Agudo</span>
-        </button>
-      </div>
-      <div class="flex justify-end">
-        <button class="btn-close-modal px-5 py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm font-bold text-white transition-colors" data-target="tuner-modal">Cerrar Afinador</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: Configuración / Sistema v1.4.0 -->
-  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
-    <div class="bg-amp-850 border border-amp-600 rounded-2xl max-w-md w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="p-5 border-b border-amp-700 flex justify-between items-center bg-amp-900/80">
-        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-          <i class="ph-bold ph-gear text-amber-400"></i> Sistema & Configuración
-        </h3>
-        <button class="btn-close-modal text-gray-400 hover:text-white text-xl transition-colors" data-target="settings-modal">
-          <i class="ph-bold ph-x pointer-events-none"></i>
-        </button>
-      </div>
-      
-      <div class="p-5 overflow-y-auto space-y-6 custom-scrollbar">
-        <!-- Update System -->
-        <div>
-          <h4 class="text-xs font-bold text-amber-400 uppercase mb-3 tracking-widest flex items-center gap-1.5"><i class="ph-bold ph-cloud-arrow-down"></i> Versión del Curso</h4>
-          <div class="bg-amp-800 border border-amp-700 rounded-xl p-4 flex flex-col gap-3 shadow-inner">
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-gray-300 font-medium">Versión Instalada:</span>
-              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.5.0</span>
+    <!-- Settings Modal -->
+    <div id="modal-settings" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-panel border border-gray-700 rounded-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 shadow-2xl" id="modal-settings-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white flex items-center">
+                    <i class="ph ph-gear text-accent mr-2"></i> Configuración
+                </h3>
+                <button id="btn-close-settings" class="text-gray-400 hover:text-white p-1">
+                    <i class="ph ph-x text-xl"></i>
+                </button>
             </div>
-            <button id="btn-check-update" class="w-full py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm text-white font-bold flex items-center justify-center gap-2 transition-all">
-              <i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones
-            </button>
-          </div>
-        </div>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider mb-2">Acerca de</p>
+                    <p class="text-white font-medium">RiffMaster App <span class="text-accent text-sm ml-2">v1.6.0 (iOS Ready)</span></p>
+                    <p class="text-xs text-gray-500 mt-1">Motor de Audio: Web Audio API (Buffered + AudioSession)</p>
+                </div>
 
-        <!-- Backup & Restore -->
-        <div>
-          <h4 class="text-xs font-bold text-amber-400 uppercase mb-3 tracking-widest flex items-center gap-1.5"><i class="ph-bold ph-floppy-disk"></i> Gestión de Progreso</h4>
-          <p class="text-xs text-gray-400 mb-4 leading-relaxed bg-amp-900/50 p-3 rounded-lg border border-amp-800">
-            Exporta tu progreso a un archivo seguro. En iOS, se abrirá la hoja para guardar en Archivos (iCloud) o compartir.
-          </p>
-          
-          <div class="space-y-3">
-            <button id="btn-export-backup" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-amber-500/25 transition-all">
-              <i class="ph-bold ph-export text-lg pointer-events-none"></i> Generar Backup JSON
-            </button>
-
-            <div class="relative group">
-              <input type="file" id="input-restore" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" aria-label="Restaurar backup">
-              <button class="w-full py-3 bg-amp-800 border border-amp-600 group-hover:bg-amp-700 group-hover:border-amp-500 text-gray-200 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-sm pointer-events-none">
-                <i class="ph-bold ph-download-simple text-lg"></i> Restaurar desde JSON
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="pt-4 border-t border-amp-700 text-center">
-           <p class="text-[10px] text-gray-500 font-mono">RiffMaster App - 100% Autocontenida offline.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[60] translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-amp-800 border-2 border-amber-500 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 w-max max-w-[90vw]">
-    <i class="ph-fill ph-info text-amber-400 text-2xl" id="toast-icon"></i>
-    <span id="toast-msg" class="text-sm font-bold tracking-wide">Mensaje</span>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT PRINCIPAL                       -->
-  <!-- ========================================== -->
-  <script>
-    /* ============================================================
-     * 1. GLOBALES Y MODALES (UI GENERAL)
-     * ============================================================ */
-    let practiceTimerInt = null;
-    window.Riffs = []; 
-    const focusTrapInstances = {};
-
-    function trapFocus(modalEl) {
-      const focusableEls = modalEl.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, details, [tabindex]:not([tabindex="-1"])');
-      if(focusableEls.length === 0) return;
-      const first = focusableEls[0], last = focusableEls[focusableEls.length - 1];
-      
-      const handler = function(e) {
-        if (e.key === 'Tab' || e.keyCode === 9) {
-          if (e.shiftKey) {
-            if (document.activeElement === first) { last.focus(); e.preventDefault(); }
-          } else {
-            if (document.activeElement === last) { first.focus(); e.preventDefault(); }
-          }
-        }
-      };
-      modalEl.addEventListener('keydown', handler);
-      focusTrapInstances[modalEl.id] = handler;
-      first.focus();
-    }
-
-    function untrapFocus(modalEl) {
-      const handler = focusTrapInstances[modalEl.id];
-      if(handler) {
-        modalEl.removeEventListener('keydown', handler);
-        delete focusTrapInstances[modalEl.id];
-      }
-    }
-
-    function openModal(id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      void modal.offsetWidth; 
-      modal.classList.remove('opacity-0');
-      trapFocus(modal);
-    }
-
-    function closeModal(id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      modal.classList.add('opacity-0');
-      untrapFocus(modal);
-      setTimeout(() => { modal.classList.remove('flex'); modal.classList.add('hidden'); }, 300);
-    }
-
-    document.getElementById('btn-tuner-modal').addEventListener('click', () => openModal('tuner-modal'));
-    document.getElementById('btn-settings-modal').addEventListener('click', () => openModal('settings-modal'));
-    
-    document.getElementById("toggle-sidebar").addEventListener('click', () => {
-      document.getElementById("sidebar").classList.remove("-translate-x-full");
-      document.getElementById("sidebar-backdrop").classList.remove("hidden");
-    });
-    document.getElementById("sidebar-backdrop").addEventListener('click', () => {
-      document.getElementById("sidebar").classList.add("-translate-x-full");
-      document.getElementById("sidebar-backdrop").classList.add("hidden");
-    });
-
-    /* ============================================================
-     * 2. AUDIO ENGINE & iOS ROBUST UNLOCK (v1.5.0 FIX)
-     * ============================================================ */
-    const AudioEngine = (() => {
-      let ctx = null;
-      let isUnlocked = false;
-
-      function getContext() {
-        if (!ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          ctx = new AudioContext();
-        }
-        return ctx;
-      }
-
-      function unlockAudio() {
-        const audioCtx = getContext();
-        
-        // 1. Forzar la reanudación del contexto (debe ser síncrono)
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-
-        // 2. SOLUCIÓN AL INTERRUPTOR DE SILENCIO: Enrutar al canal de medios (iOS 17+)
-        try {
-          const nav = navigator;
-          if (nav.audioSession) {
-            nav.audioSession.type = 'playback';
-          }
-        } catch (e) { /* Navegadores no compatibles */ }
-
-        // 3. Truco de desbloqueo con buffer silencioso (solo se ejecuta una vez)
-        if (isUnlocked) return;
-        const buffer = audioCtx.createBuffer(1, 1, 22050);
-        const source = audioCtx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioCtx.destination);
-        source.start(0);
-
-        isUnlocked = true;
-      }
-
-      // Llama a unlockAudio en CADA gesto, no solo la primera vez
-      ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
-          document.addEventListener(evt, unlockAudio, { capture: true });
-      });
-
-      const noteFreqs = {
-        'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'A#2': 116.54, 'B2': 123.47,
-        'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00,
-        'G#3': 207.65, 'A3': 220.00, 'A#3': 233.08, 'B3': 246.94, 'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
-        'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25
-      };
-
-      function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
-        const audioCtx = getContext();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        
-        const startTime = audioCtx.currentTime + timeOffset + 0.05; 
-        const safeDuration = Math.max(duration, 0.05);
-        const freq = noteFreqs[noteName] || 220;
-
-        const osc = audioCtx.createOscillator();
-        osc.type = isDistorted ? 'sawtooth' : 'triangle';
-        osc.frequency.setValueAtTime(freq, startTime);
-
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(isDistorted ? 2800 : 1600, startTime);
-        filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + safeDuration);
-
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.0001, startTime); // Inicio evitando cero absoluto
-        gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration); // Final evitando cero absoluto
-
-        osc.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        osc.start(startTime);
-        osc.stop(startTime + safeDuration);
-      }
-
-      function playChord(notes, duration = 1.5, isDistorted = false) {
-        notes.forEach((note, index) => {
-          playNote(note, duration, isDistorted, index * 0.035);
-        });
-      }
-
-      let sequenceTimeouts = [];
-      function stopCurrentSequence() {
-        sequenceTimeouts.forEach(t => clearTimeout(t));
-        sequenceTimeouts = [];
-      }
-
-      function playRiff(sequence) {
-        stopCurrentSequence();
-        let cumulativeTime = 0;
-        sequence.forEach((item) => {
-          const tId = setTimeout(() => {
-            if (Array.isArray(item.note)) {
-              playChord(item.note, item.dur || 0.5, item.drive || false);
-            } else if (item.note) {
-              playNote(item.note, item.dur || 0.4, item.drive || false);
-            }
-          }, cumulativeTime * 1000);
-          sequenceTimeouts.push(tId);
-          cumulativeTime += item.gap || 0.35;
-        });
-      }
-
-      function playClick(isAccented = false) {
-        const audioCtx = getContext();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const startTime = audioCtx.currentTime + 0.05;
-
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(isAccented ? 1200 : 800, startTime);
-        gain.gain.setValueAtTime(1, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.05);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(startTime);
-        osc.stop(startTime + 0.06);
-      }
-
-      let isBackingPlaying = false;
-      let backingInterval = null;
-      
-      function startBackingTrack(chordProgression, bpm = 100) {
-        stopBackingTrack();
-        isBackingPlaying = true;
-        const beatDurMs = (60 / bpm) * 1000;
-        let beat = 0;
-        let chordIndex = 0;
-
-        backingInterval = setInterval(() => {
-          if (!isBackingPlaying) return;
-          const ctx = getContext();
-          if (ctx.state === 'suspended') ctx.resume();
-          const now = ctx.currentTime + 0.05;
-          
-          if (beat % 2 === 0) { 
-            const kickOsc = ctx.createOscillator();
-            const kickGain = ctx.createGain();
-            kickOsc.frequency.setValueAtTime(130, now);
-            kickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
-            kickGain.gain.setValueAtTime(0.7, now);
-            kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-            kickOsc.connect(kickGain);
-            kickGain.connect(ctx.destination);
-            kickOsc.start(now);
-            kickOsc.stop(now + 0.15);
-          } else { 
-            const snareOsc = ctx.createOscillator();
-            const snareGain = ctx.createGain();
-            snareOsc.type = 'triangle';
-            snareOsc.frequency.setValueAtTime(220, now);
-            snareGain.gain.setValueAtTime(0.4, now);
-            snareGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-            snareOsc.connect(snareGain);
-            snareGain.connect(ctx.destination);
-            snareOsc.start(now);
-            snareOsc.stop(now + 0.12);
-          }
-
-          if (chordProgression && chordProgression.length > 0) {
-            playNote(chordProgression[chordIndex % chordProgression.length], beatDurMs / 1000 * 0.9, false, 0.01);
-          }
-          
-          beat++;
-          if (beat % 4 === 0) chordIndex++;
-        }, beatDurMs);
-      }
-
-      function stopBackingTrack() {
-        isBackingPlaying = false;
-        if (backingInterval) {
-          clearInterval(backingInterval);
-          backingInterval = null;
-        }
-      }
-
-      return { playNote, playChord, playRiff, playClick, stopCurrentSequence, startBackingTrack, stopBackingTrack, isBackingActive: () => isBackingPlaying };
-    })();
-
-    /* ============================================================
-     * 3. DELEGACIÓN GLOBAL DE EVENTOS (Reemplazo total de onclicks)
-     * ============================================================ */
-    document.addEventListener('click', (e) => {
-       // Cierre de Modales
-       const btnClose = e.target.closest('.btn-close-modal');
-       if (btnClose) {
-         const targetId = btnClose.getAttribute('data-target');
-         if (targetId) closeModal(targetId);
-       }
-
-       // Botones de Play Tab/Riff
-       const playBtn = e.target.closest('.play-riff-btn');
-       if(playBtn) {
-          const idx = playBtn.getAttribute('data-riff-id');
-          if (idx !== null && window.Riffs[idx]) {
-              AudioEngine.playRiff(window.Riffs[idx]);
-          }
-       }
-       
-       // Botones de Afinador
-       const noteBtn = e.target.closest('.play-note-btn');
-       if(noteBtn) {
-          const note = noteBtn.getAttribute('data-note');
-          if (note) AudioEngine.playNote(note, 2.5);
-       }
-       
-       // Navegación de módulos inferior (Siguiente/Anterior)
-       const navBtn = e.target.closest('.btn-nav');
-       if(navBtn) {
-          const target = navBtn.getAttribute('data-nav-target');
-          if (target !== null) selectModule(parseInt(target));
-       }
-    });
-
-    /* ============================================================
-     * 4. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
-     * ============================================================ */
-    const SVGVisuals = {
-      renderFretboard(dots = [], startFret = 0, numFrets = 5, title = "Diapasón") {
-        const w = 640, h = 160, fW = (w - 60) / numFrets, sGap = 22, tM = 30;
-        let fL = '', fM = '';
-        for (let i = 0; i <= numFrets; i++) {
-          const x = 50 + i * fW;
-          const cFret = startFret + i;
-          const sW = (i === 0 && startFret === 0) ? 6 : 2;
-          const sC = (i === 0 && startFret === 0) ? "#f59e0b" : "#4a4a58";
-          
-          fL += `<line x1="${x}" y1="${tM}" x2="${x}" y2="${tM + 5 * sGap}" stroke="${sC}" stroke-width="${sW}" />`;
-          
-          if (i > 0) {
-            fL += `<text x="${x - fW/2}" y="${tM + 5 * sGap + 20}" fill="#9ca3af" font-size="12" font-family="sans-serif" text-anchor="middle">Traste ${cFret}</text>`;
-            if ([3, 5, 7, 9, 15, 17].includes(cFret)) {
-              fM += `<circle cx="${x - fW/2}" cy="${tM + 2.5 * sGap}" r="5" fill="#3f3f4a" />`;
-            } else if (cFret === 12) {
-              fM += `<circle cx="${x - fW/2}" cy="${tM + 1.2 * sGap}" r="4.5" fill="#f59e0b" opacity="0.6" />
-                     <circle cx="${x - fW/2}" cy="${tM + 3.8 * sGap}" r="4.5" fill="#f59e0b" opacity="0.6" />`;
-            }
-          }
-        }
-        
-        const sN = ['e (1ª)', 'B (2ª)', 'G (3ª)', 'D (4ª)', 'A (5ª)', 'E (6ª)'];
-        let sL = '';
-        for (let s = 0; s < 6; s++) {
-          const y = tM + s * sGap, th = 1 + s * 0.6;
-          sL += `<text x="42" y="${y + 4}" fill="#d1d5db" font-size="11" font-family="sans-serif" text-anchor="end">${sN[s]}</text>
-                 <line x1="50" y1="${y}" x2="${50 + numFrets * fW}" y2="${y}" stroke="#8b949e" stroke-width="${th}" />`;
-        }
-        
-        let nD = '';
-        dots.forEach(d => {
-          const y = tM + (d.string - 1) * sGap;
-          let x = d.fret === 0 ? 35 : 50 + (d.fret - startFret) * fW - fW / 2;
-          const fill = d.root ? '#f59e0b' : '#38bdf8';
-          nD += `<g class="transition-transform hover:scale-110 cursor-pointer">
-                   <circle cx="${x}" cy="${y}" r="9" fill="${fill}" stroke="#18181c" stroke-width="2" />
-                   <text x="${x}" y="${y + 3.5}" fill="#111" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle">${d.label || (d.root?'R':'•')}</text>
-                 </g>`;
-        });
-        
-        return `
-          <div class="my-5 p-4 bg-amp-850 rounded-xl border border-amp-700 overflow-x-auto shadow-inner">
-            <div class="mb-3 flex items-center gap-2">
-              <i class="ph-bold ph-guitar text-amber-400"></i>
-              <span class="text-xs font-bold text-gray-200 uppercase tracking-wider">${title}</span>
-            </div>
-            <svg viewBox="0 0 ${w} ${h}" class="w-full min-w-[550px] select-none">
-              <rect x="50" y="${tM}" width="${numFrets * fW}" height="${5 * sGap}" fill="#1c1c22" rx="4" />
-              ${fM}${fL}${sL}${nD}
-            </svg>
-          </div>`;
-      },
-      
-      renderChordBox(name, frets, fingers = [], rootNote = "") {
-        const svgW = 160, svgH = 200, stX = 35, stY = 45, w = 90, h = 120, cW = w / 5, rH = h / 4;
-        let grid = '';
-        
-        for (let i = 0; i <= 5; i++) {
-          grid += `<line x1="${stX + i * cW}" y1="${stY}" x2="${stX + i * cW}" y2="${stY + h}" stroke="#52525e" stroke-width="2" />`;
-        }
-        for (let j = 0; j <= 4; j++) {
-          const isNut = j === 0;
-          grid += `<line x1="${stX}" y1="${stY + j * rH}" x2="${stX + w}" y2="${stY + j * rH}" stroke="${isNut ? '#f59e0b' : '#3f3f4a'}" stroke-width="${isNut ? 5 : 2}" />`;
-        }
-        
-        let marks = '';
-        frets.forEach((fret, i) => {
-          const x = stX + i * cW;
-          if (fret === -1) {
-             marks += `<text x="${x}" y="${stY - 10}" fill="#ef4444" font-size="14" font-family="sans-serif" font-weight="bold" text-anchor="middle">X</text>`;
-          } else if (fret === 0) {
-             marks += `<circle cx="${x}" cy="${stY - 14}" r="5" fill="none" stroke="#22c55e" stroke-width="2" />`;
-          } else {
-             const y = stY + (fret - 0.5) * rH;
-             marks += `
-               <circle cx="${x}" cy="${y}" r="8" fill="#38bdf8" />
-               <text x="${x}" y="${y + 4}" fill="#111" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">${fingers[i]||''}</text>
-             `;
-          }
-        });
-        
-        return `
-          <div class="inline-flex flex-col items-center bg-amp-800 p-4 rounded-xl border border-amp-700 m-2 shadow-lg hover:border-amber-500/50 transition-colors">
-            <span class="text-lg font-black text-amber-400 mb-2 tracking-tight">${name}</span>
-            <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
-              <text x="${svgW/2}" y="22" fill="#9ca3af" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">E A D G B E</text>
-              ${grid}${marks}
-            </svg>
-            <span class="text-[10px] text-gray-400 mt-2 bg-amp-900 px-2 py-1 rounded">${rootNote || 'Acorde Abierto'}</span>
-          </div>`;
-      },
-      
-      renderTab(tabLines, riffId = null) {
-        return `
-          <div class="my-5 bg-amp-900 rounded-xl border border-amp-700 p-4 sm:p-5 relative shadow-inner">
-            <div class="flex items-center justify-between pb-3 mb-3 border-b border-amp-800">
-              <span class="text-xs uppercase font-mono tracking-widest text-amber-500 font-bold flex items-center gap-2"><i class="ph-bold ph-music-notes text-base"></i> Tablatura</span>
-              ${riffId !== null ? `<button class="play-riff-btn px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-amp-900 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5" data-riff-id="${riffId}"><i class="ph-fill ph-play pointer-events-none"></i> Escuchar Tab</button>` : ''}
-            </div>
-            <pre class="tab-font text-blue-300 text-[10px] sm:text-xs overflow-x-auto py-2 leading-relaxed whitespace-pre font-bold">${tabLines.join('\n')}</pre>
-          </div>`;
-      }
-    };
-
-    /* ============================================================
-     * 5. BASE DE DATOS DEL CURSO COMPLETAMENTE DETALLADA (LOS 5 MÓDULOS)
-     * ============================================================ */
-    const CourseData = [
-      {
-        id: "mod-1", number: 1, title: "Fundamentos & Riffs Base", summary: "Postura correcta, técnica de púa alternada y cómo leer tablaturas en 60 segundos.",
-        quote: { text: "La guitarra es un instrumento fácil de empezar a tocar, pero requiere una vida entera de maestría.", author: "B.B. King" },
-        sections: [
-          {
-            title: "1. Leer Tablatura (TAB) en 60 segundos",
-            content: `<p class="mb-4 text-sm text-gray-300 leading-relaxed">Olvídate de las partituras clásicas. Los guitarristas de rock usamos <strong>Tablaturas (TAB)</strong>. Es un mapa visual de tu mástil.</p>
-                      <ul class="list-disc pl-5 text-sm text-gray-300 space-y-2 mb-4">
-                        <li>Ves 6 líneas horizontales. Cada línea representa una cuerda de tu guitarra.</li>
-                        <li>La línea de <strong>ARRIBA</strong> es la 1ª cuerda (la más fina, la que está abajo hacia el suelo en tu guitarra).</li>
-                        <li>La línea de <strong>ABAJO</strong> es la 6ª cuerda (la más gruesa, la que miras desde arriba).</li>
-                        <li>Los números indican el <strong>traste</strong> que debes pisar. Si ves un <code>0</code>, significa tocar esa cuerda "al aire" (sin pisar ningún traste).</li>
-                      </ul>
-                      <p class="text-sm text-amber-400 font-bold bg-amber-500/10 p-3 rounded border border-amber-500/20">Regla de oro: Pisa la cuerda justo detrás del traste de metal (no encima de él) para que suene limpio y sin zumbidos.</p>`,
-            fretboard: { dots: [{string:6,fret:0,label:"0"},{string:6,fret:3,label:"3"},{string:6,fret:5,label:"5"}], startFret:0, fretsCount:5, title:"Ejemplo de notas en la 6ª Cuerda" }
-          },
-          {
-            title: "2. La Púa Alternada (Alternate Picking)",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">Si quieres tocar rápido, no puedes golpear las cuerdas solo hacia abajo. Debes alternar: un golpe hacia abajo, el siguiente hacia arriba. Es como caminar, un pie después del otro.</p>
-                      <div class="grid grid-cols-2 gap-4 text-center mt-4">
-                        <div class="bg-amp-800 p-3 rounded-lg border border-amp-700">
-                          <span class="text-2xl font-black text-amber-400">⊓</span>
-                          <p class="text-xs text-gray-400 mt-1 uppercase">Púa Abajo</p>
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider mb-3">Control de Datos</p>
+                    
+                    <button id="btn-backup" class="w-full mb-3 bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center transition-colors">
+                        <i class="ph ph-export mr-2"></i> Crear Copia de Seguridad (Exportar)
+                    </button>
+                    
+                    <div class="relative w-full">
+                        <input type="file" id="file-restore" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <div class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center transition-colors pointer-events-none">
+                            <i class="ph ph-import mr-2"></i> Restaurar Progreso
                         </div>
-                        <div class="bg-amp-800 p-3 rounded-lg border border-amp-700">
-                          <span class="text-2xl font-black text-blue-400">∨</span>
-                          <p class="text-xs text-gray-400 mt-1 uppercase">Púa Arriba</p>
+                    </div>
+                    <p id="restore-msg" class="text-xs text-green-400 mt-2 hidden text-center">¡Progreso restaurado con éxito!</p>
+                </div>
+                
+                <div class="bg-red-900/20 p-4 rounded-xl border border-red-900/50">
+                    <button id="btn-reset-data" class="w-full text-red-400 hover:text-red-300 font-medium text-sm flex items-center justify-center transition-colors">
+                        <i class="ph ph-warning mr-2"></i> Borrar Todo el Progreso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO ENGINE & LOGIC -->
+    <script>
+        /* ============================================================
+         * AUDIO ENGINE & iOS ROBUST UNLOCK (v1.6.0 FIX)
+         * ============================================================ */
+        const AudioEngine = (() => {
+            let ctx = null;
+            let isUnlocked = false;
+            let backingOsc = null;
+            let backingInterval = null;
+            let isBackingPlaying = false;
+
+            function getContext() {
+                if (!ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    ctx = new AudioContext();
+                }
+                return ctx;
+            }
+
+            function unlockAudio() {
+                const audioCtx = getContext();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                try {
+                    const nav = navigator;
+                    if (nav.audioSession) {
+                        nav.audioSession.type = 'playback';
+                    }
+                } catch (e) { }
+
+                if (isUnlocked) return;
+                const buffer = audioCtx.createBuffer(1, 1, 22050);
+                const source = audioCtx.createBufferSource();
+                source.buffer = buffer;
+                source.connect(audioCtx.destination);
+                source.start(0);
+                isUnlocked = true;
+                console.log("AudioContext unlocked.");
+            }
+
+            ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+                document.addEventListener(evt, unlockAudio, { capture: true });
+            });
+
+            const noteFreqs = {
+                'E2': 82.41, 'F2': 87.31, 'F#2': 92.50, 'G2': 98.00, 'G#2': 103.83, 'A2': 110.00, 'Bb2': 116.54, 'B2': 123.47,
+                'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'Eb3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00, 
+                'G#3': 207.65, 'A3': 220.00, 'Bb3': 233.08, 'B3': 246.94, 'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'Eb4': 311.13, 
+                'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25, 'D5': 587.33, 'E5': 659.25
+            };
+
+            function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
+                const audioCtx = getContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const startTime = audioCtx.currentTime + timeOffset + 0.05;
+                const safeDuration = Math.max(duration, 0.05);
+                const freq = noteFreqs[noteName] || 220;
+
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                osc.type = isDistorted ? 'sawtooth' : 'triangle';
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                filter.type = 'lowpass';
+                filter.frequency.value = isDistorted ? 4000 : 2000;
+
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
+                // Uso de 0.0001 para evitar el bug de WebKit en iOS al decaer a 0
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + safeDuration);
+
+                osc.connect(filter);
+                
+                if (isDistorted) {
+                    const waveShaper = audioCtx.createWaveShaper();
+                    waveShaper.curve = makeDistortionCurve(40);
+                    filter.connect(waveShaper);
+                    waveShaper.connect(gainNode);
+                } else {
+                    filter.connect(gainNode);
+                }
+
+                gainNode.connect(audioCtx.destination);
+                osc.start(startTime);
+                osc.stop(startTime + safeDuration);
+            }
+
+            function makeDistortionCurve(amount) {
+                const k = typeof amount === 'number' ? amount : 50;
+                const n_samples = 44100;
+                const curve = new Float32Array(n_samples);
+                const deg = Math.PI / 180;
+                for (let i = 0; i < n_samples; ++i) {
+                    const x = i * 2 / n_samples - 1;
+                    curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+                }
+                return curve;
+            }
+
+            function playClick(isHigh = false) {
+                const audioCtx = getContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                const startTime = audioCtx.currentTime + 0.05;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(isHigh ? 1200 : 800, startTime);
+                osc.frequency.exponentialRampToValueAtTime(0.0001, startTime + 0.1);
+                
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.5, startTime + 0.005);
+                gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(startTime);
+                osc.stop(startTime + 0.1);
+            }
+
+            function playRiff(notes, isDistorted = true, tempo = 100) {
+                const beatDuration = 60 / tempo;
+                let currentTimeOffset = 0;
+
+                notes.forEach(noteData => {
+                    const { note, dur, pause } = noteData;
+                    if (note && note !== 'rest') {
+                        // Soporte para acordes en riffs (ej. ['E2', 'B2'])
+                        if(Array.isArray(note)) {
+                            note.forEach(n => playNote(n, dur * beatDuration, isDistorted, currentTimeOffset));
+                        } else {
+                            playNote(note, dur * beatDuration, isDistorted, currentTimeOffset);
+                        }
+                    }
+                    currentTimeOffset += (dur + (pause || 0)) * beatDuration;
+                });
+            }
+
+            function playChord(notes, isDistorted = false) {
+                notes.forEach(note => playNote(note, 2.0, isDistorted, 0));
+            }
+
+            function startBackingTrack(bpm) {
+                if (isBackingPlaying) return;
+                isBackingPlaying = true;
+                const beatTime = 60 / bpm;
+                let step = 0;
+                
+                // Patrón básico de bajo: Tónica en tiempo 1 y 3.
+                backingInterval = setInterval(() => {
+                    if(step % 4 === 0) playNote('A1', beatTime * 0.8, false, 0); // Bajo
+                    if(step % 2 === 1) playClick(false); // Hi-hat simulado
+                    if(step % 4 === 2) playNote('A1', beatTime * 0.4, false, 0);
+                    step++;
+                }, beatTime * 500); // 8ths notes interval
+            }
+
+            function stopBackingTrack() {
+                isBackingPlaying = false;
+                if(backingInterval) clearInterval(backingInterval);
+            }
+
+            return { playNote, playChord, playRiff, playClick, startBackingTrack, stopBackingTrack, get isBackingActive() { return isBackingPlaying; } };
+        })();
+
+
+        /* ============================================================
+         * DATA STATE & STORAGE
+         * ============================================================ */
+        let appState = {
+            unlocked: [1], // Módulos disponibles. El 1 siempre lo está.
+            completed: []  // Módulos superados con cuestionario.
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem('riffmaster_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.unlocked && Array.isArray(parsed.unlocked)) appState.unlocked = parsed.unlocked;
+                    if (parsed.completed && Array.isArray(parsed.completed)) appState.completed = parsed.completed;
+                } catch(e) { console.error("Corrupted state", e); }
+            }
+            updateProgressBar();
+        }
+
+        function saveState() {
+            localStorage.setItem('riffmaster_state', JSON.stringify(appState));
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const total = modules.length;
+            const comp = appState.completed.length;
+            const pct = Math.min(100, Math.max(0, Math.round((comp / total) * 100)));
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('progress-text').innerText = `${pct}%`;
+        }
+
+        /* ============================================================
+         * SVG GENERATORS
+         * ============================================================ */
+        function drawFretboard(strings, frets, dots, width=600, height=200) {
+            let svg = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-auto bg-fretboard rounded-lg shadow-inner my-4">`;
+            const fretSpacing = width / frets;
+            const stringSpacing = height / (strings + 1);
+
+            // Trastes (verticales)
+            for (let i = 1; i <= frets; i++) {
+                const x = i * fretSpacing;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="#A0A0A0" stroke-width="3"/>`;
+                // Número de traste abajo
+                svg += `<text x="${x - fretSpacing/2}" y="${height - 5}" fill="#FFF" font-size="12" text-anchor="middle" opacity="0.6">${i}</text>`;
+            }
+            // Cejuela (Nut)
+            svg += `<line x1="2" y1="0" x2="2" y2="${height}" stroke="#DDD" stroke-width="6"/>`;
+
+            // Inlays (Marcadores)
+            const standardDots = [3, 5, 7, 9, 15, 17, 19];
+            for (let i = 1; i <= frets; i++) {
+                const x = (i * fretSpacing) - (fretSpacing / 2);
+                const y = height / 2;
+                if (i === 12) {
+                    svg += `<circle cx="${x}" cy="${stringSpacing * 2.5}" r="6" fill="#FFF" opacity="0.4"/>`;
+                    svg += `<circle cx="${x}" cy="${stringSpacing * 4.5}" r="6" fill="#FFF" opacity="0.4"/>`;
+                } else if (standardDots.includes(i)) {
+                    svg += `<circle cx="${x}" cy="${y}" r="6" fill="#FFF" opacity="0.4"/>`;
+                }
+            }
+
+            // Cuerdas (horizontales)
+            const stringNames = ['e', 'B', 'G', 'D', 'A', 'E'];
+            for (let i = 1; i <= strings; i++) {
+                const y = i * stringSpacing;
+                const sw = 1 + (i * 0.4); // Cuerdas graves más gruesas
+                svg += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#DDD" stroke-width="${sw}"/>`;
+                svg += `<text x="10" y="${y - 4}" fill="#FF5722" font-size="12" font-weight="bold">${stringNames[i-1]}</text>`;
+            }
+
+            // Puntos de los dedos (dots array)
+            dots.forEach(d => {
+                const x = (d.fret * fretSpacing) - (fretSpacing / 2);
+                const y = d.string * stringSpacing;
+                const color = d.root ? '#FF5722' : '#2196F3';
+                svg += `<circle cx="${x}" cy="${y}" r="12" fill="${color}"/>`;
+                if(d.label) svg += `<text x="${x}" y="${y+4}" fill="#FFF" font-size="12" font-weight="bold" text-anchor="middle">${d.label}</text>`;
+            });
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function drawChordBox(chordName, frets, stringsStatus, width=150, height=180) {
+            // stringsStatus: array de 6 [E, A, D, G, B, e]. Ej: ['X', 3, 2, 0, 1, 0]
+            let svg = `<div class="inline-block text-center m-2"><svg viewBox="0 0 ${width} ${height}" class="w-32 h-auto">`;
+            const startX = 30; const startY = 40;
+            const w = 90; const h = 120;
+            const strSpace = w / 5; const fretSpace = h / 4;
+
+            svg += `<text x="${width/2}" y="20" fill="#FFF" font-size="18" font-weight="bold" text-anchor="middle">${chordName}</text>`;
+            
+            // Grid
+            for (let i = 0; i <= 5; i++) {
+                svg += `<line x1="${startX + i*strSpace}" y1="${startY}" x2="${startX + i*strSpace}" y2="${startY + h}" stroke="#888" stroke-width="2"/>`;
+            }
+            // Cejuela
+            svg += `<line x1="${startX}" y1="${startY}" x2="${startX + w}" y2="${startY}" stroke="#FFF" stroke-width="6"/>`;
+            for (let i = 1; i <= 4; i++) {
+                svg += `<line x1="${startX}" y1="${startY + i*fretSpace}" x2="${startX + w}" y2="${startY + i*fretSpace}" stroke="#888" stroke-width="2"/>`;
+            }
+
+            stringsStatus.forEach((val, i) => {
+                const x = startX + i*strSpace;
+                if (val === 'X') {
+                    svg += `<text x="${x}" y="${startY - 10}" fill="#F44336" font-size="14" text-anchor="middle" font-family="monospace">X</text>`;
+                } else if (val === 0) {
+                    svg += `<circle cx="${x}" cy="${startY - 14}" r="4" fill="none" stroke="#FFF" stroke-width="2"/>`;
+                } else if (val > 0) {
+                    const y = startY + (val * fretSpace) - (fretSpace / 2);
+                    // Suponemos que la tónica es el primer número que no es X ni 0 buscando de izquierda a derecha. Simplificación visual.
+                    svg += `<circle cx="${x}" cy="${y}" r="8" fill="#FF5722"/>`;
+                }
+            });
+
+            svg += `</svg></div>`;
+            return svg;
+        }
+
+        /* ============================================================
+         * MODULES DATA (8 EXTENSIVE MODULES WITH QUIZZES)
+         * ============================================================ */
+        const modules = [
+            {
+                id: 1,
+                title: "Módulo 1: Fundamentos y Púa Alternada",
+                icon: "ph-lightning",
+                description: "Postura, lectura de tablatura en 60s y tu primer riff histórico.",
+                quiz: [
+                    { q: "¿Qué representa el número '0' en una tablatura?", options: ["Silencio absoluto", "Tocar la cuerda al aire", "Pulsar el traste 10"], correct: 1 },
+                    { q: "¿En qué consiste la técnica de púa alternada?", options: ["Tocar siempre hacia abajo", "Alternar movimientos abajo y arriba continuamente", "Usar los dedos en vez de la púa"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4 leading-relaxed">Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala (si tienes un ampli tipo Spark, ponlo en <em>Clean</em> o ligero <em>Crunch</em>) y vamos al grano.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">1. Leer Tablatura en 60 segundos</h3>
+                    <p class="text-gray-300 mb-4">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong> (la que está más cerca del suelo). La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la que ves más cerca de ti).</p>
+                    <div class="bg-gray-900 p-4 rounded-lg overflow-x-auto tab-font text-green-400 mb-6 border border-gray-700">
+e|-------------------| (1ª Cuerda - Fina)<br>
+B|-------------------| (2ª Cuerda)<br>
+G|-------------------| (3ª Cuerda)<br>
+D|-------------------| (4ª Cuerda)<br>
+A|-------------------| (5ª Cuerda)<br>
+E|--0---3---5--------| (6ª Cuerda - Gorda)
+                    </div>
+                    <p class="text-gray-300 mb-4">Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).</p>
+                    
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">2. Púa Alternada</h3>
+                    <p class="text-gray-300 mb-4">El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑), Abajo (↓), Arriba (↑).</p>
+                    
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water (Simplificado)</h4>
+                        <p class="text-gray-400 mb-4">Toca este riff clásico de Deep Purple solo en la 6ª cuerda usando el dedo índice y anular de la mano izquierda.</p>
+                        
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center transition" data-riff="smoke">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Riff
+                            </button>
+                            <span class="text-sm text-gray-500">Distorsión: ON</span>
                         </div>
-                      </div>`,
-            tab: { lines: ["Símbolos:  ⊓  ∨  ⊓  ∨  ⊓  ∨  ⊓  ∨", "E(6ª)   |--0--0--3--3--5--5--3--3--|"] },
-            audioRiff: [{note:'E2',dur:0.3,gap:0.25},{note:'E2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'A2',dur:0.4,gap:0.25},{note:'G2',dur:0.3,gap:0.25},{note:'G2',dur:0.3,gap:0.3}]
-          }
-        ],
-        practiceRoutine: { title: "Rutina: Resistencia de Púa", targetBpm: 70, instructions: "Usa el metrónomo (barra lateral) a 70 BPM. Toca 4 veces la cuerda E gruesa al aire por cada clic del metrónomo. Usa estricta púa alternada: Abajo, Arriba, Abajo, Arriba." },
-        song: { title: "Humo en el Agua (Riff Principal)", artist: "Inspirado en Deep Purple", difficulty: "Fácil - 2 Cuerdas", tip: "Usa tu dedo índice para pisar las dos cuerdas a la vez (formando una pequeña cejilla). Este es EL riff fundacional del rock.",
-          tab: ["G (3ª) |--0---3---5---0---3---6-5--|--0---3---5---3---0----------|", "D (4ª) |--0---3---5---0---3---6-5--|--0---3---5---3---0----------|"], 
-          audioRiff: [{note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.5},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}, {note:['D3','G3'],drive:true,dur:0.4,gap:0.5},{note:['F3','A#3'],drive:true,dur:0.4,gap:0.3},{note:['G#3','C#4'],drive:true,dur:0.2,gap:0.2},{note:['G3','C4'],drive:true,dur:0.7,gap:0.7}], 
-          backingTrack: ['G2', 'G2', 'F2', 'C3'] },
-        quiz: [{ q:"¿Qué significa la línea superior en una tablatura estándar?", options:["Es la 6ª cuerda, la más grave.","Es la 1ª cuerda, la más aguda y fina.","Indica el volumen de la nota."], correct:1, explanation:"Exacto. La tablatura se lee como si miraras el mástil de tu guitarra desde arriba." }]
-      },
-      {
-        id: "mod-2", number: 2, title: "Power Chords & Palm Muting", summary: "Descubre el secreto del sonido masivo del Punk y el Heavy Metal con acordes de quinta.",
-        quote: { text: "Todo lo que necesitas son tres acordes y la verdad.", author: "Lou Reed" },
-        sections: [
-          {
-            title: "1. Acordes de Quinta (Power Chords)",
-            content: `<p class="mb-4 text-sm text-gray-300 leading-relaxed">Los acordes tradicionales suenan 'felices' (mayores) o 'tristes' (menores). Los Power Chords (Acordes de 5ta) no son ni una cosa ni la otra: son <strong>pura fuerza</strong>. Especialmente con distorsión.</p>
-                      <p class="text-sm text-gray-300 mb-2"><strong>La Forma Maestra:</strong> Solo necesitas dos dedos. El índice pisa la nota raíz (que da nombre al acorde) y el dedo anular pisa la cuerda de abajo, dos trastes más adelante. Es una forma móvil: ¡muévela por todo el mástil y tendrás todos los acordes posibles!</p>`,
-            chords: [{ name: "G5 (Raíz en 6ª)", frets: [3,5,-1,-1,-1,-1], fingers: ["1","3"] }, { name: "C5 (Raíz en 5ª)", frets: [-1,3,5,-1,-1,-1], fingers: ["","1","3"] }, { name: "D5 (Raíz en 5ª)", frets: [-1,5,7,-1,-1,-1], fingers: ["","1","3"] }]
-          },
-          {
-            title: "2. Palm Muting (El Chug-Chug)",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">Es la técnica reina del metal. Apoya el lateral (el canto) de tu mano derecha <strong>ligeramente</strong> sobre las cuerdas, justo donde nacen en el puente de la guitarra.</p>
-                      <p class="text-sm text-amber-400 font-bold bg-amber-500/10 p-3 rounded border border-amber-500/20">Si apoyas la mano muy lejos del puente, el sonido se apaga totalmente y suena seco. Si te quedas muy atrás, no muteas nada. Busca el punto dulce (sweet spot) donde suena pesado y percusivo.</p>`,
-            tab: { lines: ["  P.M.----------------|", "A |--5--5--5--5--3--3--3--3--|", "E |--3--3--3--3--------------|"] },
-            audioRiff: [{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['G2','D3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2},{note:['C3','G3'],drive:true,dur:0.15,gap:0.2}]
-          }
-        ],
-        practiceRoutine: { title: "Rutina: Saltos de Cuerda (String Skipping)", targetBpm: 85, instructions: "Alterna 4 rasgueos del acorde G5 (raíz 6ª cuerda) y 4 del acorde C5 (raíz 5ª cuerda). Mantén la forma de la mano congelada al bajar de cuerda. Aplica distorsión mental." },
-        song: { title: "Himno Punk Rock (American Idiot Style)", artist: "RiffMaster Original", difficulty: "Media - Velocidad de mano derecha", tip: "Todos los rasgueos de púa deben ser hacia ABAJO para que suene con más ataque y agresividad.",
-          tab: ["D |----------7-7------5-5-5-5-5--|", "A |--5-5-5---7-7------5-5-5-5-5--|", "E |--3-3-3---5-5------3-3-3-3-3--|"], 
-          audioRiff: [{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.35},{note:['A2','E3'],drive:true,dur:0.25,gap:0.25},{note:['A2','E3'],drive:true,dur:0.25,gap:0.5},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.25,gap:0.25},{note:['G2','D3'],drive:true,dur:0.5,gap:0.5}], 
-          backingTrack: ['G2', 'A2', 'C3', 'C3'] },
-        quiz: [{ q:"¿Dónde debe apoyarse la mano derecha para hacer un buen Palm Mute?", options:["En el mástil, cerca del traste 12.","Sobre las pastillas/micrófonos.","Justo en las silletas del puente, rozando las cuerdas."], correct:2, explanation:"Al apoyar en el puente, amortiguas las cuerdas sin matar del todo la afinación de la nota, logrando ese sonido 'chug'." }]
-      },
-      {
-        id: "mod-3", number: 3, title: "Escala Pentatónica & Solos", summary: "El vocabulario básico de los solos de guitarra. Aprende a improvisar e incorporar Bends y Ligados.",
-        quote: { text: "Haz que cada nota cuente. No toques 100 notas sin sentido si puedes decir lo mismo con una sola.", author: "David Gilmour" },
-        sections: [
-          {
-            title: "1. La Caja 1: Pentatónica de La Menor (Am)",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">Esta es la escala más famosa de la historia del rock, blues y metal. Se llama "Caja 1" porque es la forma más fácil de visualizar en el mástil. Está ubicada en el traste 5.</p>
-                      <p class="text-sm text-gray-300 mb-2">Tócala de arriba abajo (de la 6ª cuerda a la 1ª) usando los dedos 1 (índice) y 3 (anular) o 4 (meñique).</p>`,
-            fretboard: { dots: [{string:6,fret:5,root:true,label:"La"},{string:6,fret:8},{string:5,fret:5},{string:5,fret:7},{string:4,fret:5},{string:4,fret:7},{string:3,fret:5},{string:3,fret:7},{string:2,fret:5},{string:2,fret:8},{string:1,fret:5,root:true,label:"La"},{string:1,fret:8}], startFret:4, fretsCount:6, title:"Pentatónica de La Menor" }
-          },
-          {
-            title: "2. Técnicas de Expresión: Hammer-On (h) y Pull-Off (p)",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">Los grandes guitarristas no usan la púa para cada nota. Usan los dedos de la mano izquierda para 'ligar' notas y sonar más fluidos.</p>
-                      <ul class="list-disc pl-5 text-sm text-gray-300 space-y-2 mb-4">
-                        <li><strong>Hammer-On (h):</strong> Tocas una nota y luego <em>martillas</em> con otro dedo en un traste superior sin volver a usar la púa.</li>
-                        <li><strong>Pull-Off (p):</strong> Tocas una nota y <em>pellizcas</em> la cuerda hacia abajo al retirar el dedo, haciendo sonar el traste de atrás.</li>
-                      </ul>`,
-            tab: { lines: ["e |--------------------------|", "B |-------5h8---8p5----------|", "G |--5h7-------------7p5-----|"] },
-            audioRiff: [{note:'C4',dur:0.2,gap:0.15},{note:'D4',dur:0.4,gap:0.35},{note:'E4',dur:0.2,gap:0.15},{note:'G4',dur:0.4,gap:0.35},{note:'G4',dur:0.2,gap:0.15},{note:'E4',dur:0.4,gap:0.35},{note:'D4',dur:0.2,gap:0.15},{note:'C4',dur:0.6,gap:0.6}]
-          }
-        ],
-        practiceRoutine: { title: "Rutina: Trinos (Trills) sin Púa", targetBpm: 80, instructions: "Pon tu dedo índice en el traste 5 de la cuerda G. Golpea y pellizca (hammer-on y pull-off) el traste 7 con el dedo anular repetidamente, lo más rápido posible, en un solo golpe de púa inicial. Esto desarrolla una fuerza inmensa." },
-        song: { title: "Lick Clásico de Rock (Estilo Angus Young)", artist: "RiffMaster Original", difficulty: "Media - Requiere fuerza", tip: "Para hacer el BEND (b) en el traste 7, no uses solo el dedo anular. Apóyalo colocando el dedo medio e índice detrás en la misma cuerda para empujar hacia el techo con la fuerza de 3 dedos.",
-          tab: ["G |--7b9--7p5-------5--7b9---|", "D |-------------7------------|"], 
-          audioRiff: [{note:'D4',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.4,gap:0.4},{note:'C4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.6,gap:0.6}], 
-          backingTrack: ['A2', 'C3', 'G2', 'A2'] },
-        quiz: [{ q:"Para hacer un 'String Bend' (estiramiento de cuerda) controlado y afinado:", options:["Uso la fuerza de un solo dedo.","Uso el dedo anular, apoyado por el dedo medio e índice.","Tiro de la cuerda hacia afuera de la guitarra."], correct:1, explanation:"La regla de oro del bend es agrupar los dedos. El anular empuja, pero el medio y el índice son los motores." }]
-      },
-      {
-        id: "mod-4", number: 4, title: "Acordes Abiertos & Rasgueo", summary: "Aprende los acordes 'cowboy' (Em, G, C, D, Am) y domina el ritmo continuo de la mano derecha.",
-        quote: { text: "El ritmo es la columna vertebral de cualquier banda. Si no puedes mantener el tiempo, estás frito.", author: "Keith Richards" },
-        sections: [
-          {
-            title: "1. Acordes Abiertos Fundamentales",
-            content: `<p class="mb-4 text-sm text-gray-300 leading-relaxed">Estos acordes se llaman 'abiertos' porque incluyen cuerdas al aire (sin pisar). Producen un sonido rico, brillante y con mucho sustain. Son la base de casi cualquier canción acústica, pop e indie rock.</p>`,
-            chords: [
-              { name: "Em (Mi menor)", frets: [0,2,2,0,0,0], fingers: ["","2","3","","",""] }, 
-              { name: "D (Re mayor)", frets: [-1,-1,0,2,3,2], fingers: ["","","","1","3","2"] },
-              { name: "Am (La menor)", frets: [-1,0,2,2,1,0], fingers: ["","","2","3","1",""] },
-              { name: "C (Do mayor)", frets: [-1,3,2,0,1,0], fingers: ["","3","2","","1",""] }
+                        
+                        <div class="bg-black p-4 rounded-lg tab-font text-accent overflow-x-auto">
+E|--0---3---5----0---3---6-5----0---3---5---3---0--|
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "Módulo 2: Power Chords y Palm Muting",
+                icon: "ph-speaker-high",
+                description: "La base del Rock y el Punk. Estructuras móviles y muteo de palma.",
+                quiz: [
+                    { q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", options: ["En el mástil", "Justo donde las cuerdas tocan el puente", "Encima de las pastillas centrales"], correct: 1 },
+                    { q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico de 2 notas?", options: ["Un dedo", "Dos dedos (Índice y Anular/Meñique)", "Tres dedos obligatoriamente"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">El acorde de quinta, o <em>Power Chord</em> (C5, G5, etc.), es el arma definitiva del Rock. No es mayor ni menor, por lo que suena agresivo y contundente, especialmente con distorsión.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">La Forma del Power Chord</h3>
+                    <p class="text-gray-300 mb-4">La figura geométrica siempre es la misma. Dedo índice en la cuerda grave, y el dedo anular (o meñique) dos trastes más adelante en la cuerda inmediatamente inferior.</p>
+                    
+                    ${drawFretboard(6, 7, [
+                        { string: 6, fret: 3, root: true, label: '1' },
+                        { string: 5, fret: 5, root: false, label: '3' }
+                    ], 600, 180)}
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Palm Muting (P.M.)</h3>
+                    <p class="text-gray-300 mb-4">Apoya el lateral exterior de la palma de tu mano derecha (la zona carnosa) <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").</p>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk (Estilo Green Day)</h4>
+                        <p class="text-gray-400 mb-4">Mantén la misma forma de los dedos y deslízala por el mástil. Los asteriscos (*) indican Palm Muting.</p>
+                        
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="punk">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Riff
+                            </button>
+                        </div>
+                        
+                        <div class="bg-black p-4 rounded-lg tab-font text-accent overflow-x-auto whitespace-pre">
+   * * * *      * * * *      * * * * 
+A|-5-5-5-5------3-3-3-3------5-5-5-5------
+E|-3-3-3-3------1-1-1-1------3-3-3-3------
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "Módulo 3: La Pentatónica y el Blues",
+                icon: "ph-activity",
+                description: "Escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends.",
+                quiz: [
+                    { q: "¿Qué es un 'Hammer-on'?", options: ["Golpear la guitarra con la mano", "Pulsar una cuerda con la púa y 'martillear' con un dedo de la mano izquierda en un traste superior para que suene", "Tirar de la cuerda para estirarla"], correct: 1 },
+                    { q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", options: ["Traste 3", "Traste 5", "Traste 7"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor. Consta de 5 notas que repiten su patrón.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Patrón Visual: Am Pentatónica (Traste 5)</h3>
+                    ${drawFretboard(6, 10, [
+                        { string: 6, fret: 5, root: true, label: '1' }, { string: 6, fret: 8, root: false, label: '4' },
+                        { string: 5, fret: 5, root: false, label: '1' }, { string: 5, fret: 7, root: false, label: '3' },
+                        { string: 4, fret: 5, root: false, label: '1' }, { string: 4, fret: 7, root: true, label: '3' },
+                        { string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' },
+                        { string: 2, fret: 5, root: false, label: '1' }, { string: 2, fret: 8, root: false, label: '4' },
+                        { string: 1, fret: 5, root: true, label: '1' }, { string: 1, fret: 8, root: false, label: '4' }
+                    ], 600, 200)}
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Articulaciones</h3>
+                    <ul class="list-disc pl-5 text-gray-300 space-y-2 mb-4">
+                        <li><strong>Hammer-on (h):</strong> Pulsas la cuerda, e inmediatamente martilleas un traste superior con otro dedo sin volver a usar la púa.</li>
+                        <li><strong>Pull-off (p):</strong> Lo contrario. Tienes dos dedos pisando, pulsas con la púa, y retiras el dedo superior "pellizcando" la cuerda ligeramente.</li>
+                        <li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba o abajo transversalmente al mástil para subir el tono de la nota (típicamente 1 tono entero).</li>
+                    </ul>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="blues">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Lick
+                            </button>
+                        </div>
+                        <div class="bg-black p-4 rounded-lg tab-font text-accent overflow-x-auto whitespace-pre">
+e|-------------------------5~------|
+B|-------5--8p5----------5---------|
+G|--7b9----------7b9r7p5-----------|
+D|---------------------------------|
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "Módulo 4: Acordes Abiertos y Rasgueo",
+                icon: "ph-campfire",
+                description: "G, C, D, Em, Am. Rítmica contínua y dedos pivote.",
+                quiz: [
+                    { q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", options: ["Un dedo que se mueve muy rápido", "Un dedo que permanece en el mismo traste y cuerda entre dos acordes distintos, sirviendo de ancla", "El dedo meñique flotando"], correct: 1 },
+                    { q: "¿Qué acordes se suelen utilizar juntos en una progresión estilo 'Wonderwall'?", options: ["G, C, D, Em", "F#m, Bm, C#", "Solo acordes de quinta"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones de rock (Creedence, Oasis, Beatles).</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Los 5 Magníficos</h3>
+                    <div class="flex flex-wrap justify-center mb-6">
+                        ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}
+                        ${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}
+                        ${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}
+                        ${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}
+                        ${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">El Rasgueo y el Dedo Pivote</h3>
+                    <p class="text-gray-300 mb-4">El error común de los principiantes es parar la mano derecha al cambiar de acorde. <strong>La mano derecha es un reloj pendular.</strong> Nunca se detiene, incluso si haces un rasgueo al aire mientras colocas los dedos de la izquierda.</p>
+                    <p class="text-gray-300 mb-4">Busca <em>dedos pivote</em>. Al cambiar de G a D (versión rock, dejando el dedo anular en la cuerda B traste 3), no levantes el anular, úsalo como ancla y mueve el resto.</p>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto: Ritmo Pop-Rock (Abajo-Abajo-Arriba-Arriba-Abajo-Arriba)</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="strum">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Secuencia (Limita)
+                            </button>
+                        </div>
+                        <p class="text-gray-400 mb-4">Ritmo clásico. Aplícalo cambiando entre G y C cada compás.</p>
+                        <div class="bg-black p-4 rounded-lg tab-font text-white overflow-x-auto whitespace-pre">
+| ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |
+| G                 | C                 |
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: "Módulo 5: Expresión Solista",
+                icon: "ph-wave-sine",
+                description: "Vibrato de muñeca, Slides, y la Blue Note.",
+                quiz: [
+                    { q: "¿De dónde debe provenir el movimiento para hacer un buen vibrato de rock?", options: ["De los dedos temblando", "De un giro de muñeca usando el mástil como punto de apoyo", "Del brazo entero"], correct: 1 },
+                    { q: "¿Qué es un 'Slide' (deslizamiento)?", options: ["Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", "Usar un pedal de volumen", "Tirar la púa"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">Tocar las notas correctas está bien. Tocar las notas con <em>actitud</em> es lo que diferencia a una máquina de un guitarrista real. Las técnicas de expresión infunden vida y vocalidad a tu instrumento.</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">1. Vibrato</h3>
+                    <p class="text-gray-300 mb-4">No agites los dedos. Ancla el lateral del dedo índice o el pulgar en el mástil y <strong>gira la muñeca</strong> (como si giraras el pomo de una puerta). Esto causa oscilaciones regulares en el tono (más graves y de vuelta al centro).</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">2. La 'Blue Note'</h3>
+                    <p class="text-gray-300 mb-4">Al añadir una nota disonante (el 5to bemol o #4) a la pentatónica menor, consigues ese sonido tenso y oscuro típico del blues pesado.</p>
+                    
+                    ${drawFretboard(6, 10, [
+                        { string: 3, fret: 5, root: false, label: '1' }, 
+                        { string: 3, fret: 7, root: false, label: '3' },
+                        { string: 3, fret: 8, root: true, label: 'Bl' }, /* Blue note en rojo */
+                    ], 600, 100)}
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="expression">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Expresión
+                            </button>
+                        </div>
+                        <p class="text-gray-400 mb-4">S = Slide. V = Vibrato marcado. Escucha cómo el slide conecta las notas fluidamente.</p>
+                        <div class="bg-black p-4 rounded-lg tab-font text-accent overflow-x-auto whitespace-pre">
+G|--5S7--7--5---------|------------------|
+D|-------------7V-----|--5--7--7S10--7V--|
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "Módulo 6: Arpegios y Fingerpicking",
+                icon: "ph-hand-pointing",
+                description: "Descomponiendo los acordes. Púa híbrida e intros de baladas.",
+                quiz: [
+                    { q: "¿Qué significa arpegiar un acorde?", options: ["Tocar todas las notas a la vez con mucha fuerza", "Tocar las notas individuales del acorde secuencialmente una tras otra", "Tocar solo las cuerdas graves"], correct: 1 },
+                    { q: "¿Qué es la 'Púa Híbrida' (Hybrid Picking)?", options: ["Usar una púa de plástico y metal", "Sujetar la púa con pulgar/índice y usar el dedo medio o anular para pellizcar otras cuerdas simultáneamente", "Tocar sin púa"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">En lugar de rasguear todas las cuerdas a la vez (strumming), el arpegio consiste en tocar las notas de un acorde de forma secuencial. Es la base de intros legendarias de rock alternativo (ej. <em>Do I Wanna Know?</em> de los Arctic Monkeys o baladas clásicas).</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Técnica de Mano Derecha</h3>
+                    <p class="text-gray-300 mb-4">Puedes hacerlo solo con púa (usando púa alternada cuerda a cuerda, llamado <em>Crosspicking</em>) o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas el dedo medio y anular de la mano derecha para tirar de las cuerdas agudas.</p>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto: Arpegio Continuo en Em y C</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="arpeggio">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Arpegio
+                            </button>
+                        </div>
+                        <p class="text-gray-400 mb-4">Coloca los acordes abiertos de Em y luego C. Deja que todas las notas suenen el mayor tiempo posible (let ring).</p>
+                        <div class="bg-black p-4 rounded-lg tab-font text-white overflow-x-auto whitespace-pre">
+   Em                       C
+e|-------0-----------0----|-------0-----------0----|
+B|---------0-----------0--|---------1-----------1--|
+G|-----0-----0-----0-----0|-----0-----0-----0-----0|
+D|---2-----------2--------|---2-----------2--------|
+A|------------------------|-3-----------3----------|
+E|-0-----------0----------|------------------------|
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "Módulo 7: Escala Mayor y Modos Básicos",
+                icon: "ph-sun",
+                description: "Saliendo de la oscuridad. Country rock y el tono alegre (Jónico).",
+                quiz: [
+                    { q: "A nivel sonoro/emocional, ¿cómo se suele describir la diferencia entre una progresión Mayor y una Menor?", options: ["La Mayor suena más alegre/brillante y la Menor más triste/oscura", "No hay diferencia audible", "La Menor suena a pop y la Mayor a Heavy Metal"], correct: 0 },
+                    { q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", options: ["Sí, pero se aplican desplazadas en el mástil (bajando 3 trastes la tónica)", "No, son dibujos totalmente distintos", "Sí, y se tocan exactamente en el mismo lugar"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">El blues y el heavy metal viven en tonalidades menores, pero el Rock Sureño, el Country Rock y el Indie más luminoso (ej. <em>Sweet Home Alabama</em>) se basan en tonalidades mayores.</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Pentatónica Mayor vs Menor</h3>
+                    <p class="text-gray-300 mb-4">El truco de oro: El dibujo (la caja) de la escala Pentatónica Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela (hacia la izquierda). Por ejemplo, si tocas la caja 1 en el traste 5 sobre una pista en La menor (Am), para tocar sobre La Mayor (A), mueves ese mismo dibujo para que empiece en el traste 2 (F# menor relativo).</p>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto: Lick Country Rock Mayor</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="country">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Lick Mayor
+                            </button>
+                        </div>
+                        <p class="text-gray-400 mb-4">Este lick suena alegre, con bendings y uso de cuerdas al aire típico de las guitarras Telecaster.</p>
+                        <div class="bg-black p-4 rounded-lg tab-font text-accent overflow-x-auto whitespace-pre">
+e|-----------------------0--|
+B|--2h3p2----------------0--|
+G|---------4--2--0-------1--|
+D|------------------2----2--|
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "Módulo 8: Rítmica Funk y Acordes Dominantes",
+                icon: "ph-metronome",
+                description: "El groove, semicorcheas y muteo de mano izquierda.",
+                quiz: [
+                    { q: "¿En qué consiste el muteo de mano izquierda (scratches)?", options: ["Bajar el volumen de la guitarra a cero", "Rozar las cuerdas con los dedos sin apretar contra los trastes para generar un sonido de percusión sorda al rasguear", "Apagar el amplificador"], correct: 1 },
+                    { q: "En un compás de 4/4, si tocas semicorcheas de forma continua, ¿cuántos golpes das por tiempo (beat)?", options: ["2", "3", "4 (Abajo-Arriba-Abajo-Arriba)"], correct: 2 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-4">Para dominar la rítmica no basta con los acordes abiertos. El funk y el rock alternativo (piensa en los Red Hot Chili Peppers o bandas indie bailables) utilizan acordes de Séptima (Dominantes o Menores 7) y un movimiento incansable de la mano derecha en semicorcheas.</p>
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Acorde E9 (El "Acorde Funk" por excelencia)</h3>
+                    <p class="text-gray-300 mb-4">Este acorde suena picante y rítmico. Se toca en los trastes centrales.</p>
+                    ${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}
+
+                    <h3 class="text-xl font-bold text-white mt-6 mb-2">Scratches (Notas Muertas)</h3>
+                    <p class="text-gray-300 mb-4">Para lograr el ritmo "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Los dedos tocan las cuerdas pero no las aprietan contra la madera. Si rasgueas fuertemente la mano derecha, obtendrás pura percusión. Las 'x' en la tablatura indican esto.</p>
+
+                    <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-accent my-6">
+                        <h4 class="text-lg font-bold text-white mb-2">🎸 Reto Final: Groove Funk de Semicorcheas</h4>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button class="btn-play-riff bg-accent hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center" data-riff="funk">
+                                <i class="ph ph-play-circle text-xl mr-2"></i> Escuchar Groove
+                            </button>
+                        </div>
+                        <p class="text-gray-400 mb-4">Mantén el brazo derecho como una máquina, moviéndose arriba y abajo sin parar. Presiona el acorde solo en las notas numéricas, suelta la presión (pero no quites la mano) en las 'x'.</p>
+                        <div class="bg-black p-4 rounded-lg tab-font text-white overflow-x-auto whitespace-pre">
+(Acorde base: E9 - traste 7)
+e|-7--x-x-x--7--x--7-7--x-x-|
+B|-7--x-x-x--7--x--7-7--x-x-|
+G|-7--x-x-x--7--x--7-7--x-x-|
+D|-6--x-x-x--6--x--6-6--x-x-|
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        /* ============================================================
+         * AUDIO DATA DICTIONARY
+         * ============================================================ */
+        const riffData = {
+            'smoke': [
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5, pause:0.5},
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'Bb2', dur:0.5}, {note:'A2', dur:1.5, pause:0.5},
+                {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5}, {note:'G2', dur:1}, {note:'E2', dur:2}
+            ],
+            'punk': [
+                {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5}, {note:['G2','D3'], dur:0.5, pause:0.5},
+                {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5}, {note:['F2','C3'], dur:0.5, pause:0.5},
+                {note:['G2','D3'], dur:1.5}
+            ],
+            'blues': [
+                {note:'D4', dur:0.5}, {note:'E4', dur:0.5}, {note:'G4', dur:0.5}, {note:'E4', dur:0.5}, 
+                {note:'D4', dur:0.5}, {note:'C4', dur:0.5}, {note:'A3', dur:1.5}
+            ],
+            'strum': [
+                {note:['G2','B2','D3','G3','B3','G4'], dur:1}, {note:['G2','B2','D3','G3','B3','G4'], dur:1},
+                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5},
+                {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}, {note:['G2','B2','D3','G3','B3','G4'], dur:0.5}
+            ],
+            'expression': [
+                {note:'C4', dur:0.5}, {note:'D4', dur:0.5}, {note:'C4', dur:1, pause: 0.5},
+                {note:'G3', dur:0.5}, {note:'A3', dur:0.5}, {note:'C4', dur:1}
+            ],
+            'arpeggio': [
+                {note:'E2', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'B3', dur:0.5}, {note:'E4', dur:0.5}, {note:'B3', dur:0.5},
+                {note:'C3', dur:0.5}, {note:'E3', dur:0.5}, {note:'G3', dur:0.5}, {note:'C4', dur:0.5}, {note:'E4', dur:0.5}, {note:'C4', dur:0.5}
+            ],
+            'country': [
+                {note:'C#3', dur:0.25}, {note:'D3', dur:0.25}, {note:'C#3', dur:0.25}, {note:'B2', dur:0.5},
+                {note:'G2', dur:0.5}, {note:'E2', dur:0.5}, {note:'G#2', dur:1}
+            ],
+            'funk': [
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, // Golpe real
+                {note:null, dur:0.25}, {note:null, dur:0.25}, {note:null, dur:0.25}, // Muteos (silencios percusivos)
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25},
+                {note:null, dur:0.25}, 
+                {note:['D3','F#3','C4','E4','F#4'], dur:0.25}, {note:['D3','F#3','C4','E4','F#4'], dur:0.25}
             ]
-          },
-          {
-            title: "2. El Concepto del 'Dedo Pivote' y Transiciones",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">El mayor problema de los principiantes es que pausan para cambiar de acorde. El truco está en buscar dedos comunes entre dos acordes y dejarlos plantados. Ese dedo actúa como un 'ancla' o 'pivote'.</p>
-                      <p class="text-sm text-gray-300">Ejemplo: Al cambiar de <strong>Am a C</strong>, tus dedos índice y medio no se mueven en absoluto. Solo mueves el dedo anular de la 3ª cuerda (traste 2) a la 5ª cuerda (traste 3).</p>`,
-            tab: { lines: ["    [Am]        [C]", "e |--0----------0--|", "B |--1----------1--|", "G |--2----------0--|", "D |--2----------2--|", "A |--0----------3--|"] },
-            audioRiff: [{note:['A2','E3','A3','C4','E4'],dur:1.0,gap:1.2},{note:['C3','E3','G3','C4','E4'],dur:1.0,gap:1.0}]
-          }
-        ],
-        practiceRoutine: { title: "Rutina: El Tren Rítmico", targetBpm: 75, instructions: "Tu mano derecha debe moverse arriba y abajo constantemente, como un péndulo, incluso si no golpeas las cuerdas en ese instante. Toca Em (4 tiempos) y cambia a Am (4 tiempos). No dejes que la mano derecha se detenga jamás." },
-        song: { title: "Balada del Desierto", artist: "Estilo Oasis / Creedence", difficulty: "Fácil - Ritmo", tip: "Evita golpear la 6ª cuerda (Mi grave) cuando toques el acorde de D o de C. Suena fatal. Concéntrate en rasguear desde la 5ª hacia abajo.",
-          tab: ["   Em            D            Am", "E|-0-0-0-0-0---|---2---2-2--|-0-0-0-0-0---|", "B|-0-0-0-0-0---|---3---3-3--|-1-1-1-1-1---|", "G|-0-0-0-0-0---|---2---2-2--|-2-2-2-2-2---|", "D|-2-2-2-2-2---|-0---0------|-2-2-2-2-2---|"], 
-          audioRiff: [{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['E2','B2','E3','G3'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['D3','A3','D4','F#4'],dur:0.4,gap:0.4},{note:['A2','E3','A3','C4'],dur:0.6,gap:0.6}], 
-          backingTrack: ['E2', 'D3', 'A2', 'A2'] },
-        quiz: [{ q:"En el acorde de Re mayor (D), ¿qué cuerda NO debes tocar con la púa?", options:["Las cuerdas agudas (1, 2 y 3)","La 6ª cuerda (Mi grave)","Todas deben sonar"], correct:1, explanation:"El Mi grave choca armónicamente con el Re y hace que el acorde suene turbio y confuso." }]
-      },
-      {
-        id: "mod-5", number: 5, title: "Blues, Feeling & Graduación", summary: "Añade emoción a tus notas con el Vibrato, los Slides y la misteriosa 'Blue Note'.",
-        quote: { text: "El blues no se trata de sentirte mal, se trata de sentirte mejor después de haberlo tocado.", author: "Jimi Hendrix" },
-        sections: [
-          {
-            title: "1. Vibrato y la Blue Note (Nota Triste)",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed">El Vibrato es la firma de un guitarrista. Es la oscilación del tono. No se hace moviendo el dedo rápido, sino rotando el antebrazo y la muñeca como si giraras el pomo de una puerta.</p>
-                      <p class="text-sm text-gray-300 mb-2">Para sonar a Blues de verdad, añadimos una nota 'fuera de la escala' a la Pentatónica: La <strong>Blue Note</strong> (el intervalo bemol 5). Aporta una disonancia exquisita.</p>`,
-            fretboard: { dots: [{string:3,fret:5},{string:3,fret:7},{string:3,fret:8,label:"b5",root:true}], startFret:4, fretsCount:5, title:"La Blue Note (Cuerda 3, Traste 8)" }
-          },
-          {
-            title: "2. Slides y Double Stops",
-            content: `<p class="mb-3 text-sm text-gray-300 leading-relaxed"><strong>Slide (Deslizamiento):</strong> Toca una nota y desliza el dedo por la cuerda hasta otro traste sin dejar de presionar. Representado por (/).</p>
-                      <p class="text-sm text-gray-300"><strong>Double Stops:</strong> Toca dos cuerdas simultáneamente en tus solos para que suene más grueso, al estilo Chuck Berry.</p>`,
-            tab: { lines: ["   Slide              Double Stop", "e |----------------|----------------|", "B |-------5--7/9~--|------5-5-------|", "G |--5/7-----------|------5-5-------|"] },
-            audioRiff: [{note:'C4',drive:true,dur:0.2,gap:0.15},{note:'D4',drive:true,dur:0.4,gap:0.5},{note:'E4',drive:true,dur:0.3,gap:0.3},{note:'F#4',drive:true,dur:0.2,gap:0.15},{note:'G#4',drive:true,dur:0.8,gap:1.0},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3},{note:['C4','E4'],drive:true,dur:0.3,gap:0.3}]
-          }
-        ],
-        practiceRoutine: { title: "Rutina: Vibrato Vocal", targetBpm: 60, instructions: "Pon el metrónomo muy lento. Toca el traste 7 de la cuerda G. Intenta que el vibrato oscile rítmicamente (una oscilación por clic). No te aceleres, controla la muñeca." },
-        song: { title: "Jam Final de Graduación", artist: "Tú", difficulty: "Avanzada - Integra todo", tip: "Esta es la prueba final. Activa el Backing Track, siente el ritmo y trata de clavar el vibrato (~) al final de la frase.",
-          tab: ["G |--7b9--7p5-------5-7b8r7p5---7-5~~--|", "D |-------------7-------------7--------|"], 
-          audioRiff: [{note:'D4',drive:true,dur:0.4,gap:0.3},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.25,gap:0.25},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'D#4',drive:true,dur:0.3,gap:0.3},{note:'D4',drive:true,dur:0.2,gap:0.2},{note:'C4',drive:true,dur:0.2,gap:0.2},{note:'A3',drive:true,dur:0.2,gap:0.2},{note:'D4',drive:true,dur:0.3,gap:0.3},{note:'C4',drive:true,dur:0.8,gap:0.8}], 
-          backingTrack: ['A2', 'D3', 'E3', 'A2'] },
-        quiz: [{ q:"El vibrato profesional y controlado surge de:", options:["Temblar el dedo rápidamente sobre el traste.","Rotar el antebrazo y la muñeca con control rítmico, manteniendo el dedo firme.","Mover la guitarra hacia adelante y atrás."], correct:1, explanation:"El movimiento de la muñeca (como girar una llave o un pomo) aporta peso y sustento al vibrato." }]
-      }
-    ];
+        };
 
-    /* ============================================================
-     * 6. LÓGICA DE ALMACENAMIENTO, SIDEBAR Y UI CORE
-     * ============================================================ */
-    const StorageKey = "riffmaster_data_v4";
-    let currentModuleIndex = 0;
+        /* ============================================================
+         * UI CONTROLLERS & LOGIC
+         * ============================================================ */
+        let currentModuleId = 1;
 
-    function showToast(msgText, isSuccess = true) {
-      const t = document.getElementById("toast");
-      document.getElementById("toast-msg").textContent = msgText;
-      document.getElementById("toast-icon").className = isSuccess ? "ph-fill ph-check-circle text-amber-400 text-2xl" : "ph-fill ph-warning-circle text-red-500 text-2xl";
-      
-      if(isSuccess) {
-         t.classList.remove("border-red-500"); t.classList.add("border-amber-500");
-      } else {
-         t.classList.remove("border-amber-500"); t.classList.add("border-red-500");
-      }
+        function renderSidebar() {
+            const nav = document.getElementById('nav-modules');
+            nav.innerHTML = '';
+            modules.forEach(mod => {
+                const isUnlocked = appState.unlocked.includes(mod.id);
+                const isCompleted = appState.completed.includes(mod.id);
+                const isActive = mod.id === currentModuleId;
+                
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl transition-all flex items-center mb-2 
+                    ${isUnlocked ? (isActive ? 'bg-accent/20 text-accent font-bold border border-accent/50' : 'hover:bg-gray-800 text-gray-300') : 'locked-module'}`;
+                
+                let trailingIcon = '';
+                if (!isUnlocked) trailingIcon = '<i class="ph ph-lock-key text-gray-500 ml-auto"></i>';
+                else if (isCompleted) trailingIcon = '<i class="ph ph-check-circle text-green-500 ml-auto"></i>';
 
-      t.classList.remove("translate-y-24", "opacity-0");
-      setTimeout(() => t.classList.add("translate-y-24", "opacity-0"), 4000);
-    }
-
-    function getProgressData() {
-      try { 
-        const data = JSON.parse(localStorage.getItem(StorageKey)); 
-        if(data && Array.isArray(data.completedModules)) {
-           const validIds = CourseData.map(c => c.id);
-           let mods = data.completedModules.filter(m => validIds.includes(m));
-           return { completedModules: [...new Set(mods)] };
+                btn.innerHTML = `<i class="ph ${mod.icon} text-xl w-6"></i> <span class="hidden md:block ml-2 text-sm">${mod.id}. ${mod.title.split(':')[0]}</span> ${trailingIcon}`;
+                
+                if (isUnlocked) {
+                    btn.addEventListener('click', () => loadModuleUI(mod.id));
+                }
+                nav.appendChild(btn);
+            });
         }
-        return { completedModules: [] };
-      }
-      catch (e) { return { completedModules: [] }; }
-    }
-    function saveProgressData(data) {
-      try { localStorage.setItem(StorageKey, JSON.stringify(data)); } catch (e) { console.warn("Local storage fail"); }
-      updateGlobalProgressBar();
-      renderSidebarNavigation();
-    }
 
-    function updateGlobalProgressBar() {
-      const data = getProgressData();
-      const rawPct = (data.completedModules.length / CourseData.length) * 100;
-      const pct = Math.max(0, Math.min(100, Math.round(rawPct)));
-      
-      document.getElementById("global-progress-bar").style.width = `${pct}%`;
-      document.getElementById("global-progress-text").textContent = `${pct}%`;
-      document.getElementById("completed-count").textContent = `${data.completedModules.length}/${CourseData.length}`;
-    }
+        function loadModuleUI(id) {
+            currentModuleId = id;
+            const mod = modules.find(m => m.id === id);
+            if (!mod) return;
 
-    function renderSidebarNavigation() {
-      const nav = document.getElementById("modules-list");
-      nav.innerHTML = '';
-      CourseData.forEach((mod, idx) => {
-        const isDone = getProgressData().completedModules.includes(mod.id);
-        const isActive = idx === currentModuleIndex;
-        const btn = document.createElement("button");
-        btn.className = `w-full text-left p-3.5 rounded-xl transition-all duration-200 flex items-center justify-between group ${isActive ? 'bg-amber-500/15 border border-amber-500/50 shadow-md transform scale-[1.02]' : 'bg-amp-800/40 border border-transparent hover:bg-amp-800/80 hover:border-amp-700'}`;
-        
-        btn.addEventListener('click', () => { 
-          selectModule(idx); 
-          document.getElementById("sidebar").classList.add("-translate-x-full"); 
-          document.getElementById("sidebar-backdrop").classList.add("hidden"); 
-        });
-
-        btn.innerHTML = `
-          <div class="flex items-center gap-3.5 pointer-events-none">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-sm ${isDone ? 'bg-amber-500 text-amp-900' : isActive ? 'bg-amber-500/40 text-amber-300 border border-amber-500/50' : 'bg-amp-700 text-gray-400 border border-amp-600'}">
-              ${isDone ? '<i class="ph-bold ph-check text-lg"></i>' : mod.number}
-            </div>
-            <div>
-              <p class="text-sm font-bold ${isActive ? 'text-amber-400' : 'text-gray-300 group-hover:text-white transition-colors'}">${mod.title}</p>
-            </div>
-          </div>
-        `;
-        nav.appendChild(btn);
-      });
-    }
-
-    function selectModule(index) {
-      currentModuleIndex = index;
-      AudioEngine.stopBackingTrack();
-      AudioEngine.stopCurrentSequence();
-      
-      if(practiceTimerInt) {
-         clearInterval(practiceTimerInt);
-         practiceTimerInt = null;
-      }
-      
-      window.Riffs = [];
-      const mod = CourseData[currentModuleIndex];
-      
-      let sectionsHtml = mod.sections.map(sec => {
-        let secRiffId = null;
-        if(sec.audioRiff) {
-          window.Riffs.push(sec.audioRiff);
-          secRiffId = window.Riffs.length - 1;
-        }
-        
-        return `
-        <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 mb-8 shadow-xl">
-          <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2.5">
-             <div class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
-             ${sec.title}
-          </h3>
-          ${sec.content}
-          ${sec.fretboard ? SVGVisuals.renderFretboard(sec.fretboard.dots, sec.fretboard.startFret, sec.fretboard.fretsCount, sec.fretboard.title) : ''}
-          ${sec.chords ? `<div class="flex flex-wrap gap-4 justify-center my-6">${sec.chords.map(c => SVGVisuals.renderChordBox(c.name, c.frets, c.fingers)).join('')}</div>` : ''}
-          ${sec.tab ? SVGVisuals.renderTab(sec.tab.lines, secRiffId) : ''}
-        </div>
-      `}).join('');
-
-      let songRiffId = null;
-      if(mod.song.audioRiff) {
-        window.Riffs.push(mod.song.audioRiff);
-        songRiffId = window.Riffs.length - 1;
-      }
-
-      let quizHtml = mod.quiz.map((qItem, qIdx) => `
-        <div class="p-5 bg-amp-900 rounded-xl border border-amp-700 mb-4 text-sm shadow-inner" data-qidx="${qIdx}">
-          <p class="font-bold text-gray-200 mb-4 text-base">${qIdx + 1}. ${qItem.q}</p>
-          <div class="space-y-2">
-            ${qItem.options.map((opt, optIdx) => `
-              <label class="flex items-start gap-3 p-3 bg-amp-800 hover:bg-amp-700 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-amp-600">
-                <input type="radio" name="q_${qIdx}" value="${optIdx}" class="mt-1 accent-amber-500 w-4 h-4 cursor-pointer">
-                <span class="text-gray-300 text-sm leading-tight">${opt}</span>
-              </label>
-            `).join('')}
-          </div>
-          <div class="quiz-fb hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
-        </div>
-      `).join('');
-
-      document.getElementById("lesson-container").innerHTML = `
-        <div class="bg-gradient-to-br from-amp-800 to-amp-900 border border-amp-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden mb-8">
-          <div class="absolute top-0 right-0 p-8 opacity-5"><i class="ph-fill ph-guitar text-[150px]"></i></div>
-          <span class="px-3 py-1.5 bg-amber-500/20 text-amber-400 font-mono text-[10px] sm:text-xs font-bold rounded-lg border border-amber-500/30 uppercase tracking-widest shadow-sm">MÓDULO ${mod.number} DE 5</span>
-          <h2 class="text-3xl sm:text-4xl font-black text-white mt-4 mb-2 tracking-tight">${mod.title}</h2>
-          <p class="text-sm sm:text-base text-gray-400 mt-2 max-w-2xl leading-relaxed">${mod.summary}</p>
-          <div class="mt-6 p-4 bg-amp-950/50 border-l-4 border-amber-500 text-sm italic text-gray-300 rounded-r-lg shadow-inner">
-             <span class="text-amber-500 text-lg leading-none font-serif mr-1">"</span>${mod.quote.text}<span class="text-amber-500 text-lg leading-none font-serif ml-1">"</span>
-             <p class="text-xs text-gray-500 mt-2 font-bold not-italic uppercase tracking-widest">— ${mod.quote.author}</p>
-          </div>
-        </div>
-
-        ${sectionsHtml}
-
-        <div class="bg-gradient-to-r from-amp-850 to-amp-800 border-2 border-amp-700 rounded-2xl p-5 sm:p-7 shadow-xl mb-8">
-          <h3 class="font-black text-xl text-white mb-3 flex items-center gap-2"><i class="ph-fill ph-barbell text-amber-500 text-2xl"></i> Zona de Práctica</h3>
-          <h4 class="font-bold text-amber-400 mb-2">${mod.practiceRoutine.title}</h4>
-          <p class="text-sm text-gray-300 mb-5 bg-amp-900 p-4 rounded-xl border border-amp-700/50 shadow-inner leading-relaxed">${mod.practiceRoutine.instructions}</p>
-          <div class="flex items-center gap-3">
-             <button id="btn-timer" class="px-5 py-2.5 bg-amp-700 hover:bg-amp-600 text-white rounded-lg font-bold text-sm transition-colors shadow-md flex items-center gap-2">
-                <i class="ph-bold ph-stopwatch pointer-events-none"></i> Iniciar Reto (3:00)
-             </button>
-             <span id="timer-display" class="font-mono text-xl font-bold text-amber-500 hidden">03:00</span>
-          </div>
-        </div>
-
-        <div class="bg-amp-850 border border-amber-500/40 rounded-2xl p-5 sm:p-7 shadow-[0_0_30px_rgba(245,158,11,0.08)] mb-8 relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-bl-full -z-10"></div>
-          <span class="text-xs text-amber-400 font-black uppercase tracking-widest flex items-center gap-1.5 mb-2"><i class="ph-fill ph-star"></i> Desafío Final</span>
-          <h3 class="text-2xl font-black text-white mb-1">${mod.song.title}</h3>
-          <p class="text-xs text-gray-400 uppercase tracking-widest font-mono mb-4">Estilo: ${mod.song.artist}</p>
-          
-          <div class="flex flex-wrap gap-3 mt-4 mb-6">
-            <button class="play-riff-btn px-5 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shadow-sm" data-riff-id="${songRiffId}">
-               <i class="ph-fill ph-headphones text-lg pointer-events-none"></i> Escuchar Completo
-            </button>
-            <button id="btn-bt" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-amp-900 rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-amber-500/30">
-               <i class="ph-bold ph-speaker-hifi text-lg pointer-events-none"></i> Iniciar Pista Base (Backing)
-            </button>
-          </div>
-          
-          <div class="bg-amp-900 p-4 rounded-xl border border-amp-700 shadow-inner mb-4 flex gap-3">
-             <i class="ph-fill ph-lightbulb text-amber-400 text-xl mt-0.5"></i>
-             <p class="text-sm text-gray-300"><strong>Consejo Pro:</strong> ${mod.song.tip}</p>
-          </div>
-          ${SVGVisuals.renderTab(mod.song.tab)}
-        </div>
-
-        <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-7 shadow-xl mb-8">
-          <h3 class="font-black text-xl text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-brain text-purple-400 text-2xl"></i> Validación de Conocimientos</h3>
-          ${quizHtml}
-          <button id="btn-quiz" class="mt-4 w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amp-900 font-black rounded-xl text-base shadow-lg hover:shadow-amber-500/25 transition-all flex justify-center items-center gap-2">
-             <i class="ph-bold ph-check-square-offset text-xl pointer-events-none"></i> Validar Respuestas y Superar Módulo
-          </button>
-        </div>
-
-        <div class="flex justify-between items-center pt-6 border-t border-amp-800">
-          <button class="btn-nav text-sm px-5 py-2.5 bg-amp-800 hover:bg-amp-700 border border-amp-700 rounded-lg text-gray-300 font-bold transition-colors flex items-center gap-2 ${currentModuleIndex === 0 ? 'opacity-30 cursor-not-allowed pointer-events-none' : ''}" data-nav-target="${Math.max(0, currentModuleIndex-1)}">
-             <i class="ph-bold ph-arrow-left pointer-events-none"></i> Anterior
-          </button>
-          <button class="btn-nav text-sm px-5 py-2.5 bg-amber-500 hover:bg-amber-400 rounded-lg text-amp-900 font-black transition-all shadow-md flex items-center gap-2 ${currentModuleIndex === CourseData.length-1 ? 'opacity-0 pointer-events-none' : ''}" data-nav-target="${Math.min(CourseData.length-1, currentModuleIndex+1)}">
-             Siguiente <i class="ph-bold ph-arrow-right pointer-events-none"></i>
-          </button>
-        </div>
-      `;
-
-      // Assign dynamic listeners for this rendered module
-      const btnBt = document.getElementById("btn-bt");
-      if(btnBt) {
-        btnBt.addEventListener('click', (e) => {
-          const btn = e.currentTarget;
-          if(AudioEngine.isBackingActive()) {
-            AudioEngine.stopBackingTrack();
-            btn.innerHTML = `<i class="ph-bold ph-speaker-hifi text-lg pointer-events-none"></i> Iniciar Pista Base (Backing)`;
-            btn.className = "px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-amp-900 rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-amber-500/30";
-          } else {
-            const currentBpm = parseInt(document.getElementById("metro-bpm").value) || 90;
-            AudioEngine.startBackingTrack(mod.song.backingTrack, currentBpm);
-            btn.innerHTML = `<i class="ph-bold ph-stop-circle text-lg pointer-events-none"></i> Detener Pista Base`;
-            btn.className = "px-5 py-2.5 bg-red-500 hover:bg-red-400 text-white rounded-lg text-sm font-black transition-colors flex items-center gap-2 shadow-lg hover:shadow-red-500/30 animate-pulse";
-          }
-        });
-      }
-
-      const btnTimer = document.getElementById("btn-timer");
-      if(btnTimer) {
-        btnTimer.addEventListener('click', (e) => {
-           const btn = e.currentTarget;
-           const disp = document.getElementById("timer-display");
-           if(practiceTimerInt) {
-              clearInterval(practiceTimerInt); 
-              practiceTimerInt = null;
-              btn.innerHTML = `<i class="ph-bold ph-stopwatch pointer-events-none"></i> Reiniciar Reto`;
-              disp.classList.add("hidden");
-           } else {
-              let time = 180;
-              disp.classList.remove("hidden");
-              btn.innerHTML = `<i class="ph-bold ph-x pointer-events-none"></i> Detener`;
-              practiceTimerInt = setInterval(() => {
-                 time--;
-                 const m = String(Math.floor(time/60)).padStart(2,'0');
-                 const s = String(time%60).padStart(2,'0');
-                 disp.textContent = `${m}:${s}`;
-                 if(time <= 0) {
-                    clearInterval(practiceTimerInt); practiceTimerInt = null;
-                    AudioEngine.playClick(true);
-                    showToast("¡Tiempo de práctica completado! Gran trabajo.");
-                    btn.innerHTML = `<i class="ph-bold ph-stopwatch pointer-events-none"></i> Reto Terminado`;
-                 }
-              }, 1000);
-           }
-        });
-      }
-
-      const btnQuiz = document.getElementById("btn-quiz");
-      if(btnQuiz) {
-        btnQuiz.addEventListener('click', () => {
-          let allCorrect = true, allAnswered = true;
-          mod.quiz.forEach((q, idx) => {
-            const sel = document.querySelector(`input[name="q_${idx}"]:checked`);
-            const fb = document.querySelector(`[data-qidx="${idx}"] .quiz-fb`);
-            fb.classList.remove("hidden");
+            document.getElementById('header-title').innerText = mod.title;
             
-            if(!sel) { 
-               allAnswered = false; 
-               return; 
-            }
+            let htmlContent = `<p class="text-xl font-light text-gray-400 mb-8 border-b border-gray-800 pb-4">${mod.description}</p>${mod.content}`;
             
-            if(parseInt(sel.value) === q.correct) {
-              fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-emerald-900/40 text-emerald-400 border border-emerald-500/30 block";
-              fb.innerHTML = `<i class="ph-bold ph-check-circle inline-block mr-1 pointer-events-none"></i> <strong>Correcto:</strong> ${q.explanation}`;
+            // Check completed status
+            const isCompleted = appState.completed.includes(id);
+            if (isCompleted) {
+                htmlContent += `
+                    <div class="mt-12 bg-green-900/20 border border-green-500/50 p-6 rounded-xl text-center shadow-lg">
+                        <i class="ph ph-check-circle text-4xl text-green-500 mb-2"></i>
+                        <h3 class="text-xl font-bold text-green-400 mb-2">Lección Superada</h3>
+                        <p class="text-gray-300">¡Genial! Tienes los conocimientos de esta lección dominados.</p>
+                        ${id < modules.length ? `<button class="mt-4 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full btn-next" data-next="${id+1}">Ir a la siguiente lección ➔</button>` : `<p class="mt-4 font-bold text-accent">¡Has completado el curso RiffMaster al 100%!</p>`}
+                    </div>`;
             } else {
-              allCorrect = false;
-              fb.className = "quiz-fb mt-4 p-3 rounded-lg text-sm font-medium bg-red-900/40 text-red-400 border border-red-500/30 block";
-              fb.innerHTML = `<i class="ph-bold ph-x-circle inline-block mr-1 pointer-events-none"></i> <strong>Incorrecto:</strong> ${q.explanation}`;
+                // Render Quiz
+                htmlContent += `
+                    <div class="mt-12 bg-gray-800/80 p-6 md:p-8 rounded-2xl border border-gray-700 shadow-xl" id="quiz-container">
+                        <div class="flex items-center text-accent mb-4">
+                            <i class="ph ph-exam text-3xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">Cuestionario de Desbloqueo</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6">Responde correctamente para guardar tu progreso y acceder a la siguiente lección.</p>
+                        <form id="quiz-form" class="space-y-6">`;
+                
+                mod.quiz.forEach((q, index) => {
+                    htmlContent += `<div class="bg-gray-900 p-4 rounded-xl border border-gray-700/50"><p class="font-bold text-white mb-3">${index+1}. ${q.q}</p><div class="space-y-2">`;
+                    q.options.forEach((opt, oIndex) => {
+                        htmlContent += `<label class="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-gray-800 transition">
+                            <input type="radio" name="q${index}" value="${oIndex}" class="form-radio text-accent focus:ring-accent w-4 h-4" required>
+                            <span class="text-gray-300 text-sm">${opt}</span>
+                        </label>`;
+                    });
+                    htmlContent += `</div></div>`;
+                });
+
+                htmlContent += `
+                            <button type="submit" class="w-full mt-4 bg-accent hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-accent/20 transition-transform active:scale-95 flex justify-center items-center">
+                                <i class="ph ph-lock-key-open text-xl mr-2"></i> Evaluar y Guardar Progreso
+                            </button>
+                            <div id="quiz-error" class="text-red-400 hidden mt-3 text-center bg-red-900/20 p-2 rounded border border-red-900/50">Respuesta incorrecta. Revisa el contenido e inténtalo de nuevo.</div>
+                        </form>
+                    </div>`;
             }
-          });
-          
-          if(!allAnswered) return showToast("Debes responder todas las preguntas para continuar.", false);
-          
-          if(allCorrect) {
-            const d = getProgressData();
-            if(!d.completedModules.includes(mod.id)) { 
-               d.completedModules.push(mod.id); 
-               saveProgressData(d); 
-            }
-            showToast("¡Módulo Superado con Éxito! Sigue rockeando.", true);
-            setTimeout(() => {
-               document.getElementById('main-content-scroll').scrollTo({ 
-                 top: document.getElementById('lesson-container').scrollHeight, 
-                 behavior: 'smooth' 
-               });
-            }, 800);
-          } else {
-             showToast("Revisa las respuestas incorrectas e inténtalo de nuevo.", false);
-          }
-        });
-      }
 
-      document.getElementById("main-content-scroll").scrollTo({ top: 0, behavior: 'smooth' });
-      renderSidebarNavigation();
-    }
-
-    /* ============================================================
-     * 7. METRÓNOMO Y CONTROLES DEL SISTEMA (v1.4.0)
-     * ============================================================ */
-    let metroInt = null, metroBeat = 0, metroDebounceTimer;
-    const mSld = document.getElementById("metro-bpm");
-    const mTxt = document.getElementById("metro-bpm-display");
-    const mBtn = document.getElementById("metro-toggle");
-    const mLed = document.getElementById("metro-led");
-
-    mSld.addEventListener('input', e => { 
-       mTxt.textContent = e.target.value + " BPM"; 
-       clearTimeout(metroDebounceTimer);
-       metroDebounceTimer = setTimeout(() => {
-          if(metroInt) { 
-             mBtn.click();
-             setTimeout(() => mBtn.click(), 50);
-          } 
-       }, 300);
-    });
-
-    mBtn.addEventListener('click', () => {
-      if(metroInt) {
-        clearInterval(metroInt); 
-        metroInt = null;
-        document.getElementById("metro-btn-text").textContent = "Iniciar";
-        document.getElementById("metro-icon").className = "ph-fill ph-play pointer-events-none";
-        mBtn.className = "flex-1 py-2 rounded-lg bg-amp-700 hover:bg-amber-500 hover:text-amp-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200";
-      } else {
-        document.getElementById("metro-btn-text").textContent = "Pausar";
-        document.getElementById("metro-icon").className = "ph-fill ph-pause pointer-events-none";
-        mBtn.className = "flex-1 py-2 rounded-lg bg-amber-500 text-amp-900 font-bold text-xs flex items-center justify-center gap-1.5 transition duration-200 shadow-[0_0_15px_rgba(245,158,11,0.4)]";
-        
-        const bpm = parseInt(mSld.value);
-        metroBeat = 0;
-        
-        AudioEngine.playClick(true);
-        mLed.classList.add("led-active");
-        mLed.style.backgroundColor = "#ef4444";
-        mLed.style.color = "#ef4444";
-        setTimeout(() => { 
-          mLed.classList.remove("led-active"); 
-          mLed.style.backgroundColor = ""; 
-          mLed.style.color = "";
-        }, 100);
-        metroBeat++;
-
-        metroInt = setInterval(() => {
-          const isAccent = metroBeat % 4 === 0;
-          AudioEngine.playClick(isAccent);
-          
-          mLed.classList.add("led-active");
-          const accentColor = isAccent ? "#ef4444" : "#f59e0b";
-          mLed.style.backgroundColor = accentColor;
-          mLed.style.color = accentColor;
-          
-          setTimeout(() => {
-             mLed.classList.remove("led-active");
-             mLed.style.backgroundColor = "";
-             mLed.style.color = "";
-          }, 100);
-          
-          metroBeat++;
-        }, (60/bpm)*1000);
-      }
-    });
-
-    document.getElementById("btn-check-update").addEventListener("click", function() {
-      const btn = this;
-      btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin pointer-events-none"></i> Buscando...';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400 pointer-events-none"></i> App Actualizada';
-        btn.classList.add("bg-amp-800", "border-emerald-500/40");
-        showToast("Estás usando la versión más reciente del curso (v1.5.0).", true);
-        setTimeout(() => {
-          btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise pointer-events-none"></i> Comprobar Actualizaciones';
-          btn.disabled = false;
-          btn.classList.remove("bg-amp-800", "border-emerald-500/40");
-        }, 4000);
-      }, 1500);
-    });
-
-    document.getElementById("btn-export-backup").addEventListener("click", async () => {
-      const rawData = JSON.stringify(getProgressData());
-      const blob = new Blob([rawData], { type: "application/json" });
-      const fileName = "RiffMaster_Backup.json";
-      const file = new File([blob], fileName, { type: "application/json" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: 'Backup RiffMaster',
-            text: 'Copia de seguridad de mi progreso en el curso RiffMaster.'
-          });
-          showToast("Archivo compartido exitosamente.");
-        } catch (e) {
-          console.log("Canceled share or error:", e);
-        }
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast("Archivo JSON descargado en tu dispositivo.");
-      }
-    });
-
-    document.getElementById("input-restore").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const json = JSON.parse(event.target.result);
-          if(json && Array.isArray(json.completedModules)) {
-            const validIds = CourseData.map(c => c.id);
-            let safeMods = json.completedModules.filter(m => validIds.includes(m));
-            json.completedModules = [...new Set(safeMods)];
+            document.getElementById('module-content').innerHTML = htmlContent;
+            renderSidebar();
             
-            localStorage.setItem(StorageKey, JSON.stringify(json));
-            closeModal('settings-modal');
-            showToast("¡Progreso restaurado correctamente! Recargando...", true);
-            setTimeout(() => location.reload(), 1500);
-          } else {
-            showToast("El archivo seleccionado no tiene el formato correcto.", false);
-          }
-        } catch(err) {
-          showToast("Error crítico al leer el archivo JSON.", false);
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    });
+            // Re-bind events in dynamic content
+            document.querySelectorAll('.btn-play-riff').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const rId = e.currentTarget.getAttribute('data-riff');
+                    if (riffData[rId]) {
+                        AudioEngine.playRiff(riffData[rId], true, 100);
+                    }
+                });
+            });
 
-    window.onload = () => { 
-       selectModule(0); 
-       updateGlobalProgressBar(); 
-       
-       const fontPreload = document.createElement('div');
-       fontPreload.style.fontFamily = "'Courier New', monospace";
-       fontPreload.style.visibility = 'hidden';
-       fontPreload.style.position = 'absolute';
-       fontPreload.innerText = 'Preload';
-       document.body.appendChild(fontPreload);
-       setTimeout(() => document.body.removeChild(fontPreload), 100);
-    };
-  </script>
+            document.querySelectorAll('.btn-next').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const nId = parseInt(e.currentTarget.getAttribute('data-next'));
+                    loadModuleUI(nId);
+                    document.getElementById('main-scroll').scrollTop = 0;
+                });
+            });
+
+            const qForm = document.getElementById('quiz-form');
+            if (qForm) {
+                qForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    let allCorrect = true;
+                    mod.quiz.forEach((q, idx) => {
+                        const selected = qForm.querySelector(`input[name="q${idx}"]:checked`);
+                        if (!selected || parseInt(selected.value) !== q.correct) {
+                            allCorrect = false;
+                        }
+                    });
+
+                    if (allCorrect) {
+                        // Success Logic
+                        if (!appState.completed.includes(id)) appState.completed.push(id);
+                        if (id < modules.length && !appState.unlocked.includes(id + 1)) {
+                            appState.unlocked.push(id + 1);
+                        }
+                        saveState();
+                        
+                        document.getElementById('quiz-container').innerHTML = `
+                            <div class="text-center py-6 animate-pulse">
+                                <i class="ph ph-confetti text-5xl text-accent mb-2"></i>
+                                <h3 class="text-2xl font-bold text-white">¡Módulo Superado!</h3>
+                                <p class="text-gray-400 mt-2">Has desbloqueado nuevo contenido.</p>
+                            </div>
+                        `;
+                        setTimeout(() => {
+                            loadModuleUI(id); // Reload to show green success state
+                            document.getElementById('main-scroll').scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+                        }, 1500);
+
+                    } else {
+                        document.getElementById('quiz-error').classList.remove('hidden');
+                    }
+                });
+            }
+        }
+
+        /* ============================================================
+         * EVENT LISTENERS (GLOBAL)
+         * ============================================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderSidebar();
+            loadModuleUI(currentModuleId);
+
+            // Tuner Buttons
+            document.querySelectorAll('.tune-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const note = e.target.getAttribute('data-note');
+                    AudioEngine.playNote(note, 2.0, false);
+                });
+            });
+
+            // Metronome Logic
+            const btnMetro = document.getElementById('btn-metro-toggle');
+            const iconMetro = document.getElementById('icon-metro');
+            const ledMetro = document.getElementById('metro-led');
+            const sliderBpm = document.getElementById('bpm-slider');
+            const dispBpm = document.getElementById('bpm-display');
+            let metroTimeout = null;
+
+            function updateMetronome() {
+                if (AudioEngine.isBackingActive) {
+                    AudioEngine.stopBackingTrack();
+                    AudioEngine.startBackingTrack(sliderBpm.value);
+                }
+            }
+
+            sliderBpm.addEventListener('input', (e) => {
+                dispBpm.innerText = e.target.value;
+                if (metroTimeout) clearTimeout(metroTimeout);
+                metroTimeout = setTimeout(updateMetronome, 300);
+            });
+
+            btnMetro.addEventListener('click', () => {
+                if (AudioEngine.isBackingActive) {
+                    AudioEngine.stopBackingTrack();
+                    iconMetro.classList.replace('ph-stop', 'ph-play');
+                    ledMetro.classList.replace('led-on', 'led-off');
+                    btnMetro.classList.remove('bg-red-600', 'hover:bg-red-700');
+                } else {
+                    AudioEngine.startBackingTrack(sliderBpm.value);
+                    iconMetro.classList.replace('ph-play', 'ph-stop');
+                    ledMetro.classList.replace('led-off', 'led-on');
+                    btnMetro.classList.add('bg-red-600', 'hover:bg-red-700');
+                }
+            });
+
+            // Settings Modal & Backup Logic
+            const modalSet = document.getElementById('modal-settings');
+            const modalContent = document.getElementById('modal-settings-content');
+            
+            document.getElementById('btn-settings').addEventListener('click', () => {
+                modalSet.classList.remove('hidden');
+                modalSet.classList.add('flex');
+                setTimeout(() => {
+                    modalSet.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            });
+
+            document.getElementById('btn-close-settings').addEventListener('click', () => {
+                modalSet.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modalSet.classList.add('hidden');
+                    modalSet.classList.remove('flex');
+                }, 300);
+            });
+
+            // Backup Export (iOS Compatible via share)
+            document.getElementById('btn-backup').addEventListener('click', async () => {
+                const dataStr = JSON.stringify(appState);
+                const file = new File([dataStr], "riffmaster_backup.json", {type: "application/json"});
+                
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Backup RiffMaster',
+                            text: 'Copia de seguridad de progreso de RiffMaster.'
+                        });
+                    } catch (error) { console.log('Share canceled or failed'); }
+                } else {
+                    // Fallback para escritorio
+                    const url = URL.createObjectURL(file);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = "riffmaster_backup.json";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            });
+
+            // Restore Import
+            document.getElementById('file-restore').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    try {
+                        const parsed = JSON.parse(evt.target.result);
+                        if (parsed.unlocked && parsed.completed) {
+                            appState = parsed;
+                            saveState();
+                            renderSidebar();
+                            loadModuleUI(1);
+                            document.getElementById('restore-msg').classList.remove('hidden');
+                            setTimeout(() => document.getElementById('restore-msg').classList.add('hidden'), 3000);
+                        }
+                    } catch (err) { alert("Archivo de copia de seguridad inválido."); }
+                };
+                reader.readAsText(file);
+            });
+
+            // Reset Data
+            document.getElementById('btn-reset-data').addEventListener('click', () => {
+                if(confirm("¿Estás seguro de que deseas borrar TODO tu progreso? Esta acción no se puede deshacer.")) {
+                    appState = { unlocked: [1], completed: [] };
+                    saveState();
+                    renderSidebar();
+                    loadModuleUI(1);
+                    document.getElementById('btn-close-settings').click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
