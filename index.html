@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <!-- Settings Modal (v1.9.0) -->
+    <!-- Settings Modal (v2.0.0) -->
     <div id="modal-settings" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[60] p-4 backdrop-blur-md opacity-0 transition-opacity duration-300">
         <div class="bg-panel border border-[#2A2A35] rounded-2xl w-full max-w-sm p-0 transform scale-95 transition-transform duration-300 shadow-2xl flex flex-col overflow-hidden" id="modal-settings-content">
             
@@ -206,10 +206,13 @@
                     <div class="bg-panelLight p-4 rounded-xl border border-gray-800/80">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-[14px] text-gray-300 font-medium">Versión Instalada:</span>
-                            <span class="text-sm font-mono font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">v1.9.0</span>
+                            <span class="text-sm font-mono font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">v2.0.0</span>
                         </div>
-                        <button class="w-full bg-[#30303A] text-white text-[13px] font-bold py-3 rounded-xl flex items-center justify-center cursor-default pointer-events-none transition-colors">
+                        <button class="w-full bg-[#30303A] text-white text-[13px] font-bold py-3 rounded-xl flex items-center justify-center cursor-default pointer-events-none transition-colors mb-3">
                             <i class="ph-bold ph-check text-green-400 mr-2 text-base"></i> App Actualizada
+                        </button>
+                        <button id="btn-force-update" class="w-full bg-red-900/20 hover:bg-red-900/40 text-red-400 border border-red-900/50 text-[13px] font-bold py-3 rounded-xl flex items-center justify-center transition-colors shadow-sm">
+                            <i class="ph-bold ph-arrows-clockwise mr-2 text-base"></i> Forzar Actualización
                         </button>
                     </div>
                 </div>
@@ -228,12 +231,16 @@
                         <i class="ph-bold ph-upload-simple mr-2 text-lg"></i> Generar Backup JSON
                     </button>
                     
-                    <div class="relative w-full">
+                    <div class="relative w-full mb-4">
                         <input type="file" id="file-restore" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         <div class="w-full bg-[#24242B] border border-gray-700 hover:bg-[#2A2A35] text-white text-[14px] font-bold py-3.5 px-4 rounded-xl flex items-center justify-center transition-colors shadow-sm">
                             <i class="ph-bold ph-download-simple mr-2 text-lg"></i> Restaurar desde JSON
                         </div>
                     </div>
+                    
+                    <button id="btn-reset-data" class="w-full bg-transparent text-red-400 hover:text-white hover:bg-red-600 border border-red-900/50 text-[13px] font-bold py-3 rounded-xl flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso
+                    </button>
                 </div>
                 
                 <div class="text-center mb-6">
@@ -244,15 +251,15 @@
                     <div class="w-6 h-6 rounded-full bg-accent text-black flex items-center justify-center shrink-0">
                         <i class="ph-bold ph-check text-[14px]"></i>
                     </div>
-                    <p class="text-[13px] text-white font-medium leading-snug">Estás usando la versión más reciente del curso (v1.9.0).</p>
+                    <p class="text-[13px] text-white font-medium leading-snug">Estás usando la versión más reciente del curso (v2.0.0).</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast-restore" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-black px-6 py-3 rounded-full font-bold shadow-2xl transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none z-[70] flex items-center text-sm">
-        <i class="ph-bold ph-check-circle mr-2 text-lg"></i> Progreso restaurado
+    <!-- Toast Notification (Replaces alerts) -->
+    <div id="toast-notification" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-black px-6 py-3 rounded-full font-bold shadow-2xl transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none z-[70] flex items-center text-sm">
+        <i id="toast-icon" class="ph-bold ph-check-circle mr-2 text-lg"></i> <span id="toast-msg">Progreso restaurado</span>
     </div>
 
     <!-- AUDIO ENGINE & LOGIC -->
@@ -453,11 +460,32 @@
             document.getElementById('progress-text-mobile').innerText = `${pct}% completado`;
         }
 
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast-notification');
+            const icon = document.getElementById('toast-icon');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = msg;
+            if (isError) {
+                toast.classList.replace('bg-green-500', 'bg-red-500');
+                toast.classList.replace('text-black', 'text-white');
+                icon.className = 'ph-bold ph-warning-circle mr-2 text-lg';
+            } else {
+                toast.classList.replace('bg-red-500', 'bg-green-500');
+                toast.classList.replace('text-white', 'text-black');
+                icon.className = 'ph-bold ph-check-circle mr-2 text-lg';
+            }
+            toast.classList.remove('opacity-0', '-translate-y-4');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-4');
+            }, 3000);
+        }
+
         /* ============================================================
          * SVG GENERATORS (Mejorados visualmente)
          * ============================================================ */
         function drawFretboard(strings, frets, dots, width=600, height=140) {
-            let svg = `<div class="overflow-x-auto custom-scrollbar mb-6 pb-2"><svg viewBox="0 0 ${width} ${height}" class="min-w-[600px] w-full h-auto bg-fretboard rounded-lg shadow-inner">`;
+            // FIX v2.0.0: Wrap SVG inside a horizontally scrolling container with a forced min-width
+            let svg = `<div class="overflow-x-auto w-full pb-2 custom-scrollbar mb-6"><svg viewBox="0 0 ${width} ${height}" class="min-w-[500px] w-full h-auto bg-fretboard rounded-lg shadow-inner">`;
             const fretSpacing = width / frets;
             const stringSpacing = height / (strings + 1);
 
@@ -550,12 +578,12 @@
                     
                     <h3 class="text-xl font-bold text-white mt-8 mb-3">1. Leer Tablatura en 60 segundos</h3>
                     <p class="text-gray-300 mb-4 text-[15px]">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong> (la que está más cerca del suelo). La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la que ves más cerca de ti).</p>
-                    <div class="bg-gray-900 p-4 rounded-xl overflow-x-auto tab-font text-emerald-400 mb-6 border border-gray-800 shadow-inner">
-e|-------------------| (1ª Cuerda - Fina)<br>
-B|-------------------| (2ª Cuerda)<br>
-G|-------------------| (3ª Cuerda)<br>
-D|-------------------| (4ª Cuerda)<br>
-A|-------------------| (5ª Cuerda)<br>
+                    <div class="bg-gray-900 p-4 rounded-xl overflow-x-auto tab-font text-emerald-400 mb-6 border border-gray-800 shadow-inner whitespace-pre text-xs md:text-sm">
+e|-------------------| (1ª Cuerda - Fina)
+B|-------------------| (2ª Cuerda)
+G|-------------------| (3ª Cuerda)
+D|-------------------| (4ª Cuerda)
+A|-------------------| (5ª Cuerda)
 E|--0---3---5--------| (6ª Cuerda - Gorda)
                     </div>
                     <p class="text-gray-300 mb-4 text-[15px]">Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).</p>
@@ -574,7 +602,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             <span class="text-xs font-mono font-bold text-gray-500 uppercase tracking-widest bg-gray-800 px-3 py-1.5 rounded-lg">Dist: ON</span>
                         </div>
                         
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 <span class="text-accent">E</span>|--0---3---5----0---3---6-5----0---3---5---3---0--|
                         </div>
                     </div>
@@ -613,7 +641,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
    <span class="text-gray-500">* * * *      * * * *      * * * *</span> 
 <span class="text-accent">A</span>|-5-5-5-5------3-3-3-3------5-5-5-5------
 <span class="text-accent">E</span>|-3-3-3-3------1-1-1-1------3-3-3-3------
@@ -657,7 +685,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                                 <i class="ph-fill ph-play text-xl mr-2"></i> Escuchar Lick
                             </button>
                         </div>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 <span class="text-accent">e</span>|-------------------------5~------|
 <span class="text-accent">B</span>|-------5--8p5----------5---------|
 <span class="text-accent">G</span>|--7b9----------7b9r7p5-----------|
@@ -699,7 +727,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         <p class="text-gray-400 mb-5 text-[14px]">Ritmo clásico. Aplícalo cambiando entre G y C cada compás.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 | ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |
 | <span class="text-accent font-bold">G</span>                 | <span class="text-accent font-bold">C</span>                 |
                         </div>
@@ -738,7 +766,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         <p class="text-gray-400 mb-5 text-[14px]">S = Slide. V = Vibrato marcado. Escucha cómo el slide conecta las notas fluidamente.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 <span class="text-accent">G</span>|--5S7--7--5---------|------------------|
 <span class="text-accent">D</span>|-------------7V-----|--5--7--7S10--7V--|
                         </div>
@@ -768,7 +796,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         <p class="text-gray-400 mb-5 text-[14px]">Coloca los acordes abiertos de Em y luego C. Deja que todas las notas suenen el mayor tiempo posible (let ring).</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
    <span class="text-accent font-bold">Em</span>                       <span class="text-accent font-bold">C</span>
 <span class="text-accent">e</span>|-------0-----------0----|-------0-----------0----|
 <span class="text-accent">B</span>|---------0-----------0--|---------1-----------1--|
@@ -803,7 +831,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         <p class="text-gray-400 mb-5 text-[14px]">Este lick suena alegre, con bendings y uso de cuerdas al aire típico de las guitarras Telecaster.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 <span class="text-accent">e</span>|-----------------------0--|
 <span class="text-accent">B</span>|--2h3p2----------------0--|
 <span class="text-accent">G</span>|---------4--2--0-------1--|
@@ -839,7 +867,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             </button>
                         </div>
                         <p class="text-gray-400 mb-5 text-[14px]">Mantén el brazo derecho como una máquina, moviéndose arriba y abajo sin parar. Presiona el acorde solo en las notas numéricas, suelta la presión (pero no quites la mano) en las 'x'.</p>
-                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre border border-gray-800 custom-scrollbar">
+                        <div class="bg-dark p-4 rounded-xl tab-font text-gray-300 overflow-x-auto whitespace-pre text-xs md:text-sm border border-gray-800 custom-scrollbar">
 <span class="text-gray-500">(Acorde base: E9 - traste 7)</span>
 <span class="text-accent">e</span>|-7--<span class="text-gray-500">x-x-x</span>--7--<span class="text-gray-500">x</span>--7-7--<span class="text-gray-500">x-x</span>-|
 <span class="text-accent">B</span>|-7--<span class="text-gray-500">x-x-x</span>--7--<span class="text-gray-500">x</span>--7-7--<span class="text-gray-500">x-x</span>-|
@@ -893,7 +921,6 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                 if (!isUnlocked) trailingIcon = '<i class="ph-bold ph-lock-key text-gray-600 ml-auto"></i>';
                 else if (isCompleted) trailingIcon = '<i class="ph-fill ph-check-circle text-green-500 ml-auto text-lg"></i>';
 
-                // Mostrar "1. Nombre del módulo" ocultando "Módulo 1:"
                 const moduleName = mod.title.split(': ')[1] || mod.title;
                 btn.innerHTML = `<i class="ph-bold ${mod.icon} text-lg w-6 shrink-0"></i> <span class="ml-2 text-[13px] leading-tight flex-1">${mod.id}. ${moduleName}</span> ${trailingIcon}`;
                 
@@ -1106,7 +1133,13 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                     modalSet.classList.remove('flex');
                 }, 300);
             });
+            
+            // Force Update
+            document.getElementById('btn-force-update').addEventListener('click', () => {
+                window.location.href = window.location.href.split('?')[0] + '?v=' + new Date().getTime();
+            });
 
+            // Backup JSON
             document.getElementById('btn-backup').addEventListener('click', async () => {
                 const dataStr = JSON.stringify(appState);
                 const file = new File([dataStr], "riffmaster_backup.json", {type: "application/json"});
@@ -1131,8 +1164,7 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                 }
             });
 
-            const toastRestore = document.getElementById('toast-restore');
-
+            // Restore JSON
             document.getElementById('file-restore').addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -1146,17 +1178,51 @@ E|--0---3---5--------| (6ª Cuerda - Gorda)
                             renderSidebar();
                             loadModuleUI(1);
                             
-                            // Mostrar Toast
                             document.getElementById('btn-close-settings').click();
-                            toastRestore.classList.remove('opacity-0', '-translate-y-4');
-                            setTimeout(() => {
-                                toastRestore.classList.add('opacity-0', '-translate-y-4');
-                            }, 3000);
+                            showToast("Progreso restaurado con éxito.");
+                        } else {
+                            showToast("Archivo JSON inválido.", true);
                         }
-                    } catch (err) { alert("Archivo de copia de seguridad inválido."); }
+                    } catch (err) {
+                        showToast("Error leyendo archivo de backup.", true);
+                    }
                 };
                 reader.readAsText(file);
                 e.target.value = ''; // Reset input
+            });
+            
+            // Reset Data (Replaces confirm())
+            let resetConfirm = false;
+            const btnReset = document.getElementById('btn-reset-data');
+            btnReset.addEventListener('click', () => {
+                if(!resetConfirm) {
+                    resetConfirm = true;
+                    btnReset.innerHTML = '<i class="ph-bold ph-warning mr-2 text-lg"></i> ¿Seguro? Clic para borrar';
+                    btnReset.classList.replace('text-red-400', 'text-white');
+                    btnReset.classList.replace('hover:text-white', 'hover:text-white');
+                    btnReset.classList.replace('bg-transparent', 'bg-red-600');
+                    btnReset.classList.replace('border-red-900/50', 'border-red-600');
+                    setTimeout(() => {
+                        resetConfirm = false;
+                        btnReset.innerHTML = '<i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso';
+                        btnReset.classList.replace('text-white', 'text-red-400');
+                        btnReset.classList.replace('bg-red-600', 'bg-transparent');
+                        btnReset.classList.replace('border-red-600', 'border-red-900/50');
+                    }, 4000);
+                } else {
+                    appState = { unlocked: [1], completed: [] };
+                    saveState();
+                    renderSidebar();
+                    loadModuleUI(1);
+                    document.getElementById('btn-close-settings').click();
+                    showToast("Todo el progreso fue borrado.");
+                    
+                    resetConfirm = false;
+                    btnReset.innerHTML = '<i class="ph-bold ph-trash mr-2 text-base"></i> Borrar Todo el Progreso';
+                    btnReset.classList.replace('text-white', 'text-red-400');
+                    btnReset.classList.replace('bg-red-600', 'bg-transparent');
+                    btnReset.classList.replace('border-red-600', 'border-red-900/50');
+                }
             });
         });
     </script>
