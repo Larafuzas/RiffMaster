@@ -11,8 +11,8 @@
   <meta name="apple-mobile-web-app-title" content="RiffMaster">
   
   <!-- Enlaces al icono en la raíz del repositorio -->
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/jpeg" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.jpeg">
+  <link rel="icon" type="image/jpeg" href="icon.jpeg">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -237,7 +237,7 @@
           <div class="bg-amp-800 border border-amp-700 rounded-xl p-4 flex flex-col gap-3 shadow-inner">
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-300 font-medium">Versión Instalada:</span>
-              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.2.0 (Build 45)</span>
+              <span class="text-sm font-mono font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-500/20">v1.3.0 (Build iOS Fixed)</span>
             </div>
             <button id="btn-check-update" class="w-full py-2.5 bg-amp-700 hover:bg-amp-600 rounded-lg text-sm text-white font-bold flex items-center justify-center gap-2 transition-all">
               <i class="ph-bold ph-arrows-clockwise"></i> Comprobar Actualizaciones
@@ -286,7 +286,7 @@
   <!-- ========================================== -->
   <script>
     /* ============================================================
-     * 1. SINTETIZADOR DE AUDIO - WEB AUDIO API (FIXED FOR IOS)
+     * 1. SINTETIZADOR DE AUDIO - WEB AUDIO API (RESCATADO PARA IOS)
      * ============================================================ */
     const AudioEngine = (() => {
       let ctx = null;
@@ -296,33 +296,34 @@
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           ctx = new AudioContext();
         }
-        if (ctx.state === 'suspended') {
-          ctx.resume();
+        // Fuerza el reinicio del contexto si iOS lo suspendió
+        if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+          ctx.resume().catch(e => console.warn("Error al reanudar AudioContext", e));
         }
         return ctx;
       }
 
-      // iOS Unlock Hack: Reproducir un buffer silencioso en el primer toque
+      // iOS Unlock Hack Robusto: Se adjunta globalmente a la ventana
       const unlockAudioContext = () => {
         const audioCtx = getContext();
         if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
+            audioCtx.resume();
         }
-        // Crear un buffer vacío de 1 segundo
+        // Reproducir un buffer minúsculo vacío para habilitar el motor en Safari
         const buffer = audioCtx.createBuffer(1, 1, 22050);
         const source = audioCtx.createBufferSource();
         source.buffer = buffer;
         source.connect(audioCtx.destination);
         source.start(0);
 
-        // Remover listeners una vez desbloqueado
-        document.body.removeEventListener('touchstart', unlockAudioContext);
-        document.body.removeEventListener('click', unlockAudioContext);
+        // Limpiar los escuchas para no ejecutar esto más de una vez
+        const events = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
+        events.forEach(evt => window.removeEventListener(evt, unlockAudioContext, { capture: true }));
       };
       
-      // Asignar los listeners para desbloquear en iOS y Android
-      document.body.addEventListener('touchstart', unlockAudioContext, { once: true });
-      document.body.addEventListener('click', unlockAudioContext, { once: true });
+      // Adjuntar a los eventos de usuario en la fase de captura (antes de que lo haga cualquier botón)
+      const events = ['touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
+      events.forEach(evt => window.addEventListener(evt, unlockAudioContext, { once: true, capture: true }));
 
       // Frecuencias exactas para las notas de guitarra
       const noteFreqs = {
@@ -334,8 +335,8 @@
 
       // Función principal para reproducir una nota sintetizada
       function playNote(noteName, duration = 1.0, isDistorted = false, timeOffset = 0) {
-        const audioCtx = getContext();
-        const startTime = audioCtx.currentTime + timeOffset;
+        const audioCtx = getContext(); // Llama síncronamente al clic del botón
+        const startTime = audioCtx.currentTime + (timeOffset > 0 ? timeOffset : 0.01); // 0.01 da margen a Safari
         const freq = noteFreqs[noteName] || 220;
 
         const osc = audioCtx.createOscillator();
@@ -345,17 +346,14 @@
 
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        // Filtro dinámico para simular el ataque de la púa y el decaimiento natural
         filter.frequency.setValueAtTime(isDistorted ? 2800 : 1600, startTime);
         filter.frequency.exponentialRampToValueAtTime(isDistorted ? 1200 : 400, startTime + duration);
 
         const gainNode = audioCtx.createGain();
-        // Envolvente de volumen (ADSR simplificado)
         gainNode.gain.setValueAtTime(0.001, startTime);
-        gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015); // Attack rápido
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration); // Decay natural
+        gainNode.gain.linearRampToValueAtTime(isDistorted ? 0.3 : 0.6, startTime + 0.015);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
-        // Rutear la señal
         osc.connect(filter);
         filter.connect(gainNode);
         gainNode.connect(audioCtx.destination);
@@ -364,10 +362,10 @@
         osc.stop(startTime + duration);
       }
 
-      // Reproducir varias notas a la vez (Acordes) con un ligero rasgueo (strum)
       function playChord(notes, duration = 1.5, isDistorted = false) {
+        // Ejecutado síncronamente
+        getContext(); 
         notes.forEach((note, index) => {
-          // El timeOffset de index * 0.035 simula el tiempo que tarda la púa en cruzar las cuerdas
           playNote(note, duration, isDistorted, index * 0.035);
         });
       }
@@ -381,8 +379,9 @@
       // Reproducir una tablatura/secuencia en el tiempo
       function playRiff(sequence) {
         stopCurrentSequence();
-        getContext();
+        const audioCtx = getContext(); // Invocar síncronamente al clic del botón 'Escuchar'
         let cumulativeTime = 0;
+        
         sequence.forEach((item) => {
           const tId = setTimeout(() => {
             if (Array.isArray(item.note)) {
@@ -392,7 +391,7 @@
             }
           }, cumulativeTime * 1000);
           sequenceTimeouts.push(tId);
-          cumulativeTime += item.gap || 0.35; // Gap es el tiempo hasta la siguiente nota
+          cumulativeTime += item.gap || 0.35;
         });
       }
 
@@ -401,11 +400,13 @@
         const audioCtx = getContext();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        const now = audioCtx.currentTime;
+        const now = audioCtx.currentTime + 0.01;
+        
         osc.type = 'sine';
         osc.frequency.setValueAtTime(isAccented ? 1200 : 800, now);
         gain.gain.setValueAtTime(1, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
@@ -418,7 +419,7 @@
       
       function startBackingTrack(chordProgression, bpm = 100) {
         stopBackingTrack();
-        getContext();
+        const audioCtx = getContext(); // Asegurar despertar al tocar 'Iniciar pista base'
         isBackingPlaying = true;
         const beatDurMs = (60 / bpm) * 1000;
         let beat = 0;
@@ -426,44 +427,41 @@
 
         backingInterval = setInterval(() => {
           if (!isBackingPlaying) return;
-          const audioCtx = getContext();
-          const now = audioCtx.currentTime;
+          const ctx = getContext(); // Re-chequear estado
+          const now = ctx.currentTime + 0.01;
           
-          // --- Sintetizador de Batería ---
+          // Batería Kick
           if (beat % 2 === 0) { 
-            // Kick (Bombo) en tiempos 1 y 3
-            const kickOsc = audioCtx.createOscillator();
-            const kickGain = audioCtx.createGain();
+            const kickOsc = ctx.createOscillator();
+            const kickGain = ctx.createGain();
             kickOsc.frequency.setValueAtTime(130, now);
             kickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
             kickGain.gain.setValueAtTime(0.7, now);
             kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
             kickOsc.connect(kickGain);
-            kickGain.connect(audioCtx.destination);
+            kickGain.connect(ctx.destination);
             kickOsc.start(now);
             kickOsc.stop(now + 0.15);
           } else { 
-            // Snare (Caja) en tiempos 2 y 4
-            const snareOsc = audioCtx.createOscillator();
-            const snareGain = audioCtx.createGain();
+            // Snare
+            const snareOsc = ctx.createOscillator();
+            const snareGain = ctx.createGain();
             snareOsc.type = 'triangle';
             snareOsc.frequency.setValueAtTime(220, now);
             snareGain.gain.setValueAtTime(0.4, now);
             snareGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
             snareOsc.connect(snareGain);
-            snareGain.connect(audioCtx.destination);
+            snareGain.connect(ctx.destination);
             snareOsc.start(now);
             snareOsc.stop(now + 0.12);
           }
 
-          // --- Sintetizador de Bajo (Sigue la progresión) ---
+          // Bajo
           if (chordProgression && chordProgression.length > 0) {
-            // El bajo toca la nota tónica del acorde actual
-            playNote(chordProgression[chordIndex % chordProgression.length], beatDurMs / 1000 * 0.9, false);
+            playNote(chordProgression[chordIndex % chordProgression.length], beatDurMs / 1000 * 0.9, false, 0.01);
           }
           
           beat++;
-          // Cambiar de acorde cada 4 tiempos (1 compás)
           if (beat % 4 === 0) chordIndex++;
         }, beatDurMs);
       }
@@ -482,53 +480,42 @@
     /* ============================================================
      * 2. GENERADOR SVG E INTERFAZ (UI COMPONENTES)
      * ============================================================ */
-    // Esta constante genera todo el HTML de los gráficos sin escribir miles de líneas estáticas.
     const SVGVisuals = {
-      
-      // Dibuja un mástil interactivo
       renderFretboard(dots = [], startFret = 0, numFrets = 5, title = "Diapasón") {
         const w = 640, h = 160, fW = (w - 60) / numFrets, sGap = 22, tM = 30;
-        let fL = '', fM = ''; // Lineas de trastes y marcadores
-        
-        // Dibujar Trastes verticales y marcadores de posición (3, 5, 7, 9, 12)
+        let fL = '', fM = '';
         for (let i = 0; i <= numFrets; i++) {
           const x = 50 + i * fW;
           const cFret = startFret + i;
-          const sW = (i === 0 && startFret === 0) ? 6 : 2; // Cejuela más gruesa
+          const sW = (i === 0 && startFret === 0) ? 6 : 2;
           const sC = (i === 0 && startFret === 0) ? "#f59e0b" : "#4a4a58";
           
           fL += `<line x1="${x}" y1="${tM}" x2="${x}" y2="${tM + 5 * sGap}" stroke="${sC}" stroke-width="${sW}" />`;
           
           if (i > 0) {
             fL += `<text x="${x - fW/2}" y="${tM + 5 * sGap + 20}" fill="#9ca3af" font-size="12" font-family="sans-serif" text-anchor="middle">Traste ${cFret}</text>`;
-            // Marcadores de punto simples
             if ([3, 5, 7, 9, 15, 17].includes(cFret)) {
               fM += `<circle cx="${x - fW/2}" cy="${tM + 2.5 * sGap}" r="5" fill="#3f3f4a" />`;
-            } 
-            // Marcador doble en traste 12
-            else if (cFret === 12) {
+            } else if (cFret === 12) {
               fM += `<circle cx="${x - fW/2}" cy="${tM + 1.2 * sGap}" r="4.5" fill="#f59e0b" opacity="0.6" />
                      <circle cx="${x - fW/2}" cy="${tM + 3.8 * sGap}" r="4.5" fill="#f59e0b" opacity="0.6" />`;
             }
           }
         }
         
-        // Dibujar Cuerdas horizontales (de más fina a más gruesa)
         const sN = ['e (1ª)', 'B (2ª)', 'G (3ª)', 'D (4ª)', 'A (5ª)', 'E (6ª)'];
         let sL = '';
         for (let s = 0; s < 6; s++) {
-          const y = tM + s * sGap, th = 1 + s * 0.6; // Grosor incremental
+          const y = tM + s * sGap, th = 1 + s * 0.6;
           sL += `<text x="42" y="${y + 4}" fill="#d1d5db" font-size="11" font-family="sans-serif" text-anchor="end">${sN[s]}</text>
                  <line x1="50" y1="${y}" x2="${50 + numFrets * fW}" y2="${y}" stroke="#8b949e" stroke-width="${th}" />`;
         }
         
-        // Dibujar Puntos de los dedos
         let nD = '';
         dots.forEach(d => {
           const y = tM + (d.string - 1) * sGap;
-          // Si es cuerda al aire (fret 0), dibujarlo fuera del mástil
           let x = d.fret === 0 ? 35 : 50 + (d.fret - startFret) * fW - fW / 2;
-          const fill = d.root ? '#f59e0b' : '#38bdf8'; // Naranja para tónica, azul para resto
+          const fill = d.root ? '#f59e0b' : '#38bdf8';
           nD += `<g class="transition-transform hover:scale-110 cursor-pointer">
                    <circle cx="${x}" cy="${y}" r="9" fill="${fill}" stroke="#18181c" stroke-width="2" />
                    <text x="${x}" y="${y + 3.5}" fill="#111" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle">${d.label || (d.root?'R':'•')}</text>
@@ -542,23 +529,19 @@
               <span class="text-xs font-bold text-gray-200 uppercase tracking-wider">${title}</span>
             </div>
             <svg viewBox="0 0 ${w} ${h}" class="w-full min-w-[550px] select-none">
-              <!-- Madera del mástil -->
               <rect x="50" y="${tM}" width="${numFrets * fW}" height="${5 * sGap}" fill="#1c1c22" rx="4" />
               ${fM}${fL}${sL}${nD}
             </svg>
           </div>`;
       },
       
-      // Dibuja un diagrama vertical de acorde
       renderChordBox(name, frets, fingers = [], rootNote = "") {
         const svgW = 160, svgH = 200, stX = 35, stY = 45, w = 90, h = 120, cW = w / 5, rH = h / 4;
         let grid = '';
         
-        // Cuerdas verticales
         for (let i = 0; i <= 5; i++) {
           grid += `<line x1="${stX + i * cW}" y1="${stY}" x2="${stX + i * cW}" y2="${stY + h}" stroke="#52525e" stroke-width="2" />`;
         }
-        // Trastes horizontales (Cejuela dorada gruesa)
         for (let j = 0; j <= 4; j++) {
           const isNut = j === 0;
           grid += `<line x1="${stX}" y1="${stY + j * rH}" x2="${stX + w}" y2="${stY + j * rH}" stroke="${isNut ? '#f59e0b' : '#3f3f4a'}" stroke-width="${isNut ? 5 : 2}" />`;
@@ -568,16 +551,11 @@
         frets.forEach((fret, i) => {
           const x = stX + i * cW;
           if (fret === -1) {
-             // Muted string (X)
              marks += `<text x="${x}" y="${stY - 10}" fill="#ef4444" font-size="14" font-family="sans-serif" font-weight="bold" text-anchor="middle">X</text>`;
           } else if (fret === 0) {
-             // Open string (O)
              marks += `<circle cx="${x}" cy="${stY - 14}" r="5" fill="none" stroke="#22c55e" stroke-width="2" />`;
           } else {
-             // Dedos pisando
              const y = stY + (fret - 0.5) * rH;
-             const isBass = (i === 0 || i === 1 || i === 2) && fret !== 0; // Aproximación visual
-             const col = rootNote !== "" ? '#f59e0b' : '#38bdf8';
              marks += `
                <circle cx="${x}" cy="${y}" r="8" fill="#38bdf8" />
                <text x="${x}" y="${y + 4}" fill="#111" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">${fingers[i]||''}</text>
@@ -596,7 +574,6 @@
           </div>`;
       },
       
-      // Renderiza una tablatura ASCII con reproductor integrado
       renderTab(tabLines, playCode = null) {
         return `
           <div class="my-5 bg-amp-900 rounded-xl border border-amp-700 p-4 sm:p-5 relative shadow-inner">
@@ -826,7 +803,6 @@
       const mod = CourseData[currentModuleIndex];
       const isCompleted = getProgressData().completedModules.includes(mod.id);
       
-      // Renderizar Secciones Dinámicamente
       let sectionsHtml = mod.sections.map(sec => `
         <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-6 mb-8 shadow-xl">
           <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2.5">
@@ -840,7 +816,6 @@
         </div>
       `).join('');
 
-      // Renderizar Quiz Dinámicamente
       let quizHtml = mod.quiz.map((qItem, qIdx) => `
         <div class="p-5 bg-amp-900 rounded-xl border border-amp-700 mb-4 text-sm shadow-inner" data-qidx="${qIdx}">
           <p class="font-bold text-gray-200 mb-4 text-base">${qIdx + 1}. ${qItem.q}</p>
@@ -856,10 +831,7 @@
         </div>
       `).join('');
 
-      // Inyectar todo en el contenedor
       document.getElementById("lesson-container").innerHTML = `
-        
-        <!-- Cabecera del Módulo -->
         <div class="bg-gradient-to-br from-amp-800 to-amp-900 border border-amp-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden mb-8">
           <div class="absolute top-0 right-0 p-8 opacity-5"><i class="ph-fill ph-guitar text-[150px]"></i></div>
           <span class="px-3 py-1.5 bg-amber-500/20 text-amber-400 font-mono text-[10px] sm:text-xs font-bold rounded-lg border border-amber-500/30 uppercase tracking-widest shadow-sm">MÓDULO ${mod.number} DE 5</span>
@@ -873,7 +845,6 @@
 
         ${sectionsHtml}
 
-        <!-- Zona de Práctica -->
         <div class="bg-gradient-to-r from-amp-850 to-amp-800 border-2 border-amp-700 rounded-2xl p-5 sm:p-7 shadow-xl mb-8">
           <h3 class="font-black text-xl text-white mb-3 flex items-center gap-2"><i class="ph-fill ph-barbell text-amber-500 text-2xl"></i> Zona de Práctica</h3>
           <h4 class="font-bold text-amber-400 mb-2">${mod.practiceRoutine.title}</h4>
@@ -886,7 +857,6 @@
           </div>
         </div>
 
-        <!-- Canción / Desafío Final -->
         <div class="bg-amp-850 border border-amber-500/40 rounded-2xl p-5 sm:p-7 shadow-[0_0_30px_rgba(245,158,11,0.08)] mb-8 relative overflow-hidden">
           <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-bl-full -z-10"></div>
           <span class="text-xs text-amber-400 font-black uppercase tracking-widest flex items-center gap-1.5 mb-2"><i class="ph-fill ph-star"></i> Desafío Final</span>
@@ -909,7 +879,6 @@
           ${SVGVisuals.renderTab(mod.song.tab)}
         </div>
 
-        <!-- Cuestionario / Validación -->
         <div class="bg-amp-850 border border-amp-700 rounded-2xl p-5 sm:p-7 shadow-xl mb-8">
           <h3 class="font-black text-xl text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-brain text-purple-400 text-2xl"></i> Validación de Conocimientos</h3>
           ${quizHtml}
@@ -918,7 +887,6 @@
           </button>
         </div>
 
-        <!-- Controles de Navegación Footer -->
         <div class="flex justify-between items-center pt-6 border-t border-amp-800">
           <button onclick="selectModule(${Math.max(0, currentModuleIndex-1)})" class="text-sm px-5 py-2.5 bg-amp-800 hover:bg-amp-700 border border-amp-700 rounded-lg text-gray-300 font-bold transition-colors flex items-center gap-2 ${currentModuleIndex === 0 ? 'opacity-30 cursor-not-allowed pointer-events-none' : ''}">
              <i class="ph-bold ph-arrow-left"></i> Anterior
@@ -928,8 +896,6 @@
           </button>
         </div>
       `;
-
-      // --- Eventos Dinámicos inyectados en la vista ---
 
       // Lógica de Backing Track
       document.getElementById("btn-bt").onclick = (e) => {
@@ -945,7 +911,6 @@
         }
       };
 
-      // Lógica del Timer de Práctica
       let timerInt = null;
       document.getElementById("btn-timer").onclick = (e) => {
          const btn = e.currentTarget;
@@ -955,7 +920,7 @@
             btn.innerHTML = `<i class="ph-bold ph-stopwatch"></i> Reiniciar Reto`;
             disp.classList.add("hidden");
          } else {
-            let time = 180; // 3 minutos
+            let time = 180;
             disp.classList.remove("hidden");
             btn.innerHTML = `<i class="ph-bold ph-x"></i> Detener`;
             timerInt = setInterval(() => {
@@ -965,7 +930,7 @@
                disp.textContent = `${m}:${s}`;
                if(time <= 0) {
                   clearInterval(timerInt); timerInt = null;
-                  AudioEngine.playClick(true); // Alarma
+                  AudioEngine.playClick(true);
                   showToast("¡Tiempo de práctica completado! Gran trabajo.");
                   btn.innerHTML = `<i class="ph-bold ph-stopwatch"></i> Reto Terminado`;
                }
@@ -973,7 +938,6 @@
          }
       };
 
-      // Lógica del Cuestionario
       document.getElementById("btn-quiz").onclick = () => {
         let allCorrect = true, allAnswered = true;
         mod.quiz.forEach((q, idx) => {
@@ -1005,7 +969,6 @@
              saveProgressData(d); 
           }
           showToast("¡Módulo Superado con Éxito! Sigue rockeando.", true);
-          // Auto-scroll al footer para ir al siguiente módulo
           setTimeout(() => {
              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
           }, 800);
@@ -1014,7 +977,6 @@
         }
       };
 
-      // Scroll al inicio cada vez que se cambia de módulo
       document.getElementById("main-content-scroll").scrollTop = 0;
       renderSidebarNavigation();
     }
@@ -1023,11 +985,9 @@
      * 5. LÓGICA DE METRÓNOMO Y MODALES (UI GENERAL)
      * ============================================================ */
     
-    // Afinador
     const modalTuner = document.getElementById("tuner-modal");
     document.getElementById("btn-tuner-modal").onclick = () => {
        modalTuner.classList.remove("hidden");
-       // Pequeño timeout para animar opacidad (Tailwind transition)
        setTimeout(() => modalTuner.classList.remove("opacity-0"), 10);
     };
     const closeTuner = () => {
@@ -1037,7 +997,6 @@
     document.getElementById("btn-close-tuner").onclick = closeTuner;
     document.getElementById("btn-close-tuner-2").onclick = closeTuner;
 
-    // Configuración & Sistema
     const modalSettings = document.getElementById("settings-modal");
     document.getElementById("btn-settings-modal").onclick = () => {
        modalSettings.classList.remove("hidden");
@@ -1048,7 +1007,6 @@
        setTimeout(() => modalSettings.classList.add("hidden"), 300);
     };
 
-    // Metrónomo
     let metroInt = null, metroBeat = 0;
     const mSld = document.getElementById("metro-bpm");
     const mTxt = document.getElementById("metro-bpm-display");
@@ -1058,7 +1016,6 @@
     mSld.oninput = e => { 
        mTxt.textContent = e.target.value + " BPM"; 
        if(metroInt) { 
-          // Si está sonando, reiniciarlo para adaptar el nuevo tempo
           clearInterval(metroInt); 
           mBtn.click(); 
           mBtn.click(); 
@@ -1080,7 +1037,6 @@
         const bpm = parseInt(mSld.value);
         metroBeat = 0;
         
-        // Sonar el primer beat inmediatamente
         AudioEngine.playClick(true);
         mLed.classList.add("led-active");
         setTimeout(() => mLed.classList.remove("led-active"), 100);
@@ -1091,8 +1047,8 @@
           AudioEngine.playClick(isAccent);
           
           mLed.classList.add("led-active");
-          if(isAccent) mLed.style.backgroundColor = "#ef4444"; // Rojo en el acento
-          else mLed.style.backgroundColor = "#f59e0b"; // Naranja resto
+          if(isAccent) mLed.style.backgroundColor = "#ef4444";
+          else mLed.style.backgroundColor = "#f59e0b";
           
           setTimeout(() => {
              mLed.classList.remove("led-active");
@@ -1104,7 +1060,6 @@
       }
     };
 
-    // Sidebar en móviles
     document.getElementById("toggle-sidebar").onclick = () => {
       document.getElementById("sidebar").classList.remove("-translate-x-full");
       document.getElementById("sidebar-backdrop").classList.remove("hidden");
@@ -1115,10 +1070,8 @@
     };
 
     /* ============================================================
-     * 6. ACTUALIZACIONES SIMULADAS Y BACKUP (WEB SHARE API - IOS)
+     * 6. ACTUALIZACIONES SIMULADAS Y BACKUP (WEB SHARE API)
      * ============================================================ */
-    
-    // Comprobar Actualización
     document.getElementById("btn-check-update").addEventListener("click", function() {
       const btn = this;
       btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Buscando...';
@@ -1126,7 +1079,7 @@
       setTimeout(() => {
         btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i> App Actualizada';
         btn.classList.add("bg-amp-800", "border-emerald-500/40");
-        showToast("Estás usando la versión más reciente del curso (v1.2.0).", true);
+        showToast("Estás usando la versión más reciente del curso (v1.3.0).", true);
         setTimeout(() => {
           btn.innerHTML = '<i class="ph-bold ph-arrows-clockwise"></i> Comprobar Actualizaciones';
           btn.disabled = false;
@@ -1135,7 +1088,6 @@
       }, 1500);
     });
 
-    // Exportar Backup (iOS / PC)
     document.getElementById("btn-export-backup").addEventListener("click", async () => {
       const rawData = localStorage.getItem(StorageKey) || JSON.stringify(getProgressData());
       const blob = new Blob([rawData], { type: "application/json" });
@@ -1154,7 +1106,6 @@
           console.log("Error o cancelación al compartir:", e);
         }
       } else {
-        // Fallback clásico para navegadores de PC
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -1167,7 +1118,6 @@
       }
     });
 
-    // Restaurar Backup
     document.getElementById("input-restore").addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -1188,17 +1138,13 @@
         }
       };
       reader.readAsText(file);
-      e.target.value = ''; // Reset input para poder cargar el mismo archivo otra vez
+      e.target.value = '';
     });
 
-    /* ============================================================
-     * INICIALIZACIÓN DE LA APLICACIÓN
-     * ============================================================ */
     window.onload = () => { 
        selectModule(0); 
        updateGlobalProgressBar(); 
        
-       // Pre-cargar la fuente Courier New forzando un render oculto para evitar saltos
        const fontPreload = document.createElement('div');
        fontPreload.style.fontFamily = "'Courier New', monospace";
        fontPreload.style.visibility = 'hidden';
