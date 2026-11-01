@@ -48,6 +48,7 @@
         .tab-font { 
             font-family: 'Courier New', Courier, monospace; 
             letter-spacing: 1px; 
+            line-height: 1.5;
         }
         
         .glass { 
@@ -114,7 +115,7 @@
             <span class="ml-2 font-bold text-lg md:text-xl text-white tracking-tight">RiffMaster</span>
         </div>
         
-        <!-- Iconos de acción (Con más aire para móviles) -->
+        <!-- Iconos de acción -->
         <div class="flex items-center space-x-2 md:space-x-3">
             
             <!-- Botón Referencia (Libro) -->
@@ -366,7 +367,9 @@
             </button>
             <div class="flex items-center mb-6">
                 <svg class="text-accent mr-3" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22v-6"></path><path d="M9.5 16A4.5 4.5 0 0 1 5 11.5V3"></path><path d="M14.5 16A4.5 4.5 0 0 0 19 11.5V3"></path>
+                    <path d="M12 22v-6"></path>
+                    <path d="M9.5 16A4.5 4.5 0 0 1 5 11.5V3"></path>
+                    <path d="M14.5 16A4.5 4.5 0 0 0 19 11.5V3"></path>
                 </svg>
                 <h3 class="text-xl font-bold text-white">Afinador Clásico</h3>
             </div>
@@ -390,7 +393,10 @@
             </button>
             <div class="flex items-center mb-2">
                 <svg class="text-accent mr-3" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5.5 21l3-15h7l3 15h-13z"></path><path d="M8.5 17l1.5-8h4l1.5 8"></path><line x1="12" y1="19" x2="15" y2="9"></line><circle cx="14" cy="12" r="1.5" fill="currentColor"></circle>
+                    <path d="M5.5 21l3-15h7l3 15h-13z"></path>
+                    <path d="M8.5 17l1.5-8h4l1.5 8"></path>
+                    <line x1="12" y1="19" x2="15" y2="9"></line>
+                    <circle cx="14" cy="12" r="1.5" fill="currentColor"></circle>
                 </svg>
                 <h3 class="text-xl font-bold text-white">Metrónomo (Backing)</h3>
             </div>
@@ -423,7 +429,8 @@
             </button>
             <h3 class="text-xl font-bold text-white mb-6 flex items-center border-b border-[#2a2a2a] pb-4">
                 <svg class="text-accent mr-2" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg> Sistema & Configuración
             </h3>
             <div class="space-y-6">
@@ -431,7 +438,7 @@
                     <p class="text-[11px] text-accent uppercase font-bold tracking-wider mb-4 flex items-center">VERSIÓN DEL CURSO</p>
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-300 font-medium">Versión Instalada:</span>
-                        <span class="bg-[#2a2a2a] text-accent font-mono text-sm px-3 py-1 rounded-md">v2.4.0</span>
+                        <span class="bg-[#2a2a2a] text-accent font-mono text-sm px-3 py-1 rounded-md">v3.0.0</span>
                     </div>
                     <button id="btn-force-update" class="w-full bg-[#2a2a2a] hover:bg-[#333] text-gray-200 font-medium py-3 rounded-lg flex items-center justify-center transition-colors">
                         <svg class="mr-2" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21.5 2v6h-6M2.13 15.57a9 9 0 1 0 3.87-11.14L2.5 8"></path></svg> Forzar Actualización
@@ -452,7 +459,7 @@
                 </div>
                 <div class="bg-accent/10 border border-accent/30 p-3 rounded-lg flex items-center">
                     <div class="bg-accent rounded-full p-1 mr-3 flex-shrink-0"><svg viewBox="0 0 24 24" width="16" height="16" stroke="black" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                    <p class="text-xs text-gray-200 font-medium leading-tight">Estás usando la versión más reciente del curso (v2.4.0).</p>
+                    <p class="text-xs text-gray-200 font-medium leading-tight">Estás usando la versión más reciente del curso (v3.0.0).</p>
                 </div>
                 <div class="pt-4 border-t border-[#2a2a2a]">
                     <button id="btn-reset-data" class="w-full text-red-500 hover:text-red-400 font-medium text-sm py-2 flex items-center justify-center transition-colors">Borrar Progreso Local</button>
@@ -628,7 +635,7 @@
         })();
 
         /* ============================================================
-         * 2. DATOS, ESTADO Y DIBUJO SVG
+         * 2. DATOS, ESTADO Y DIBUJO SVG (AHORA CON startFret FIX)
          * ============================================================ */
         let appState = { unlocked: [1], completed: [] };
 
@@ -706,28 +713,54 @@
             return svg;
         }
 
-        function drawChordBox(chordName, frets, stringsStatus, width=150, height=180) {
+        // FUNCIÓN MEJORADA: Permite startFret para evitar dibujar puntos fuera del canvas
+        function drawChordBox(chordName, frets, stringsStatus, startFret = 1, width=150, height=180) {
             let svg = `<div class="inline-block text-center m-2"><svg viewBox="0 0 ${width} ${height}" class="w-32 h-auto">`;
-            const startX = 30; const startY = 40; const w = 90; const h = 120;
+            const startX = 35; const startY = 40; const w = 90; const h = 120;
             const strSpace = w / 5; const fretSpace = h / 4;
 
             svg += `<text x="${width/2}" y="20" fill="#FFF" font-size="20" font-weight="bold" text-anchor="middle">${chordName}</text>`;
-            for (let i = 0; i <= 5; i++) svg += `<line x1="${startX + i*strSpace}" y1="${startY}" x2="${startX + i*strSpace}" y2="${startY + h}" stroke="#666" stroke-width="2"/>`;
-            svg += `<line x1="${startX}" y1="${startY}" x2="${startX + w}" y2="${startY}" stroke="#FFF" stroke-width="6"/>`;
-            for (let i = 1; i <= 4; i++) svg += `<line x1="${startX}" y1="${startY + i*fretSpace}" x2="${startX + w}" y2="${startY + i*fretSpace}" stroke="#666" stroke-width="2"/>`;
+            
+            // Cuerdas verticales
+            for (let i = 0; i <= 5; i++) {
+                svg += `<line x1="${startX + i*strSpace}" y1="${startY}" x2="${startX + i*strSpace}" y2="${startY + h}" stroke="#666" stroke-width="2"/>`;
+            }
+            
+            // Cejuela gruesa si startFret es 1, o línea fina + texto si es mayor
+            if (startFret === 1) {
+                svg += `<line x1="${startX}" y1="${startY}" x2="${startX + w}" y2="${startY}" stroke="#FFF" stroke-width="6"/>`;
+            } else {
+                svg += `<line x1="${startX}" y1="${startY}" x2="${startX + w}" y2="${startY}" stroke="#666" stroke-width="2"/>`;
+                svg += `<text x="${startX - 22}" y="${startY + 15}" fill="#FFF" font-size="13" font-weight="bold">${startFret}fr</text>`;
+            }
+            
+            // Trastes horizontales
+            for (let i = 1; i <= 4; i++) {
+                svg += `<line x1="${startX}" y1="${startY + i*fretSpace}" x2="${startX + w}" y2="${startY + i*fretSpace}" stroke="#666" stroke-width="2"/>`;
+            }
 
+            // Puntos / Marcas de cuerdas
             stringsStatus.forEach((val, i) => {
                 const x = startX + i*strSpace;
-                if (val === 'X') svg += `<text x="${x}" y="${startY - 10}" fill="#ef4444" font-size="16" text-anchor="middle" font-family="monospace font-bold">X</text>`;
-                else if (val === 0) svg += `<circle cx="${x}" cy="${startY - 14}" r="5" fill="none" stroke="#FFF" stroke-width="2"/>`;
-                else if (val > 0) svg += `<circle cx="${x}" cy="${startY + (val * fretSpace) - (fretSpace / 2)}" r="9" fill="#FFb300"/>`;
+                if (val === 'X') {
+                    svg += `<text x="${x}" y="${startY - 10}" fill="#ef4444" font-size="16" text-anchor="middle" font-family="monospace font-bold">X</text>`;
+                } else if (val === 0) {
+                    svg += `<circle cx="${x}" cy="${startY - 14}" r="5" fill="none" stroke="#FFF" stroke-width="2"/>`;
+                } else if (val > 0) {
+                    // Cálculo relativo al traste de inicio
+                    const relativeFret = val - startFret + 1;
+                    if (relativeFret > 0 && relativeFret <= frets) {
+                        svg += `<circle cx="${x}" cy="${startY + (relativeFret * fretSpace) - (fretSpace / 2)}" r="9" fill="#FFb300"/>`;
+                    }
+                }
             });
+            
             svg += `</svg></div>`;
             return svg;
         }
 
         /* ============================================================
-         * 3. RIFF DATA
+         * 3. RIFF DATA (Las partituras del audio)
          * ============================================================ */
         const riffData = {
             'smoke': [{note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5, pause:0.5}, {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'Bb2', dur:0.5}, {note:'A2', dur:1.5, pause:0.5}, {note:'E2', dur:1}, {note:'G2', dur:1}, {note:'A2', dur:1.5}, {note:'G2', dur:1}, {note:'E2', dur:2}],
@@ -745,142 +778,568 @@
         };
 
         /* ============================================================
-         * 4. CONTENIDO DE LOS 12 MÓDULOS DEL CURSO
+         * 4. CONTENIDO EXHAUSTIVO DE LOS 12 MÓDULOS DEL CURSO
          * ============================================================ */
         const modules = [
             {
-                id: 1, title: "1. Fundamentos y Púa Alternada", description: "Postura, lectura de tablatura en 60s y tu primer riff histórico.",
-                quiz: [{ q: "¿Qué representa el número '0' en una tablatura?", options: ["Silencio absoluto", "Tocar la cuerda al aire", "Pulsar el traste 10"], correct: 1 }, { q: "¿En qué consiste la técnica de púa alternada?", options: ["Tocar siempre hacia abajo", "Alternar movimientos abajo y arriba continuamente", "Usar los dedos en vez de la púa"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico: coge tu guitarra, conéctala y vamos al grano.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Leer Tablatura en 60 segundos</h3><p class="text-gray-300 mb-4 leading-relaxed">La tablatura tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong>. La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (la sexta).</p>
-                    <div class="bg-[#111] p-4 rounded-xl border border-gray-800 overflow-x-auto shadow-inner mb-6"><pre class="tab-font text-xs md:text-sm text-[#4af626] whitespace-pre">e|-------------------| (1ª Cuerda - Fina)\nB|-------------------| (2ª Cuerda)\nG|-------------------| (3ª Cuerda)\nD|-------------------| (4ª Cuerda)\nA|-------------------| (5ª Cuerda)\nE|--0---3---5--------| (6ª Cuerda - Gorda)</pre></div>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Los números indican el <strong>traste</strong>. Un '0' significa tocar la cuerda al aire (sin pisar ningún traste).</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. Púa Alternada</h3><p class="text-gray-300 mb-6 leading-relaxed">El secreto de la velocidad no es mover la mano rápido, es la economía de movimiento. Acostúmbrate a mover la púa en secuencias: Abajo (↓), Arriba (↑).</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="smoke"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">E|--0---3---5----0---3---6-5----0---3---5---3---0--|</pre></div></div>`
-            },
-            {
-                id: 2, title: "2. Power Chords y Palm Muting", description: "La base del Rock y el Punk. Estructuras móviles y muteo de palma.",
-                quiz: [{ q: "¿Dónde se apoya la mano derecha para hacer Palm Muting?", options: ["En el mástil", "Justo encima del puente", "Encima de las pastillas"], correct: 1 }, { q: "¿Cuántos dedos se necesitan estrictamente para un Power Chord básico?", options: ["Un dedo", "Dos dedos", "Tres dedos obligatoriamente"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">El acorde de quinta, o <em>Power Chord</em>, es el arma definitiva del Rock. Es agresivo y contundente, especialmente con distorsión.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Forma del Power Chord</h3>
-                    ${drawFretboard(6, 7, [{ string: 6, fret: 3, root: true, label: '1' }, { string: 5, fret: 5, root: false, label: '3' }], 600, 180)}
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Palm Muting (P.M.)</h3><p class="text-gray-300 mb-6 leading-relaxed">Apoya el lateral exterior de la palma de tu mano derecha <strong>justo encima del puente</strong> de la guitarra. Toca hacia abajo. Debes obtener un sonido seco, percusivo y apagado ("chug-chug").</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="punk"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">   * * * *      * * * *      * * * * \nA|-5-5-5-5------3-3-3-3------5-5-5-5------\nE|-3-3-3-3------1-1-1-1------3-3-3-3------</pre></div></div>`
-            },
-            {
-                id: 3, title: "3. La Pentatónica y el Blues", description: "Escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends.",
-                quiz: [{ q: "¿Qué es un 'Hammer-on'?", options: ["Golpear la guitarra", "Pulsar una cuerda y 'martillear' con un dedo en un traste superior", "Tirar de la cuerda"], correct: 1 }, { q: "En la primera caja de la pentatónica de La (Am), ¿en qué traste empieza la cuerda 6?", options: ["Traste 3", "Traste 5", "Traste 7"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Si quieres improvisar solos, el 90% de los guitarristas de rock empezaron aquí: La Caja 1 de la Escala Pentatónica Menor.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Patrón Visual: Am Pentatónica (Traste 5)</h3>
-                    ${drawFretboard(6, 10, [{ string: 6, fret: 5, root: true, label: '1' }, { string: 6, fret: 8, root: false, label: '4' }, { string: 5, fret: 5, root: false, label: '1' }, { string: 5, fret: 7, root: false, label: '3' }, { string: 4, fret: 5, root: false, label: '1' }, { string: 4, fret: 7, root: true, label: '3' }, { string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' }, { string: 2, fret: 5, root: false, label: '1' }, { string: 2, fret: 8, root: false, label: '4' }, { string: 1, fret: 5, root: true, label: '1' }, { string: 1, fret: 8, root: false, label: '4' }], 600, 200)}
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Articulaciones</h3>
-                    <ul class="list-disc pl-5 text-gray-300 space-y-3 mb-6 leading-relaxed"><li><strong>Hammer-on (h):</strong> Martilleas un traste superior sin volver a usar la púa.</li><li><strong>Pull-off (p):</strong> Retiras el dedo superior pellizcando la cuerda.</li><li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba transversalmente.</li></ul>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="blues"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-------------------------5~------|\nB|-------5--8p5----------5---------|\nG|--7b9----------7b9r7p5-----------|\nD|---------------------------------|</pre></div></div>`
-            },
-            {
-                id: 4, title: "4. Acordes Abiertos y Rasgueo", description: "G, C, D, Em, Am. Rítmica contínua y dedos pivote.",
-                quiz: [{ q: "¿Qué significa un dedo 'pivote' al cambiar de acorde?", options: ["Un dedo que se mueve rápido", "Un dedo que permanece en el mismo traste sirviendo de ancla", "El dedo meñique"], correct: 1 }, { q: "¿Qué es un rasgueo?", options: ["Tocar las cuerdas de una en una", "Golpear varias cuerdas a la vez siguiendo un patrón rítmico", "Tocar solo con el pulgar"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Los acordes abiertos usan cuerdas al aire. Son la base acústica de miles de canciones.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Los 5 Magníficos</h3>
-                    <div class="flex flex-wrap justify-center mb-8 bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800">
-                        ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
+                id: 1, 
+                title: "1. Fundamentos y Púa Alternada", 
+                description: "Postura, lectura de tablatura y la técnica esencial de púa alternada.",
+                quiz: [
+                    { q: "¿Qué representa el número '0' en una tablatura?", options: ["Silencio absoluto", "Tocar la cuerda al aire (sin pisar trastes)", "Pulsar el traste 10"], correct: 1 }, 
+                    { q: "¿En qué consiste la técnica de púa alternada?", options: ["Tocar siempre hacia abajo", "Alternar movimientos de púa estrictamente abajo y arriba de forma continua", "Usar los dedos pulgar e índice"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Bienvenido a RiffMaster. Olvídate del solfeo tradicional. Aquí el enfoque es 100% práctico. Para empezar, asegúrate de sujetar la púa (púa mediana, ~0.88mm) entre el pulgar y el lateral del dedo índice, dejando asomar solo un pequeño milímetro de plástico. Ángulo de 45 grados respecto a las cuerdas.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Lectura Rápida de Tablatura (TAB)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        La tablatura representa gráficamente el mástil de tu guitarra. Tiene 6 líneas. La línea de <strong>arriba</strong> representa la cuerda más <strong>fina</strong> (cuerda e aguda, la 1ª). La línea de <strong>abajo</strong> es la cuerda más <strong>gorda</strong> (cuerda E grave, la 6ª). Los números indican el <strong>traste</strong> que debes pisar. Si ves un '0', significa tocar la cuerda "al aire" (sin pisar ningún traste de la mano izquierda).
+                    </p>
+                    
+                    <div class="bg-[#111] p-4 rounded-xl border border-gray-800 overflow-x-auto shadow-inner mb-6">
+<pre class="tab-font text-xs md:text-sm text-[#4af626] whitespace-pre">
+e|-------------------| (1ª Cuerda - Fina)
+B|-------------------| (2ª Cuerda)
+G|-------------------| (3ª Cuerda)
+D|-------------------| (4ª Cuerda)
+A|-------------------| (5ª Cuerda)
+E|--0---3---5--------| (6ª Cuerda - Gorda)
+</pre>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El Dedo Pivote</h3><p class="text-gray-300 mb-4 leading-relaxed">El error común es parar la mano derecha al cambiar. <strong>La mano derecha es un reloj pendular.</strong> Busca dedos ancla para transiciones rápidas.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Ritmo Pop-Rock</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="strum"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">| ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |\n| G                 | C                 |</pre></div></div>`
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. Púa Alternada (Alternate Picking)</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El secreto de la fluidez y la velocidad no es mover la mano rápido, es la "economía de movimiento". El movimiento no nace del codo, nace de un ligero giro de la muñeca. Debes acostumbrar a tu mano derecha a moverse en un patrón ininterrumpido: Abajo (↓), Arriba (↑), Abajo (↓), Arriba (↑). Nunca des dos golpes hacia abajo seguidos en secuencias rápidas.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Smoke on the Water (Simplificado)</h4>
+                        <p class="text-gray-400 mb-6">Toca este riff clásico de Deep Purple. Para una postura correcta de mano izquierda, usa el dedo índice para el traste 3 y el dedo anular para el traste 5. Mantén la púa alternada en todo momento.</p>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="smoke">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
+                            </button>
+                        </div>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+E|--0---3---5----0---3---6-5----0---3---5---3---0--|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 5, title: "5. Expresión Solista", description: "Vibrato de muñeca, Slides, y la Blue Note.",
-                quiz: [{ q: "¿De dónde debe provenir el movimiento para hacer un vibrato?", options: ["De los dedos temblando", "De un giro de muñeca usando el mástil como punto de apoyo", "Del brazo entero"], correct: 1 }, { q: "¿Qué es un 'Slide'?", options: ["Pulsar la cuerda y deslizar el dedo a otro traste sin soltar la presión", "Usar un pedal de volumen", "Tirar la púa"], correct: 0 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Tocar las notas con <em>actitud</em> es lo que diferencia a un guitarrista real.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. Vibrato</h3><p class="text-gray-300 mb-4 leading-relaxed">Ancla el pulgar y <strong>gira la muñeca</strong>.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. La 'Blue Note'</h3><p class="text-gray-300 mb-4 leading-relaxed">Añade una nota disonante a la pentatónica para ese sonido oscuro.</p>
-                    ${drawFretboard(6, 10, [{ string: 3, fret: 5, root: false, label: '1' }, { string: 3, fret: 7, root: false, label: '3' }, { string: 3, fret: 8, root: true, label: 'Bl' }], 600, 100)}
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="expression"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Expresión</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">G|--5S7--7--5---------|------------------|\nD|-------------7V-----|--5--7--7S10--7V--|</pre></div></div>`
+                id: 2, 
+                title: "2. Power Chords y Palm Muting", 
+                description: "La base del Rock y el Punk. Estructuras móviles (quintas) y muteo percusivo de palma.",
+                quiz: [
+                    { q: "¿Dónde se apoya exactamente la mano derecha para hacer Palm Muting?", options: ["En el centro del mástil", "Justo donde las cuerdas tocan el puente de la guitarra", "Encima de las pastillas centrales"], correct: 1 }, 
+                    { q: "¿Qué dedos se suelen usar para formar un Power Chord básico de dos notas?", options: ["Solo el dedo índice (haciendo cejilla)", "El dedo Índice y el Anular (o meñique)", "El dedo Pulgar y el Medio"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El acorde de quinta, universalmente conocido como <em>Power Chord</em> (C5, G5, D5), es la herramienta definitiva de la música Rock y Metal. Su característica principal es que carece de la tercera nota (la que define si un acorde es mayor o menor). Al no ser ni alegre ni triste, suena inherentemente agresivo, hueco y sumamente contundente cuando se utiliza distorsión.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Geometría del Power Chord</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Lo mejor de la guitarra es que es visual. La forma de los dedos para este acorde siempre es la misma y la puedes deslizar por todo el mástil. Coloca tu dedo <strong>Índice</strong> en la cuerda más grave (por ejemplo, 6ª cuerda, traste 3 para un sol). Luego, coloca tu dedo <strong>Anular</strong> (o el meñique si te es más cómodo) exactamente dos trastes más arriba, en la cuerda inmediatamente inferior (5ª cuerda, traste 5). 
+                    </p>
+                    
+                    ${drawFretboard(6, 7, [{ string: 6, fret: 3, root: true, label: 'G' }, { string: 5, fret: 5, root: false, label: 'D' }], 600, 180)}
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La técnica de Palm Muting (P.M.)</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El Palm Muting te permite conseguir ese característico sonido "chug-chug" percusivo del heavy metal. Para lograrlo, apoya suavemente el lateral exterior de la palma de tu mano derecha (la zona carnosa opuesta al pulgar) <strong>justo encima del puente</strong> donde nacen las cuerdas. Si te adelantas mucho hacia el mástil, asfixiarás el sonido; si te quedas muy atrás, no mutearás nada. Rasguea todas las notas estrictamente hacia abajo.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Práctico: Riff Punk (Estilo Ramones / Green Day)</h4>
+                        <p class="text-gray-400 mb-6">Mantén la rigidez de tus dedos Índice y Anular y desliza el bloque entero por el mástil. Los asteriscos (*) debajo de la tablatura te indican qué golpes deben llevar Palm Muting aplicado.</p>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="punk">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Riff
+                            </button>
+                        </div>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+   * * * *      * * * *      * * * * 
+A|-5-5-5-5------3-3-3-3------5-5-5-5------
+E|-3-3-3-3------1-1-1-1------3-3-3-3------
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 6, title: "6. Arpegios y Fingerpicking", description: "Descomponiendo los acordes. Púa híbrida e intros de baladas.",
-                quiz: [{ q: "¿Qué significa arpegiar un acorde?", options: ["Tocar todas las notas a la vez", "Tocar las notas individuales secuencialmente", "Tocar solo los bajos"], correct: 1 }, { q: "¿Qué es la 'Púa Híbrida'?", options: ["Usar una púa de plástico y metal", "Sujetar la púa con pulgar/índice y usar el dedo medio para pellizcar otras cuerdas", "Tocar sin púa"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">El arpegio consiste en tocar las notas de un acorde de forma secuencial.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Técnica de Mano Derecha</h3><p class="text-gray-300 mb-4 leading-relaxed">Puedes hacerlo solo con púa o con <strong>Púa Híbrida</strong>: mantienes la púa para los bajos y usas los dedos para las agudas.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio Continuo en Em y C</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="arpeggio"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Arpegio</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">   Em                       C\ne|-------0-----------0----|-------0-----------0----|\nB|---------0-----------0--|---------1-----------1--|\nG|-----0-----0-----0-----0|-----0-----0-----0-----0|\nD|---2-----------2--------|---2-----------2--------|\nA|------------------------|-3-----------3----------|\nE|-0-----------0----------|------------------------|</pre></div></div>`
+                id: 3, 
+                title: "3. La Pentatónica y Articulaciones", 
+                description: "La escala Pentatónica Menor, Hammer-ons, Pull-offs y Bends de Blues.",
+                quiz: [
+                    { q: "¿Qué mecánica física define un 'Hammer-on'?", options: ["Golpear rítmicamente el cuerpo de madera de la guitarra", "Pulsar una cuerda con la púa y usar la fuerza de un dedo de la mano izquierda para golpear (martillear) un traste más alto", "Tirar de la cuerda transversalmente hacia arriba"], correct: 1 }, 
+                    { q: "En la famosa caja 1 de la Pentatónica menor de La (Am), ¿en qué traste posicionamos el dedo índice (comienzo del dibujo)?", options: ["Traste 3", "Traste 5", "Traste 7"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Si tu objetivo es improvisar solos de guitarra, el 99% de las leyendas del rock (Clapton, Page, Angus Young) empezaron exactamente aquí: dominando la primera posición (Caja 1) de la Escala Pentatónica Menor. Es una escala de 5 notas que repite su estructura geométrica a lo largo del diapasón.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Patrón Geométrico: Am Pentatónica (Traste 5)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Coloca tu dedo índice fijo haciendo barra visual en el traste 5. Este dedo nunca bajará del traste 5. Los puntos marcados te indican dónde pisar. Toca cada nota en sucesión ascendente y luego descendente.
+                    </p>
+                    
+                    ${drawFretboard(6, 10, [
+                        { string: 6, fret: 5, root: true, label: '1' }, 
+                        { string: 6, fret: 8, root: false, label: '4' }, 
+                        { string: 5, fret: 5, root: false, label: '1' }, 
+                        { string: 5, fret: 7, root: false, label: '3' }, 
+                        { string: 4, fret: 5, root: false, label: '1' }, 
+                        { string: 4, fret: 7, root: true, label: '3' }, 
+                        { string: 3, fret: 5, root: false, label: '1' }, 
+                        { string: 3, fret: 7, root: false, label: '3' }, 
+                        { string: 2, fret: 5, root: false, label: '1' }, 
+                        { string: 2, fret: 8, root: false, label: '4' }, 
+                        { string: 1, fret: 5, root: true, label: '1' }, 
+                        { string: 1, fret: 8, root: false, label: '4' }
+                    ], 600, 200)}
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Articulaciones: Haciendo cantar a la guitarra</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">Para no sonar como un robot tecleando, usamos articulaciones (Legato). Exigen fuerza en los dedos de la mano izquierda (trastes):</p>
+                    <ul class="list-disc pl-5 text-gray-300 space-y-3 mb-6 leading-relaxed">
+                        <li><strong>Hammer-on (h):</strong> Tienes el dedo índice pisando el traste 5. Pulsas la cuerda con la púa, e instantáneamente "martilleas" con fuerza tu dedo anular en el traste 7 de la misma cuerda. Consigues dos notas con un solo ataque de púa.</li>
+                        <li><strong>Pull-off (p):</strong> La técnica inversa. Tienes índice en el 5 y anular en el 7. Pulsas la cuerda con la púa, y retiras el dedo anular haciendo un ligero "pellizco" hacia abajo para que la cuerda siga vibrando ahora en el traste 5.</li>
+                        <li><strong>Bend (b):</strong> Empujar la cuerda hacia arriba o hacia abajo transversalmente (arrastrándola sobre la madera) para subir la afinación de la nota (habitualmente un tono entero, es decir, dos trastes). Usa 2 o 3 dedos de apoyo detrás del dedo principal para tener fuerza al empujar.</li>
+                    </ul>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick de Blues Clásico</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="blues">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick
+                            </button>
+                        </div>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-------------------------5~------|
+B|-------5--8p5----------5---------|
+G|--7b9----------7b9r7p5-----------|
+D|---------------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 7, title: "7. Escala Mayor y Modos", description: "Saliendo de la oscuridad. Country rock y el tono alegre.",
-                quiz: [{ q: "¿Cómo se suele describir la diferencia entre Mayor y Menor?", options: ["La Mayor suena más alegre y la Menor más oscura", "No hay diferencia audible", "La Menor suena a pop"], correct: 0 }, { q: "¿La Escala Pentatónica Mayor tiene las mismas formas que la Menor?", options: ["Sí, desplazadas en el mástil (bajando 3 trastes la tónica)", "No, son distintos", "Sí, en el mismo lugar"], correct: 0 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">El Rock Sureño, Country y Pop se basan en tonalidades mayores.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Pentatónica Mayor vs Menor</h3><p class="text-gray-300 mb-4 leading-relaxed">El dibujo de la escala Mayor es <strong>exactamente igual</strong> que la Menor, pero debes mover todo el patrón 3 trastes hacia la cejuela.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Country Rock</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="country"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Mayor</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-----------------------0--|\nB|--2h3p2----------------0--|\nG|---------4--2--0-------1--|\nD|------------------2----2--|</pre></div></div>`
+                id: 4, 
+                title: "4. Acordes Abiertos y Rítmica de Rasgueo", 
+                description: "Formación de acordes Mayores y Menores con cuerdas al aire, el brazo péndulo y los dedos pivote.",
+                quiz: [
+                    { q: "Al realizar transiciones entre acordes, ¿qué es un dedo 'pivote' o dedo 'ancla'?", options: ["Un dedo que se debe levantar y mover muy rápido", "Un dedo que permanece clavado en el mismo traste y cuerda entre ambos acordes, sirviendo como eje de rotación", "El dedo meñique flotante"], correct: 1 }, 
+                    { q: "¿En qué consiste exactamente un rasgueo (Strumming)?", options: ["Tocar las cuerdas de una en una (arpegiar)", "Golpear todas las cuerdas indicadas a la vez en movimientos continuos de muñeca y brazo, siguiendo una subdivisión rítmica", "Silenciar la guitarra con la mano derecha"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        La guitarra rítmica de fogata, de pub, de banda de folk-rock y pop se sostiene casi en su totalidad sobre el dominio de los acordes abiertos. Se denominan "abiertos" porque utilizan la resonancia natural de las cuerdas tocadas "al aire" (sin pisar), lo que genera un sonido envolvente, enorme y muy acústico (piensa en los Beatles, Oasis, o Tom Petty).
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Los 5 Magníficos (G, C, D, Em, Am)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Familiarízate con estos 5 diagramas. La 'X' roja indica que esa cuerda <strong>NO</strong> debe sonar al rasguear el acorde (debes silenciarla con la punta de un dedo de la mano izquierda, o simplemente evitar golpearla con la púa). El '0' transparente significa cuerda al aire. Los puntos naranjas te indican dónde pisar.
+                    </p>
+                    <div class="flex flex-wrap justify-center mb-8 bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800">
+                        ${drawChordBox('G', 4, [3, 2, 0, 0, 3, 3])}
+                        ${drawChordBox('C', 4, ['X', 3, 2, 0, 1, 0])}
+                        ${drawChordBox('D', 4, ['X', 'X', 0, 2, 3, 2])}
+                        ${drawChordBox('Em', 4, [0, 2, 2, 0, 0, 0])}
+                        ${drawChordBox('Am', 4, ['X', 0, 2, 2, 1, 0])}
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Regla del Brazo Péndulo y los Dedos Pivote</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        <strong>1. El reloj pendular:</strong> El mayor error del principiante es parar la mano derecha mientras la mano izquierda busca el siguiente acorde. Tu brazo derecho (el de la púa) es un metrónomo biológico. Sube y baja incesantemente. Incluso si no llegas a tiempo con la mano izquierda, sigue rasgueando (aunque suenen cuerdas al aire) para no perder el tiempo de la canción.<br><br>
+                        <strong>2. El Dedo Pivote (Ancla):</strong> Para cambiar de acorde rápido, busca puntos en común. Ejemplo clásico: Para cambiar de Sol (G versión Rock con 4 dedos) a Re (D), te darás cuenta de que tu dedo <strong>anular</strong> está en el traste 3 de la cuerda B (2ª cuerda) en ambos acordes. <strong>No lo levantes</strong>. Úsalo como un pivote o ancla sobre el que el resto de dedos orbitan para formar la nueva figura.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Patrón de Ritmo Pop-Rock (Abajo-Abajo-Arriba-Arriba-Abajo-Arriba)</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="strum">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia (MIDI Limpio)
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Aplica este ritmo (el más famoso de la historia de la guitarra acústica) cambiando entre un acorde de Sol Mayor (G) y un Do Mayor (C) cada compás.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+| ↓   ↓   ↑   ↑ ↓ ↑ | ↓   ↓   ↑   ↑ ↓ ↑ |
+| G                 | C                 |
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 8, title: "8. Rítmica Funk y Scratches", description: "El groove, semicorcheas y muteo de mano izquierda.",
-                quiz: [{ q: "¿En qué consiste el muteo de mano izquierda?", options: ["Bajar el volumen de la guitarra", "Rozar las cuerdas sin apretar para generar percusión sorda", "Apagar el ampli"], correct: 1 }, { q: "Al tocar semicorcheas continuas, ¿cuántos golpes das por tiempo (beat)?", options: ["2", "3", "4 (Abajo-Arriba-Abajo-Arriba)"], correct: 2 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">El funk utiliza acordes de Séptima y un movimiento incansable de la mano derecha en semicorcheas.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Acorde E9 (El "Acorde Funk")</h3>
-                    <div class="bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800 inline-block mb-4">${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7])}</div>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Scratches (Notas Muertas)</h3><p class="text-gray-300 mb-4 leading-relaxed">Para el "chaka-chaka", relaja la presión de la mano izquierda sobre el mástil. Las 'x' en la tablatura indican esto.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto Final: Groove Funk</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="funk"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Groove</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">(Acorde base: E9 - traste 7)\ne|-7--x-x-x--7--x--7-7--x-x-|\nB|-7--x-x-x--7--x--7-7--x-x-|\nG|-7--x-x-x--7--x--7-7--x-x-|\nD|-6--x-x-x--6--x--6-6--x-x-|</pre></div></div>`
+                id: 5, 
+                title: "5. Expresión Solista Avanzada", 
+                description: "Dar alma a las notas mediante el Vibrato de muñeca, Slides glissando y la esotérica Blue Note.",
+                quiz: [
+                    { q: "Para conseguir un vibrato amplio de estilo Rock (ej. B.B. King o Zakk Wylde), ¿de dónde debe provenir físicamente el movimiento?", options: ["De mover rápidamente la falange de los dedos sobre la cuerda", "De un giro potente de la muñeca (como abrir un pomo) usando el lateral del dedo índice anclado al mástil como punto de apoyo", "De agitar el brazo entero desde el codo"], correct: 1 }, 
+                    { q: "¿En qué consiste la técnica de ejecución de un 'Slide' (deslizamiento)?", options: ["Pulsar la cuerda con la púa e, inmediatamente, deslizar el dedo a otro traste manteniendo la presión constante contra la madera en todo el recorrido", "Utilizar un tubo de cristal hueco en el dedo", "Tocar notas arrastradas con el pedal de volumen"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Tocar las notas correctas en la escala correcta (matemática pura) te convierte en un ejecutor. Tocar esas mismas notas añadiendo pausas, ataques dinámicos y, sobre todo, técnicas de expresión, te convierte en un músico. Las técnicas expresivas buscan simular los quiebros, suspiros y llantos de la voz humana.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">1. El Vibrato (V)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Un error fatal es intentar hacer vibrato estirando la cuerda empujando solo con la yema del dedo (como en el violín clásico). En la guitarra eléctrica de rock, el vibrato se hace anclando el nudillo o el interior del pulgar en la curva superior del mástil, y realizando una torsión o <strong>giro de muñeca</strong> firme (simulando abrir la manivela de una puerta redonda). Esto oscilará la cuerda transversalmente produciendo variaciones de afinación estables y rítmicas.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">2. La 'Blue Note' (El tritono del diablo)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        El Blues suena triste y canalla gracias a una nota matemática muy específica que los músicos clásicos denominaban "el tritono diabólico". Si le añades la Quinta Disminuida (5b) a la escala pentatónica menor que aprendiste en el Módulo 3, obtienes la genuina "Blues Scale". Fíjate en el punto marcado como <strong>'Bl'</strong> (Traste 8, Cuerda 3). Úsala como nota de paso (no descanses sobre ella) para generar extrema tensión antes de resolver.
+                    </p>
+                    
+                    ${drawFretboard(6, 10, [
+                        { string: 3, fret: 5, root: false, label: '1' }, 
+                        { string: 3, fret: 7, root: false, label: '3' }, 
+                        { string: 3, fret: 8, root: true, label: 'Bl' } // Destacada como tónica para efecto visual naranja
+                    ], 600, 100)}
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Fraseo Expresivo y Legato</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="expression">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Expresión
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Atención a la tablatura: <strong>S</strong> significa <em>Slide</em> (deslizar el dedo sin despegarlo de la cuerda). <strong>V</strong> significa aplicar un vibrato exagerado dejando que la nota muera lentamente (Sustain).</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+G|--5S7--7--5---------|------------------|
+D|-------------7V-----|--5--7--7S10--7V--|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 9, title: "9. Velocidad y Púa Avanzada", description: "Sincronización milimétrica, tresillos y secuencias shred.",
-                quiz: [{ q: "Para tocar rápido de forma limpia, ¿qué es lo más importante?", options: ["Tensar el brazo al máximo", "Mover la púa desde el codo", "Relajación muscular y movimientos mínimos de muñeca"], correct: 2 }, { q: "¿Qué es tocar en tresillos?", options: ["Tocar tres notas por cada golpe de metrónomo (tiempo)", "Tocar en el traste 3", "Tocar tres cuerdas a la vez"], correct: 0 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Entramos en territorio avanzado. Para conseguir velocidad real (shred), necesitas eliminar cualquier tensión en tu brazo derecho. El movimiento proviene de giros microscópicos de muñeca o de los dedos pulgar e índice.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La regla de la Sincronización</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Tus manos izquierda y derecha están probablemente desincronizadas. La solución no es tocar más rápido, sino usar metrónomo a velocidades ridículamente lentas hasta que el ataque de la púa coincida perfectamente con la pulsación del traste.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Carrera Descendente</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="speed"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia</button></div>
-                    <p class="text-sm text-gray-400 mb-4">Toca 4 notas por golpe de metrónomo (semicorcheas) usando estricta púa alternada abajo-arriba-abajo-arriba.</p>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-----------------------------------------|\nB|-5-3-1-0---------------------------------|\nG|---------2-0-----------------------------|\nD|-------------4-2-------------------------|\nA|-----------------2~----------------------|\nE|-----------------------------------------|</pre></div></div>`
+                id: 6, 
+                title: "6. Arpegios y Fingerpicking (Púa Híbrida)", 
+                description: "Descomponiendo progresiones de acordes. Intros estelares y baladas alternativas.",
+                quiz: [
+                    { q: "¿En la jerga guitarrística, qué significa la orden 'Arpegiar' un acorde?", options: ["Tocar todas sus notas a la vez con la máxima fuerza posible", "Ejecutar las notas individuales del acorde secuencialmente, una tras otra, dejando que suenen las anteriores por resonancia simpática", "Mudar el acorde a un bajo eléctrico"], correct: 1 }, 
+                    { q: "¿Qué técnica rítmica derecha conocemos como 'Púa Híbrida' (Hybrid Picking)?", options: ["Tocar usando una púa metálica en lugar de nylon", "Sujetar la púa de forma convencional (pulgar/índice) para tocar bajos, mientras simultáneamente usamos los dedos medio o anular sobrantes para pellizcar otras cuerdas más finas (imitando un piano)", "Pulsar con el pulgar exclusivamente"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El rasgueo bruto está muy bien para la estrofa y el estribillo a todo volumen, pero las canciones necesitan dinámica y pausas. El arpegio (del italiano <em>arpeggiare</em>, tocar el arpa) consiste en mantener pulsado el dibujo de un acorde con la mano izquierda, mientras la mano derecha desgrana (separa) las notas tocándolas una a una melódicamente. 
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Mecánica de la Mano Derecha para Arpegios</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Tienes tres opciones para ejecutar arreglos como el de <em>"Everybody Hurts"</em> (R.E.M) o <em>"Do I Wanna Know?"</em> (Arctic Monkeys): <br><br>
+                        <strong>1. Crosspicking estricto:</strong> Usas solo la púa, realizando un barrido de púa alternada cuerda a cuerda (requiere muchísima precisión de muñeca).<br>
+                        <strong>2. Fingerpicking (Clásico):</strong> Dejas la púa. Tu pulgar se encarga de las cuerdas 6, 5 y 4. Tu índice (3ª cuerda), medio (2ª cuerda) y anular (1ª cuerda) pellizcan de forma ascendente. <br>
+                        <strong>3. Púa Híbrida:</strong> La favorita en Country y Rock Progresivo. Agarras la púa normal para los bajos y usas el dedo medio y anular de la misma mano para pellizcar las notas agudas (imitando la mano derecha de un pianista).
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio Secuencial Continuo (Em y C)</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="arpeggio">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Arpegio
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Coloca el acorde abierto de Mi menor (Em) del módulo 4, e intenta tocar esta secuencia dejando resonar TODAS las cuerdas (Let Ring) para crear un colchón armónico. Al segundo compás, cambia el acorde a Do mayor (C).</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+   Em                       C
+e|-------0-----------0----|-------0-----------0----|
+B|---------0-----------0--|---------1-----------1--|
+G|-----0-----0-----0-----0|-----0-----0-----0-----0|
+D|---2-----------2--------|---2-----------2--------|
+A|------------------------|-3-----------3----------|
+E|-0-----------0----------|------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 10, title: "10. Fingerstyle y Travis Picking", description: "Independencia de pulgar para acústicas y baladas de rock.",
-                quiz: [{ q: "¿Qué caracteriza al 'Travis Picking'?", options: ["Un patrón de bajos alternados tocado con el pulgar mientras los demás dedos tocan melodías sincopadas", "Golpear la caja de la guitarra", "Tocar muy fuerte con púa"], correct: 0 }, { q: "¿Qué dedos se suelen usar para las 3 cuerdas más agudas (G, B, e) en fingerstyle tradicional?", options: ["Solo el índice", "Índice, medio y anular (p-i-m-a)", "Pulgar y meñique"], correct: 1 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Suelta la púa. El Fingerstyle te convierte en una banda completa: tu pulgar es el bajista y tus otros dedos son los cantantes.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La regla P-I-M-A</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Asigna tus dedos: <strong>P</strong>ulgar (bajos: E, A, D), <strong>I</strong>ndice (cuerda G), <strong>M</strong>edio (cuerda B), <strong>A</strong>nular (cuerda e).</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Patrón Travis Básico</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="travis"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Travis</button></div>
-                    <p class="text-sm text-gray-400 mb-4">Mantén un acorde de Do Mayor (C) fijo. El pulgar salta entre la cuerda 5 y la 4 constantemente.</p>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-white whitespace-pre">   C \n   P   I   P(M)  P   I\ne|------------------------|\nB|-----------1------------|\nG|-----0-----------0------|\nD|-------2-----------2----|\nA|-3-----------3----------|\nE|------------------------|</pre></div></div>`
+                id: 7, 
+                title: "7. Escala Mayor, Country Rock y Tono Luminoso", 
+                description: "Saliendo de la oscuridad bluesera. Uso de la escala mayor relativa (Jónica) y bends de guitarra Telecaster.",
+                quiz: [
+                    { q: "A nivel de análisis auditivo y emocional, ¿cuál es la diferencia principal entre un acorde/escala Mayor y Menor?", options: ["El modo Mayor suena inherentemente luminoso, alegre, épico o resuelto, mientras que el Menor suena melancólico, sombrío o reflexivo", "No hay diferencia audible para el cerebro humano", "La Menor suena más fuerte y aguda siempre"], correct: 0 }, 
+                    { q: "¿En qué se diferencia el dibujo de la Escala Pentatónica MAYOR respecto al de la Pentatónica MENOR aprendido en el módulo 3?", options: ["Tienen exactamente el mismo dibujo geométrico (la misma caja de notas), pero el dibujo de la Mayor se aplica desplazándolo 3 trastes más abajo (hacia la izquierda, hacia el clavijero) respecto al tono base", "Los dibujos son estructuralmente opuestos", "La escala Mayor requiere usar los 4 dedos en todas las cuerdas obligatoriamente"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Llevas todo el curso inmerso en la sonoridad oscura, rockera y agresiva de las escalas menores. Sin embargo, géneros como el Country, el Rock Sureño (Lynyrd Skynyrd), el Indie feliz o himnos como <em>"Sweet Child O' Mine"</em> se basan en tonalidades mayores, que aportan brillantez, alegría y una sensación de resolución épica.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El gran truco: Pentatónica Mayor vs Menor</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        A los guitarristas de rock no nos gusta memorizar miles de escalas, nos gusta hackear el mástil desplazando patrones geométricos. Aquí tienes la regla de oro de la armonía moderna: <br><br>
+                        <strong>El dibujo (la caja) de la escala Pentatónica Mayor es EXACTAMENTE IGUAL que el de la Pentatónica Menor.</strong><br> 
+                        ¿Cuál es el truco? Debes mover todo el patrón visual 3 trastes hacia la izquierda (hacia la cejuela o clavijero). Por ejemplo, si el acompañamiento de bajo y batería está tocando en el acorde de "La menor" (Am), tú tocas tu dibujo de escala desde el traste 5. Pero si el acompañamiento está tocando un tema luminoso y alegre en el acorde de "La Mayor" (A), usas EL MISMO DIBUJO, pero lo bajas para empezarlo en el traste 2. Esta es la relación entre el tono Menor y su Mayor relativo.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Country Rock Mayor</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="country">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Mayor
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Este lick emplea la sonoridad típica "chicken picking" de guitarras Fender Telecaster (muy agudas). Mezcla notas pisadas (traste 2 y 3) con cuerdas repentinamente al aire (traste 0) para emular el salto ágil de un banjo o violín country.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-----------------------0--|
+B|--2h3p2----------------0--|
+G|---------4--2--0-------1--|
+D|------------------2----2--|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 11, title: "11. Modos: El Sonido Dórico", description: "Rock clásico, Fusión y la nota 'mágica' de Santana.",
-                quiz: [{ q: "¿Cuál es la diferencia principal entre la escala Menor Natural (Eólica) y el modo Dórico?", options: ["El Dórico tiene la sexta mayor (una nota más brillante)", "El Dórico no tiene séptima", "El Dórico es para tocar flamenco"], correct: 0 }, { q: "¿Sobre qué tipo de progresión brilla especialmente el modo Dórico?", options: ["Sobre progresiones menores funk/rock de dos acordes (ej. Am7 - D7)", "Sobre acordes Power Chords distorsionados", "Sobre acordes Mayores puros"], correct: 0 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Cuando te aburras de la Pentatónica, los Modos Griegos te abren un nuevo universo. El modo <strong>Dórico</strong> es una escala menor pero con un toque elegante y brillante (usado exhaustivamente por Carlos Santana o Pink Floyd).</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Nota Mágica: 6ª Mayor</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Coge tu pentatónica menor, y añádele las notas 2ª mayor y 6ª mayor. Esa 6ª mayor es la que da el sabor a jazz/fusión.</p>
-                    ${drawFretboard(6, 12, [{ string: 4, fret: 7, root: true, label: '1' }, { string: 4, fret: 9, root: false, label: '2' }, { string: 3, fret: 5, root: false, label: '3m' }, { string: 3, fret: 7, root: false, label: '4' }, { string: 2, fret: 5, root: false, label: '5' }, { string: 2, fret: 7, root: true, label: '6M' } ], 600, 150)}
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Lick Dórico Fusión</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="dorian"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Dórico</button></div>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">e|-------------------------|\nB|-----------------7~--8-5~|\nG|-------5--7--9-----------|\nD|--7----------------------|\nA|-------------------------|\nE|-------------------------|</pre></div></div>`
+                id: 8, 
+                title: "8. Groove Funk: Acordes Dominantes y Scratches", 
+                description: "Domina la síncopa, el movimiento de semicorcheas (16th notes) y la percusión del muteo de mano izquierda.",
+                quiz: [
+                    { q: "¿En qué consiste la técnica rítmica de muteo de mano izquierda (Scratches), representada por una 'x' en las tablaturas?", options: ["En bajar el potenciómetro de volumen de la guitarra temporalmente", "En relajar la presión de los dedos sobre el mástil para que las cuerdas dejen de pisar el hierro (traste) pero manteniendo el contacto con ellas para ahogar la vibración, y luego rasguear agresivamente para generar un ruido sordo y puramente percusivo", "En desenchufar el cable jack del amplificador"], correct: 1 }, 
+                    { q: "Si configuramos el metrónomo en un compás básico de 4/4 a 90 BPM, y queremos tocar un ritmo continuo de semicorcheas (16th notes) sin pausa, ¿cuántos rasgueos (golpes de púa) tenemos que encajar por cada golpe sonoro o 'clic' del metrónomo?", options: ["2 golpes por clic", "3 golpes (Tresillo)", "4 golpes constantes por clic, divididos en el movimiento Abajo-Arriba-Abajo-Arriba"], correct: 2 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El rock y el metal buscan grosor sonoro, pero el Funk, el Disco, el Indie bailable y el Neo-Soul (Nile Rodgers, John Frusciante en RHCP, Prince) buscan que la guitarra actúe como un instrumento rítmico y percusivo (como una conga o una batería auxiliar), utilizando acordes "Dominantes" o "Menores 7", mucho más complejos y picantes armónicamente.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El infame Acorde E9 (El "Hendrix / Funk Chord")</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Este acorde te parecerá extremadamente raro de primeras por la posición del dedo medio, pero una vez que te acostumbres, será tu mejor amigo para grooves funk (véase <em>"Kiss"</em> de Prince). Ojo a la técnica de mano izquierda: el dedo anular hace una "mini-cejilla" aplastando las cuerdas 1, 2 y 3 en el mismo traste (7).
+                    </p>
+                    <div class="bg-[#1a1a1a] p-4 rounded-2xl border border-gray-800 inline-block mb-8">
+                        ${drawChordBox('E9', 4, ['X', 7, 6, 7, 7, 7], 6)}
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Scratches (Notas Muertas y Percusión)</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        El secreto del groove funk estilo "chaka-chaka" es que la mano derecha <strong>nunca, bajo ningún concepto, deja de moverse de arriba a abajo en semicorcheas</strong> (divididas mentalmente como: Un-e-i-a, Dos-e-i-a, Tres-e-i-a...). ¿Cómo evitar que el acorde suene sin parar y se ensucie todo? Usando tu mano izquierda. <br><br>
+                        Relaja la presión de la mano izquierda sobre el mástil, pero no despegues los dedos de las cuerdas. Si rasgueas fuertemente la mano derecha, las pastillas solo captarán ruido de fricción y percusión pura. Las 'x' en la tablatura indican que en ese rasgueo concreto, la mano izquierda está "ahogando" (relajada) el acorde E9. Al momento siguiente, vuelves a aplicar fuerza prensil para que la nota corte la mezcla.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Final: El Groove Funk (Sincopado)</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="funk">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Groove Rítmico
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Abre el metrónomo. Fíjalo en 80 BPM. Tu mano derecha será un motor en movimiento incesante que ataca todas las cuerdas a la vez. Controlarás cuándo suena música (E9, traste 7) y cuándo suena silencio percusivo (x-x-x) coordinando los "apretones" de la mano izquierda.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+(Cejilla implícita en traste 7 / Dedo medio en traste 6)
+e|-7--x-x-x--7--x--7-7--x-x-|
+B|-7--x-x-x--7--x--7-7--x-x-|
+G|-7--x-x-x--7--x--7-7--x-x-|
+D|-6--x-x-x--6--x--6-6--x-x-|
+</pre>
+                        </div>
+                    </div>
+                `
             },
             {
-                id: 12, title: "12. Tapping a Dos Manos", description: "El legado de Van Halen. Arpegios a la velocidad de la luz.",
-                quiz: [{ q: "¿Qué es el Tapping?", options: ["Golpear el cuerpo de la guitarra", "Usar un dedo de la mano de la púa (derecha) para golpear una nota en el diapasón", "Tocar armónicos"], correct: 1 }, { q: "En la notación de tablatura moderna, ¿qué letra suele indicar un toque de Tapping?", options: ["Una 'T'", "Una 'H'", "Una 'P'"], correct: 0 }],
-                content: `<p class="text-gray-300 mb-6 leading-relaxed">Popularizado por Eddie Van Halen a finales de los 70s, el Tapping te permite tocar saltos de notas inmensos y arpegios rapidísimos que serían imposibles solo con la mano izquierda.</p>
-                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La Mecánica (T - p - p)</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Sujeta la púa con el pulgar y el medio (o escóndela). Usa tu dedo índice derecho para golpear firmemente (Tap) la cuerda en un traste alto. Inmediatamente, pellizca ligeramente la cuerda al soltar (Pull-off) hacia un dedo de tu mano izquierda que ya está pisando una nota más grave.</p>
-                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg"><h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Arpegio de Tapping Clásico</h4>
-                    <div class="flex items-center space-x-4 mb-6"><button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="tapping"><i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Tapping</button></div>
-                    <p class="text-sm text-gray-400 mb-4">T = Tap con mano derecha. p = pull off a mano izquierda.</p>
-                    <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800"><pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">    T        T        T \ne|-12p7p3---12p7p3---11p7p3--|\nB|---------------------------|\nG|---------------------------|</pre></div></div>`
+                id: 9, 
+                title: "9. Velocidad de Púa Alternada (Técnica Shred)", 
+                description: "Disciplina rítmica rigurosa, sincronización milimétrica a altas velocidades y reducción drástica del arco de movimiento.",
+                quiz: [
+                    { q: "Desde un punto de vista biomecánico para conseguir tocar carreras de notas ultra-rápidas y limpias, ¿cuál es el consejo principal de los maestros del shred (Paul Gilbert, Yngwie Malmsteen)?", options: ["Tensar todo el brazo desde el hombro hasta el codo para generar una vibración rápida como un espasmo", "Realizar grandes círculos y arcos de púa exagerados para que la cuerda golpee con fuerza", "Tener relajación muscular absoluta en el antebrazo, concentrando todo el trabajo en un giro micrométrico de muñeca que apenas despegue la púa un milímetro de la cuerda tras atacarla (economía total de movimiento)"], correct: 2 }, 
+                    { q: "Rítmicamente, ¿a qué nos referimos cuando decimos que un pasaje rápido de guitarra 'se toca en Tresillos' (Triplets)?", options: ["Se toca agrupando las notas en bloques rítmicos exactos de 3 divisiones simétricas por cada golpe de metrónomo/bombo (un-dos-tres, un-dos-tres)", "Se tocan obligatoriamente 3 cuerdas a la vez", "Se tocan notas en el traste 3 del mástil"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Entramos en territorio "virtuoso". El Heavy Metal moderno, el Metalcore, el Jazz Fusión y el Rock Neoclásico requieren tocar multitud de notas por segundo sin cometer fallos. Para conseguir velocidad real, necesitas purgar todos los malos hábitos posturales que tengas hasta ahora.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El mantra del virtuoso: La Sincronización</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Si te grabas a ti mismo intentando tocar "rápido", notarás un amasijo de ruido y notas sucias ahogadas. El problema casi nunca es que tu mano derecha (púa) o izquierda (trastes) sean lentas individualmente. El problema es <strong>la asincronía</strong>: la púa golpea la cuerda fracciones de segundo antes o después de que el dedo izquierdo pise el traste contra la madera.<br><br>
+                        <strong>El antídoto:</strong> Debes configurar tu metrónomo a velocidades ridículamente lentas (ej. 60 BPM). Toca carreras lineales vigilando que el ataque plástico de la púa caiga <em>exactamente, milimétricamente</em> en el mismo pico de tiempo que el golpe de presión dactilar sobre el traste. Sube 5 BPM solo cuando domines esa velocidad a la perfección 10 veces seguidas sin el menor roce.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">Economía de Movimiento y Pick-Slanting</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Es física simple: A mayor distancia a recorrer, más tiempo se tarda. Si al golpear una cuerda hacia abajo (↓) tu púa se aleja un centímetro entero de las cuerdas, tardará una eternidad en volver para el golpe hacia arriba (↑). Aprende a "enterrar" menos la púa y a usar ángulos de ataque sesgados (Pick-Slanting) para deslizarte sobre las cuerdas como la proa de un barco sobre las olas, no como una pared.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: Carrera Lineal Descendente (Shred Style)</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="speed">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Secuencia (MIDI 120BPM)
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Pasa esta tablatura por el filtro de los tresillos (3 notas por beat) si usas grupos de tres, o divídela en semicorcheas regulares (grupos de 4). Vigila con cuidado la dirección de tu púa en los cambios de cuerda (cruzando del salto B a G y D).</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-----------------------------------------|
+B|-5-3-1-0---------------------------------|
+G|---------2-0-----------------------------|
+D|-------------4-2-------------------------|
+A|-----------------2~----------------------|
+E|-----------------------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 10, 
+                title: "10. Independencia: Fingerstyle y Travis Picking", 
+                description: "Soltar la púa e independizar el bajo del pulgar (Walking bass) de la melodía de los dedos superiores (Técnica clásica americana).",
+                quiz: [
+                    { q: "¿En qué escuela o técnica guitarrística se engloba el 'Travis Picking' (nombrado así por Merle Travis)?", options: ["Un patrón de arpegio percusivo en el que el pulgar de la mano derecha lleva el bajo, alternando incansablemente notas graves o quintas sobre el tempo fuerte, mientras que el resto de los dedos ejecutan melodías independientes, a menudo sincopadas, sobre las cuerdas finas (simulando ragtime)", "Golpear fuertemente la tapa de la guitarra para emular el bombo de batería", "Tocar acordes distorsionados arrastrando armónicos"], correct: 0 }, 
+                    { q: "¿En la jerga del estudio del Fingerstyle clásico de conservatorio, a qué dedos humanos se les asignan tradicionalmente las cuerdas agudas bajo la regla nemotécnica (P-I-M-A)?", options: ["Solo al dedo Índice como si hiciera de púa gigante", "Al Índice, dedo Medio y dedo Anular", "Al Pulgar y el Meñique como en el ukelele hawaiano"], correct: 1 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Llega un momento en que tocar con pistas de acompañamiento (Backing Tracks) o un grupo te cansa, y quieres coger tu guitarra acústica y sonar a orquesta completa tú solo (estilo Tommy Emmanuel, Chet Atkins, Mark Knopfler o Iron & Wine). Para ello debes guardar la púa en el bolsillo y recurrir al viejo y puro Fingerstyle rústico americano.
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">La regla P-I-M-A: Reparto de áreas</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Cuando usas Fingerstyle, la guitarra se divide rígidamente en dos instrumentos distintos tocados a la vez:<br>
+                        <strong>El Bajo (El Pulgar 'P'):</strong> Su trabajo es mantener el compás machacón del bombo y el bajo saltando entre las cuerdas de entorchado grueso (6ª Mi, 5ª La, 4ª Re).<br>
+                        <strong>El Cantante (Los dedos 'I-M-A'):</strong> Su trabajo es tocar la melodía en los huecos o a contratiempo en las cuerdas de nylon/acero finas (3ª Sol con el Índice, 2ª Si con el Medio, y 1ª Mi aguda con el Anular). No invadas las cuerdas asignadas a los otros dedos, mantenlos en formación como si fueran un garfio sobre las cuerdas.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto: El motor Travis de Bajo Alternante</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="travis">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Ritmo Travis
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Mantén un acorde fijo de Do Mayor (C) de los del Módulo 4 con la mano izquierda inamovible (en ancla). Concéntrate en la disociación mental: tu pulgar (P) va dando "pasos de caminante" entre la cuerda 5 (Do) y la 4 (Mi), marcando las corcheas secas. En huecos estratégicos, el índice (I) de pellizcará la 2ª cuerda o la 1ª de forma libre.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-white whitespace-pre">
+   Acorde Constante C Major.
+   P   I   P(M)  P   I
+e|------------------------|
+B|-----------1------------|
+G|-----0-----------0------|
+D|-------2-----------2----|
+A|-3-----------3----------|
+E|------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 11, 
+                title: "11. Modos Griegos: El misterio del Modo Dórico", 
+                description: "Descubre el secreto del Rock Clásico progresivo, la música Fusión y la nota 'mágica' de Carlos Santana.",
+                quiz: [
+                    { q: "¿En qué nota vital se diferencia audazmente la escala Menor Natural estándar (también conocida como Modo Eólico) y el Modo Dórico de origen griego?", options: ["El Modo Dórico eleva un semitono la sexta nota de la escala, convirtiéndola en una Sexta Mayor (6M). Esta nota inyecta una extraña brillantez esperanzadora dentro de una escala intrínsecamente menor triste, haciéndola misteriosa y celestial", "El Modo Dórico carece del grado de la séptima, siendo una escala puramente de cuatro notas orientales", "El Modo Dórico se toca exclusivamente en guitarras con trastes escalopeados"], correct: 0 }, 
+                    { q: "Analizando la armonía de fondo (el backing track de acordes), ¿sobre qué famosa progresión circular 'vuela' y brilla más naturalmente una improvisación en Modo Dórico?", options: ["Sobre progresiones funk/soul o pop-rock basadas en una rueda de dos acordes Menores Séptima, típicamente del tipo I-IV (ejemplo: Vamp estático entre Dm7 y G7, o Am7 a D7 prolongado en el tiempo)", "Sobre acordes Power Chords ruidosos tocados en modo Trash Metal de los 80", "Sobre puras triadas Mayores simples extraídas del Canon de Pachelbel (Estilo Pop clásico)"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Llega un punto en la vida del guitarrista de Blues-Rock en el que abusar de la Escala Pentatónica produce hartazgo y clichés previsibles (todos empezamos a sonar igual). Los teóricos musicales antiguos (Griegos y músicos de la Edad Media Celta) crearon los "Modos": siete escalas derivadas de la Escala Mayor que producen atmósferas emocionales únicas y exóticas. El más famoso e importante en la historia del rock psicodélico, fusión y funk es el <strong>Modo Dórico (Dorian Mode)</strong>. Piénsalo como la herramienta que construyó himnos inmortales del calibre de <em>"Oye Como Va"</em>, <em>"Shine On You Crazy Diamond"</em> (Pink Floyd) o <em>"So What"</em> (Miles Davis).
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El ADN del Dórico: La Nota Mágica (6ª Mayor)</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Construir el modo dórico es sorprendentemente intuitivo. Coge el dibujo base de la Escala Menor Natural, y alteras un solo elemento para cambiar drásticamente su "color": buscas la sexta nota de la escala y la subes medio tono (un traste). Esa <strong>Sexta Mayor (6M)</strong> es la causante del milagro. Al insertarse en un contexto de acordes menores oscuros, actúa como un destello de luz dorado o una resolución mística, rompiendo la tensión trágica y aportando una vibra 'Jazz' y sofisticada muy propia del maestro de la guitarra latina Carlos Santana o Joe Satriani en sus baladas.
+                    </p>
+                    
+                    ${drawFretboard(6, 12, [
+                        { string: 4, fret: 7, root: true, label: 'Tónica' }, 
+                        { string: 4, fret: 9, root: false, label: '2' }, 
+                        { string: 3, fret: 5, root: false, label: '3m' }, 
+                        { string: 3, fret: 7, root: false, label: '4' }, 
+                        { string: 2, fret: 5, root: false, label: '5' }, 
+                        { string: 2, fret: 7, root: true, label: '6M' } // 6M en rojo para destacar
+                    ], 600, 150)}
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Avanzado: Lick Dórico de Fusión Latina</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="dorian">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Lick Dórico
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Nótese cómo el riff escala graciosamente, acentuando y manteniendo el vibrato en la nota del traste 7 de la segunda cuerda (precisamente, la 6ª Mayor Dórica del diagrama), dejándola flotar de manera casi sensual contra el ritmo sincopado.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+e|-------------------------|
+B|-----------------7~--8-5~|
+G|-------5--7--9-----------|
+D|--7----------------------|
+A|-------------------------|
+E|-------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 12, 
+                title: "12. Arpegios Expansivos: El Tapping a Dos Manos (Eddie Van Halen Style)", 
+                description: "Extiende tu alcance en el diapasón saltando octavas y tejiendo arpegios acrobáticos a la velocidad de la luz integrando ambas manos sobre los trastes.",
+                quiz: [
+                    { q: "Analizando la revolución biomecánica impuesta por guitarristas virtuosos a finales de los 70's (Van Halen, Steve Hackett, Allan Holdsworth)... ¿Qué es concretamente la técnica de 'Two-Handed Tapping' o Tapping a dos manos?", options: ["Golpear frenéticamente la madera exterior de la caja de la guitarra acústica para simular un instrumento de percusión tribalesco que acompañe a la voz", "Descartar momentáneamente la función rítmica convencional de la púa en la mano derecha, para usar el dedo Índice o Medio de esta misma mano, empleándolo a modo de 'martillo percusor' que golpea (o pisa fuertemente con un ataque seco) una nota aguda de un traste alejado directamente en el diapasón, combinándolo de inmediato con legatos, hammer-ons y pull-offs fluidos de la mano izquierda", "Mover la púa tan deprisa que genera armónicos de púa ('Pinch Harmonics') parecidos a gritos"], correct: 1 }, 
+                    { q: "En la convención de escritura moderna para partituras de internet y revistas guitarrísticas (Tablaturas 'TAB')... ¿Qué símbolo internacionalmente aceptado suele coronar y marcar las notas que deben ejecutarse con un golpe directo del dedo de Tapping (mano derecha)?", options: ["Una imponente letra 'T' mayúscula justo encima del número (fret) que debe ser percutido", "Una letra 'H' mayúscula (referente a 'Hit')", "Una letra 'P' mayúscula referenciando a la Púa percusiva"], correct: 0 }
+                ],
+                content: `
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Llegamos al final del curso cruzando la frontera de lo clásico para abrazar una de las técnicas modernas visual y sonoramente más impactantes del Hard Rock, popularizada globalmente y llevada al paroxismo por el genio revolucionario <strong>Eddie Van Halen</strong> (en piezas de leyenda como el célebre solo instrumental, <em>"Eruption"</em> - 1978). El "Tapping" destroza la barrera tradicional de que "una mano sirve para pulsar con púa y la otra para pisar trastes".
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-white mt-8 mb-4">El mecanismo y la secuencia rítmica circular (T - p - p / T - p - h)</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        El Tapping bien ejecutado no exige fuerza bruta ni manos titánicas, exige "coreografía" exacta. Funciona casi siempre como un bucle rotatorio de tres golpes continuos aplicados en una misma cuerda (normalmente la cuerda fina 'e' o la 'B' para solos pirotécnicos) desglosando las tres notas principales (Tríada) de un arpegio muy amplio (con grandes saltos de trastes) que sería totalmente imposible o sumamente torpe de abarcar estirando únicamente los dedos de la mano izquierda.<br><br>
+                        <strong>El Procedimiento Paso a Paso:</strong><br>
+                        1. Guarda u oculta tu púa acomodándola en el pliegue interior de tu dedo corazón o pulgar.<br>
+                        2. Coloca tu mano izquierda en el mástil pisando una nota base baja, por ejemplo, el dedo índice en el <strong>traste 3</strong> de la 1ª cuerda.<br>
+                        3. Lanza el dedo índice (o corazón) rígidamente extendido de tu <strong>mano derecha</strong> hacia arriba en el mástil y golpea firmemente como un martillo neumático (<strong>'Tap' / 'T'</strong>) el hierro del <strong>traste 12</strong> (este golpe generará volumen audible por percusión contra el hierro del traste, sin necesidad de usar púa).<br>
+                        4. Ahora viene el truco crucial que todos fallan al principio: no apartes tu dedo derecho de golpe. Arrástralo un milímetro hacia abajo o pellizca levemente la cuerda al retirarlo. Ese minúsculo pellizco excita la vibración de la cuerda permitiendo que, instantáneamente, suene por arrastre (<strong>'Pull-off' / 'p'</strong>) otra nota que tengas pisada detrás; por ejemplo, la del <strong>traste 7</strong> que está esperando ser pisada por tu dedo meñique de la mano izquierda.<br>
+                        5. Finalmente, ese meñique (traste 7) vuelve a hacer otro Pull-off ('p') pellizcando la cuerda al liberarla, para dejar que recaiga todo en la nota base del dedo índice en el traste 3.<br><br>
+                        Y repites la cascada infinita y fluida: Tapping 12 - Pull 7 - Pull 3 - Tapping 12 - Pull 7 - Pull 3.
+                    </p>
+                    
+                    <div class="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-800 border-l-4 border-l-accent my-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-white mb-2">🎸 Reto Magistral: Arpegio de Tapping Neoclásico en Mi Menor (Em)</h4>
+                        <div class="flex items-center space-x-4 mb-6">
+                            <button class="btn-play-riff bg-white text-black hover:bg-gray-200 font-bold py-3 px-6 rounded-full flex items-center transition shadow-md" data-riff="tapping">
+                                <i class="ph-fill ph-play-circle text-2xl mr-2 text-accent"></i> Escuchar Sinfonía Tapping
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">El símbolo <strong>'T'</strong> te avisa inexorablemente de que en ese número debes usar el dedo balístico de la mano derecha. Las letras minúsculas <strong>'p'</strong> encadenadas señalan la escalera de "Pull-offs" consecutivos recayendo sobre los dedos de tu mano izquierda plantados previamente. Ajusta bien la distorsión del amplificador o añade un pedal de compresión para ayudar a igualar el volumen de las notas.</p>
+                        <div class="bg-black p-4 rounded-xl overflow-x-auto border border-gray-800">
+<pre class="tab-font text-xs md:text-sm text-accent whitespace-pre">
+    T        T        T        T        T        T
+e|-12p7p3---12p7p3---11p7p3---11p7p3---12p7p3---12p7p3--|
+B|------------------------------------------------------|
+G|------------------------------------------------------|
+</pre>
+                        </div>
+                    </div>
+                `
             }
         ];
+
 
         /* ============================================================
          * 5. LÓGICA DE INTERFAZ, REFERENCIA Y EVENTOS JS
@@ -929,7 +1388,7 @@
             renderSidebar();
 
             let htmlContent = `
-                <h2 class="font-black text-3xl md:text-4xl text-white mb-2 leading-tight">${mod.title}</h2>
+                <h2 class="font-black text-3xl md:text-4xl text-white mb-4 leading-tight">${mod.title}</h2>
                 <p class="text-xl font-light text-gray-400 mb-10 pb-6 border-b border-gray-800">${mod.description}</p>
                 ${mod.content}
             `;
@@ -940,12 +1399,12 @@
                     <div class="mt-12 bg-green-900/10 border border-green-500/30 p-8 rounded-2xl text-center shadow-lg">
                         <i class="ph-fill ph-check-circle text-6xl text-green-500 mb-4"></i>
                         <h3 class="text-2xl font-bold text-white mb-2">Lección Superada</h3>
-                        <p class="text-gray-400 mb-6">Conocimientos dominados.</p>
+                        <p class="text-gray-400 mb-6">Conocimientos teóricos y prácticos superados con nota.</p>
                         ${id < modules.length ? 
                             `<button class="bg-white text-black hover:bg-gray-200 font-bold py-3 px-8 rounded-full btn-next transition" data-next="${id+1}">
                                 Siguiente Lección ➔
                             </button>` : 
-                            `<p class="font-bold text-accent text-xl">¡Felicidades, has completado todos los niveles de RiffMaster!</p>`
+                            `<p class="font-bold text-accent text-xl mt-6 p-4 border border-accent/20 rounded-xl bg-accent/10">¡Felicidades Maestro! Has completado el 100% de la doctrina RiffMaster.</p>`
                         }
                     </div>
                 `;
@@ -954,24 +1413,26 @@
                     <div class="mt-12 bg-[#161616] p-6 md:p-10 rounded-3xl border border-[#2a2a2a] shadow-2xl" id="quiz-container">
                         <div class="flex items-center text-accent mb-6">
                             <i class="ph ph-exam text-4xl mr-3"></i>
-                            <h3 class="text-2xl font-bold text-white">Desbloqueo</h3>
+                            <h3 class="text-2xl font-bold text-white">Desbloqueo de Conocimiento</h3>
                         </div>
-                        <p class="text-gray-400 mb-8">Responde correctamente para guardar tu progreso.</p>
+                        <p class="text-gray-400 mb-8">Demuestra que has asimilado la teoría leyendo con atención las explicaciones superiores. Responde correctamente las cuestiones para guardar el progreso permanentemente y avanzar al siguiente nivel.</p>
                         <form id="quiz-form" class="space-y-6">
                 `;
                 
                 mod.quiz.forEach((q, index) => {
                     htmlContent += `
                         <div class="bg-[#111] p-5 rounded-xl border border-gray-800">
-                            <p class="font-bold text-white mb-4">${index+1}. ${q.q}</p>
+                            <p class="font-bold text-white mb-4 text-base md:text-lg">${index+1}. ${q.q}</p>
                             <div class="space-y-3">
                     `;
                     
                     q.options.forEach((opt, oIndex) => { 
                         htmlContent += `
-                            <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg border border-gray-800 hover:border-gray-600 transition">
-                                <input type="radio" name="q${index}" value="${oIndex}" class="form-radio text-accent focus:ring-accent w-5 h-5 bg-gray-900 border-gray-700" required>
-                                <span class="text-gray-300 text-sm font-medium leading-tight">${opt}</span>
+                            <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-lg border border-gray-800 hover:border-gray-500 transition hover:bg-gray-900 group">
+                                <div class="flex-shrink-0 mt-1">
+                                    <input type="radio" name="q${index}" value="${oIndex}" class="form-radio text-accent focus:ring-accent w-5 h-5 bg-gray-900 border-gray-600" required>
+                                </div>
+                                <span class="text-gray-300 text-sm md:text-base font-medium leading-relaxed group-hover:text-white">${opt}</span>
                             </label>
                         `; 
                     });
@@ -980,10 +1441,10 @@
                 
                 htmlContent += `
                             <button type="submit" class="w-full mt-8 bg-accent hover:bg-accentHover text-black font-bold py-4 px-6 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center text-lg">
-                                <i class="ph ph-lock-key-open text-2xl mr-2"></i> Evaluar y Avanzar
+                                <i class="ph ph-lock-key-open text-2xl mr-2"></i> Evaluar y Avanzar Nivel
                             </button>
-                            <div id="quiz-error" class="text-red-400 hidden mt-4 text-center font-medium bg-red-900/20 p-3 rounded-lg border border-red-900/50">
-                                Respuesta incorrecta. Revisa el contenido.
+                            <div id="quiz-error" class="text-red-400 hidden mt-4 text-center font-medium bg-red-900/20 p-4 rounded-lg border border-red-900/50">
+                                <i class="ph-fill ph-warning-circle text-xl align-middle mr-1"></i> Análisis incorrecto. Por favor, revisa detalladamente la teoría superior e inténtalo de nuevo.
                             </div>
                         </form>
                     </div>
@@ -1020,7 +1481,7 @@
                         if (!appState.completed.includes(id)) appState.completed.push(id);
                         if (id < modules.length && !appState.unlocked.includes(id + 1)) appState.unlocked.push(id + 1);
                         saveState();
-                        showToast("¡Lección superada!");
+                        showToast("¡Lección validada con éxito!");
                         loadModuleUI(id);
                         document.getElementById('main-scroll').scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                     } else {
@@ -1060,17 +1521,13 @@
             renderSidebar();
             loadModuleUI(currentModuleId);
 
-            // Botones de Menú
             document.getElementById('btn-menu-toggle').addEventListener('click', () => toggleMenu());
             overlay.addEventListener('click', () => toggleMenu(true));
 
-            // ==========================================
-            // LÓGICA DEL ACORDEÓN DE REFERENCIA (NUEVO)
-            // ==========================================
+            // Lógica Acordeón de Referencia
             const refView = document.getElementById('reference-view');
             const mainView = document.getElementById('main-scroll');
             
-            // Toggle Vista Referencia
             document.getElementById('btn-reference-toggle').addEventListener('click', function() {
                 this.classList.toggle('bg-accent');
                 this.classList.toggle('text-black');
@@ -1089,10 +1546,7 @@
                 }
             });
 
-            // Funcionalidad Acordeón Exclusivo (cierra uno al abrir otro)
             const accHeaders = document.querySelectorAll('.accordion-header');
-            
-            // Abrir el primer elemento por defecto
             if(accHeaders.length > 0) {
                 accHeaders[0].nextElementSibling.classList.remove('hidden');
                 accHeaders[0].querySelector('.chevron').style.transform = 'rotate(180deg)';
@@ -1103,13 +1557,9 @@
                     const content = header.nextElementSibling;
                     const isOpen = !content.classList.contains('hidden');
 
-                    // 1. Cerrar todos los contenidos
                     document.querySelectorAll('.accordion-content').forEach(c => c.classList.add('hidden'));
-                    
-                    // 2. Resetear todos los iconos chevron
                     document.querySelectorAll('.accordion-header .chevron').forEach(icon => icon.style.transform = 'rotate(0deg)');
 
-                    // 3. Si estaba cerrado, ábrelo (y rota su icono)
                     if (!isOpen) {
                         content.classList.remove('hidden');
                         header.querySelector('.chevron').style.transform = 'rotate(180deg)';
@@ -1117,10 +1567,9 @@
                 });
             });
 
-            // Smooth Scroll para los enlaces del acordeón
             document.querySelectorAll('#reference-view aside a').forEach(link => {
                 link.addEventListener('click', (e) => {
-                    e.preventDefault(); // Evitar el comportamiento hash brusco
+                    e.preventDefault(); 
                     const targetId = link.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
@@ -1138,7 +1587,7 @@
             document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', (e) => closeModal(e.target.closest('.fixed.inset-0'))));
             document.querySelectorAll('.tune-btn').forEach(btn => btn.addEventListener('click', (e) => AudioEngine.playNote(e.currentTarget.getAttribute('data-note'), 2.0, false)));
 
-            // Lógica del Metrónomo (LED Pulsante)
+            // Lógica del Metrónomo
             const btnMetro = document.getElementById('btn-metro-toggle');
             const iconPlay = document.getElementById('icon-metro-play');
             const iconStop = document.getElementById('icon-metro-stop');
